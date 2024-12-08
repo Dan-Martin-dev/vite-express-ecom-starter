@@ -1,15 +1,23 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 // Adjust path based on actual structure
 import MovingBar from "./MovingBar";
 import logo from "/home/vare/project/microservices_1/ecommerce_1/Barnes-Clone-Frontend/public/logo.webp"; // Adjust this path according to your structure
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 
 const Header: React.FC = () => {
   /* 	const { toggleCarrito } = useCart();
 	const { isAuthenticated, login, logout } = useAuth();
 
    */
-	const [ isProductosHovered, setIsProductosHovered] = useState(false);
+  const [isProductosHovered, setIsProductosHovered] = useState(false);
+  const location = useLocation();
+
+  useEffect(() => {
+    setIsProductosHovered(false);
+  }, [location]);
+
+   
+  // Close the panel whenever the route changes
 
   return (
     <div className="relative w-full">
@@ -83,28 +91,36 @@ const Header: React.FC = () => {
         >
           NEW COLLECTION
         </NavLink>
-        <div
-        	onMouseOut={() => { setIsProductosHovered(false); }}
-			onMouseOver={() => { setIsProductosHovered(true); }} 
-        >
-          <NavLink
-            className="text-gray-500 font-normal text-sm mt-[-1px]"
-            to="/products/:productsId"
-          >
-            PRODUCTOS
-          </NavLink>
 
-          {/* Panel desplegable */}
+        {/* Panel desplegable */}
+        <div
+          onMouseOut={() => {
+            setIsProductosHovered(false);
+          }}
+          onMouseOver={() => {
+            setIsProductosHovered(true);
+          }}
+        >
+          {/* Products button */}
+          <a className="text-gray-500 font-normal text-sm mt-[-1px]">
+            PRODUCTOS
+          </a>
+
+          {/* Panel */}
           <div
- 			className={`absolute left-0 w-full bg-white shadow-lg transition-opacity duration-500 
-              ${isProductosHovered ? "opacity-100 z-50" : "opacity-0 pointer-events-none"}`}
+            className={`absolute left-0 w-full bg-white shadow-lg transition-opacity duration-500 
+              ${
+                isProductosHovered
+                  ? "opacity-100 z-50"
+                  : "opacity-0 pointer-events-none"
+              }`}
           >
             <div className="grid grid-cols-6 p-8">
               {/* Column 1 */}
               <div>
                 <ul>
                   <li className="text-gray-500 font-normal text-sm relative mb-3">
-                    NEW COLLECTION
+                    <NavLink to="/collection">NEW COLLECTION</NavLink>
                   </li>
                 </ul>
               </div>
@@ -189,6 +205,7 @@ const Header: React.FC = () => {
             </div>
           </div>
         </div>
+
         <a className="text-gray-500 font-normal text-sm" href="#sale">
           SALE
         </a>

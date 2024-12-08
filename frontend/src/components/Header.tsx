@@ -1,11 +1,13 @@
 import { useState } from "react";
-import logo from 'vite-express-ecom-starter/frontend/src/assets/frontend_assets/logo.webp'
+// Adjust path based on actual structure
 import MovingBar from "./MovingBar";
+import logo from "/home/vare/project/microservices_1/ecommerce_1/Barnes-Clone-Frontend/public/logo.webp"; // Adjust this path according to your structure
 
 const Header: React.FC = () => {
-	const { toggleCarrito } = useCart();
+/* 	const { toggleCarrito } = useCart();
 	const [ isProductosHovered, setIsProductosHovered] = useState(false);
-
+	const { isAuthenticated, login, logout } = useAuth();
+ */
 	return (
 		<div className="relative w-full">
 			{/* Black Bar: moving bar */}
@@ -42,7 +44,7 @@ const Header: React.FC = () => {
 				<div className="flex-shrink-0 flex space-x-2 mr-2 sm:mr-10">
 					{/* Login/logoff conditional */}
 					<button className="hidden md:block">
-						<div>
+{/* 						<div>
 							{isAuthenticated ? (
 								<a
 									href="/"
@@ -60,13 +62,13 @@ const Header: React.FC = () => {
 									Login
 								</a>
 							)}
-						</div>
+						</div> */}
 					</button>
 
 					{/* carrito button */}
 					<button className="relative text-black py-2 px-4 flex items-center justify-center">
 						<h1
-							onClick={toggleCarrito}
+							/* onClick={toggleCarrito} */
 							className="text-gray-500 font-normal text-md md:text-lg"
 						>
 							Carrito
@@ -87,8 +89,8 @@ const Header: React.FC = () => {
 					NEW COLLECTION
 				</a>
 				<div
-					onMouseOut={() => { setIsProductosHovered(false); }}
-					onMouseOver={() => { setIsProductosHovered(true); }}
+				/* 	onMouseOut={() => { setIsProductosHovered(false); }}
+					onMouseOver={() => { setIsProductosHovered(true); }} */
 				>
 					<a
 						className="text-gray-500 font-normal text-sm mt-[-1px]"
@@ -99,8 +101,8 @@ const Header: React.FC = () => {
 
 					{/* Panel desplegable */}
 					<div
-						className={`absolute left-0 w-full bg-white shadow-lg transition-opacity duration-500 
-              ${isProductosHovered ? "opacity-100 z-50" : "opacity-0 pointer-events-none"}`}
+	/* 					className={`absolute left-0 w-full bg-white shadow-lg transition-opacity duration-500 
+              ${isProductosHovered ? "opacity-100 z-50" : "opacity-0 pointer-events-none"}`} */
 					>
 						<div className="grid grid-cols-6 p-8">
 							{/* Column 1 */}
@@ -198,7 +200,7 @@ const Header: React.FC = () => {
 			</div>
 
 			{/* Sliding cart */}
-			<SmartCart />
+			{/* <SmartCart /> */}
 		</div>
 	);
 };

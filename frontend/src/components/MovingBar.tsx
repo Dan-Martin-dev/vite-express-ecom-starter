@@ -1,5 +1,4 @@
-import 'vite-express-ecom-starter/frontend/src/styles/MovingBlackBar.css'
-
+import '../styles/MovingBar.css'
 const MovingBar: React.FC = () => {
   return (
       <div className="relative w-full h-9 overflow-hidden bg-black">

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import MovingBar from "./MovingBar";
+import MovingBar from "@/components/MovingBar";
 import logo from "/home/vare/project/microservices_1/ecommerce_1/Barnes-Clone-Frontend/public/logo.webp"; // Adjust this path according to your structure
 import { NavLink, useLocation } from "react-router-dom";
 

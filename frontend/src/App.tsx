@@ -10,8 +10,9 @@ import Orders from './pages/Orders';
 import PlaceOrder from './pages/PlaceOrder';
 import Product from './pages/Product';
 import Header from './components/Header';
+import Sale from './pages/Sale';
 
-const App = () => {
+const App = () => { 
   return (
     <div>
       <Header/>
@@ -21,6 +22,7 @@ const App = () => {
         <Route path="/cart" element={<Cart />} />
         <Route path="/collection" element={<Collection />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/sale" element={<Sale />} />
         <Route path="/orders" element={<Orders />} />
         <Route path="/placeorder" element={<PlaceOrder />} />
         <Route path="/product/:productId" element={<Product />} />

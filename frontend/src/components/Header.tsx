@@ -1,34 +1,28 @@
 import { useEffect, useState } from "react";
 import MovingBar from "./MovingBar";
 import logo from "/home/vare/project/microservices_1/ecommerce_1/Barnes-Clone-Frontend/public/logo.webp"; // Adjust this path according to your structure
-import { Link, NavLink, useLocation } from "react-router-dom";
-
-
+import { NavLink, useLocation } from "react-router-dom";
 
 const Header: React.FC = () => {
-
   const [visible, setVisible] = useState(false);
+  const [menuVisible, setMenuVisible] = useState(false);
+
   const [isProductosHovered, setIsProductosHovered] = useState(false);
   const location = useLocation();
 
   useEffect(() => {
     setIsProductosHovered(false);
+    setMenuVisible(false);
   }, [location]);
-
 
   return (
     <div className="relative w-full">
-
-
-
       {/* Black Bar: moving bar */}
       <MovingBar />
 
-
-
       {/* Header: logos y botones */}
       <header className="bg-white text-white p-4 md:p-6 flex items-center justify-between">
-        {/* Left: Buscar Button */}
+        {/* Search Button */}
         <div className="hidden md:block flex-shrink-0 ">
           <button className="">
             <h1 className="text-gray-500 font-normal text-md md:text-lg  md:ml-10">
@@ -37,13 +31,58 @@ const Header: React.FC = () => {
           </button>
         </div>
 
-        {/* Left: Smart Search Button */}
+        {/* Menu Button */}
         <div className="block md:hidden lg:hidden flex-shrink-0 sm:ml-10 ml-6">
-          <button className="">
+          <button className="" onClick={() => setMenuVisible(true)}>
             <h1 className="text-gray-500 font-normal text-md md:text-lg">
               Menu
             </h1>
           </button>
+        </div>
+
+        {/* Sliding Menu for small screens */}
+        <div
+          className={`fixed top-0 left-0 bg-white shadow-lg transform ${
+            menuVisible ? "translate-x-0" : "-translate-x-full"
+          } transition-transform duration-500 ease-in-out z-10 w-full md:w-1/2 lg:w-1/3 h-full overflow-y-auto`}
+        >
+          {/* Sliding Menu container */}
+          <div className="p-3 w-full min-h-screen flex flex-col">
+
+            {/* Close button */}
+            <div className="flex justify-end items-center">
+              <button
+                className="text-2xl font-medium text-gray-600"
+                onClick={() => setMenuVisible(false)}
+              >
+                <svg
+                  className="w-6 h-6 text-gray-500"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M6 18L18 6M6 6l12 12"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                  />
+                </svg>
+              </button>
+            </div>
+
+            {/* Links */}
+            <NavLink className="text-4xl text-red-600" to="/">
+              Home
+            </NavLink>
+            <NavLink className="text-4xl text-red-600" to="/collection">
+              NEW COLLECTION
+            </NavLink>
+            <NavLink className="text-4xl text-red-600" to="/sale">
+              SALE
+            </NavLink>
+          </div>
         </div>
 
         {/* Center: Logo */}
@@ -55,7 +94,7 @@ const Header: React.FC = () => {
 
         {/* Right: Login and Cart Buttons with toggle */}
         <div className="flex-shrink-0 flex space-x-2 mr-2 sm:mr-10">
-          {/* Login/logoff conditional */}
+          {/* Login button conditional */}
           <button className="hidden md:block">
             <div>
               <NavLink
@@ -67,23 +106,21 @@ const Header: React.FC = () => {
             </div>
           </button>
 
-          {/* carrito button */}
-          <Link
-            to="/cart"
-            className="relative text-black py-2 px-4 flex items-center justify-center"
-          >
+          {/* Cart button */}
+          <button className="relative text-black py-2 px-4 flex items-center justify-center">
             <h1
               onClick={() => setVisible(true)}
               className="text-gray-500 font-normal text-md md:text-lg"
             >
               Carrito
             </h1>
+
             <div className="absolute top-0 right-2 -mt-1 -mr-1 flex items-center justify-center w-4 h-4 bg-gray-500 text-white text-xs rounded-full">
               <span className="text-xxs font-light">2</span>
             </div>
-          </Link>
+          </button>
 
-          {/* Sidebar cart for small screens */}
+          {/* Sidebar Cart for small screens */}
           <div
             className={`fixed top-0 right-0 bg-white shadow-lg transform ${
               visible ? "translate-x-0" : "translate-x-full"
@@ -217,8 +254,6 @@ const Header: React.FC = () => {
         </div>
       </header>
 
-
-
       {/* Categorias: hay eventos */}
       <div className="hidden md:flex justify-center items-center space-x-8 pt-2 py-6 bg-white">
         <NavLink className="text-gray-500 font-normal text-sm" to="/">
@@ -346,11 +381,8 @@ const Header: React.FC = () => {
           SALE
         </NavLink>
       </div>
-
-
     </div>
   );
 };
 
 export default Header;
-

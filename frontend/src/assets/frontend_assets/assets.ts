@@ -102,6 +102,7 @@ export const products = [
       "A lightweight, usually knitted, pullover shirt, close-fitting and with a round neckline and short sleeves, worn as an undershirt or outer garment.",
     price: 100,
     image: [p_img1],
+    share: "6 x $6.200,00 sin interés",
     category: "Women",
     subCategory: "Topwear",
     sizes: ["S", "M", "L", "XL"],
@@ -124,6 +125,7 @@ export const products = [
     createdAt: "123123",
     updatedAt: "123213",
     beforePrice: 80,
+    share: "6 x $6.200,00 sin interés",
   },
   {
     id: 3,
@@ -133,14 +135,14 @@ export const products = [
     price: 220,
     image: [p_img3],
     category: "Kids",
-
     subCategory: "Topwear",
-
     sizes: ["S", "M", "L", "XL"],
     date: 1716634345448,
     createdAt: "123123",
     updatedAt: "123213",
     beforePrice: 80,
+    share: "6 x $6.200,00 sin interés",
+
   },
   {
     id: 4,
@@ -154,9 +156,12 @@ export const products = [
     date: 1716634345448,
     createdAt: "123123",
     subCategory: "Topwear",
-
     updatedAt: "123213",
     beforePrice: 80,
+    share: "6 x $6.200,00 sin interés",
+
+
+
   },
   {
     id: 5,
@@ -170,9 +175,10 @@ export const products = [
     date: 1716634345448,
     createdAt: "123123",
     subCategory: "Topwear",
-
     updatedAt: "123213",
     beforePrice: 80,
+    share: "6 x $6.200,00 sin interés",
+
   },
   {
     id: 6,
@@ -188,6 +194,8 @@ export const products = [
     createdAt: "123123",
     updatedAt: "123213",
     beforePrice: 80,
+    share: "6 x $6.200,00 sin interés",
+
   },
   {
     id: 7,
@@ -203,6 +211,8 @@ export const products = [
     createdAt: "123123",
     updatedAt: "123213",
     beforePrice: 80,
+    share: "6 x $6.200,00 sin interés",
+
   },
   {
     id: 8,
@@ -218,6 +228,8 @@ export const products = [
     createdAt: "123123",
     updatedAt: "123213",
     beforePrice: 80,
+    share: "6 x $6.200,00 sin interés",
+
   },
   {
     id: 9,
@@ -233,6 +245,8 @@ export const products = [
     createdAt: "123123",
     updatedAt: "123213",
     beforePrice: 80,
+    share: "6 x $6.200,00 sin interés",
+
   },
   {
     id: 10,
@@ -248,6 +262,8 @@ export const products = [
     createdAt: "123123",
     updatedAt: "123213",
     beforePrice: 80,
+    share: "6 x $6.200,00 sin interés",
+
   },
   {
     id: 11,
@@ -263,6 +279,8 @@ export const products = [
     createdAt: "123123",
     updatedAt: "123213",
     beforePrice: 80,
+    share: "6 x $6.200,00 sin interés",
+
   },
   {
     id: 12,
@@ -278,6 +296,8 @@ export const products = [
     createdAt: "123123",
     updatedAt: "123213",
     beforePrice: 80,
+    share: "6 x $6.200,00 sin interés",
+
   },
   {
     id: 13,
@@ -293,6 +313,8 @@ export const products = [
     createdAt: "123123",
     updatedAt: "123213",
     beforePrice: 80,
+    share: "6 x $6.200,00 sin interés",
+
   },
   {
     id: 14,
@@ -308,6 +330,8 @@ export const products = [
     createdAt: "123123",
     updatedAt: "123213",
     beforePrice: 80,
+    share: "6 x $6.200,00 sin interés",
+
   },
   {
     id: 15,
@@ -322,7 +346,9 @@ export const products = [
     date: 1716634345448,
     createdAt: "123123",
     updatedAt: "123213",
-    beforePrice: 80,
+    beforePrice: 80,   
+    share: "6 x $6.200,00 sin interés",
+
   },
   {
     id: 16,
@@ -338,6 +364,8 @@ export const products = [
     createdAt: "123123",
     updatedAt: "123213",
     beforePrice: 80,
+    share: "6 x $6.200,00 sin interés",
+
   },
   {
     id: 17,
@@ -353,6 +381,8 @@ export const products = [
     createdAt: "123123",
     updatedAt: "123213",
     beforePrice: 80,
+    share: "6 x $6.200,00 sin interés",
+
   },
   {
     id: 18,
@@ -367,7 +397,9 @@ export const products = [
     date: 1716634345448,
     createdAt: "123123",
     updatedAt: "123213",
-    beforePrice: 80,
+    beforePrice: 80,   
+    share: "6 x $6.200,00 sin interés",
+
   },
   {
     id: 19,
@@ -383,6 +415,8 @@ export const products = [
     createdAt: "123123",
     updatedAt: "123213",
     beforePrice: 80,
+    share: "6 x $6.200,00 sin interés",
+
   },
   {
     id: 20,
@@ -398,6 +432,8 @@ export const products = [
     createdAt: "123123",
     updatedAt: "123213",
     beforePrice: 80,
+    share: "6 x $6.200,00 sin interés",
+
   },
 ];
 

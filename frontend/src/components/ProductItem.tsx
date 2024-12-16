@@ -1,16 +1,24 @@
 import { Link } from "react-router-dom";
+import type { Product } from "@/types/types";
+import { useState } from "react";
 
-const ProductItem = ({product}) => {
+interface ProductItemProps {
+  product: Product;
+}
+
+const ProductItem: React.FC<ProductItemProps> = ({ product }) => {
+  const [hover, setHover] = useState(false)
+
   return (
     <div className="max-w-full mt-4 min-h-max">
       <div
         className="relative overflow-hidden bg-white shadow-lg"
-        /* 				onMouseEnter={() => {
-            setHover(true);
+        onMouseEnter={() => {
+          setHover(true);
         }}
         onMouseLeave={() => {
-            setHover(false);
-        }} */
+          setHover(false);
+        }}
       >
         {/* Red Tag */}
         <div className="absolute top-1/2 left-0 transform -translate-y-1/2 bg-red-600 text-white text-xs font-bold px-2 py-1 z-10">
@@ -22,10 +30,10 @@ const ProductItem = ({product}) => {
         <Link to={`/products/${product.id}`}>
           <div className="w-full max-h-full h-[500px] sm:h-[900px] md:h-[300px] lg:h-[500px] overflow-hidden relative">
             <img
-              alt={product.title}
-      /*         className={`transform transition-transform duration-500 ease-in-out ${
+              alt={product.name}
+              className={`transform transition-transform duration-500 ease-in-out ${
                 hover ? "scale-110" : "scale-100"
-              } w-full h-full object-cover`} */
+              } w-full h-full object-cover`}
               src={product.image[0]}
             />
           </div>
@@ -34,7 +42,7 @@ const ProductItem = ({product}) => {
 
       {/* Product Info */}
       <div key={product.id} className="mt-3">
-        <h2 className="text-md font-semibold text-gray-600">{product.title}</h2>
+        <h2 className="text-md font-semibold text-gray-600">{product.name}</h2>
         <div className="flex items-center space-x-2">
           <span className="text-md font-normal text-gray-500">
             ${product.price}
@@ -50,7 +58,7 @@ const ProductItem = ({product}) => {
         {/* Link to product detail page */}
         <button
           className="mt-2 w-full text-gray-500 text-sm font-normal py-2 text-left underline"
- /*          onClick={() => {
+          /*          onClick={() => {
             setIsPopupVisible(true);
             addToCart(product);
           }} */
@@ -59,7 +67,7 @@ const ProductItem = ({product}) => {
         </button>
 
         {/* Render ProductPopup when visible */}
-{/*         {isPopupVisible && (
+        {/*         {isPopupVisible && (
           <ProductPopup
             product={product}
             onClose={() => {

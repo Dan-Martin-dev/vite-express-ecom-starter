@@ -11,6 +11,7 @@ export interface Product {
 	subCategory: string,
 	date: number,
 	sizes: string[];
+	share: string
 }
 
 export interface Category {

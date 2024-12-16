@@ -1,16 +1,19 @@
 import { ShopContext } from "@/context/ShopContext";
 import { useContext, useEffect, useState } from "react";
 import ProductItem from "./ProductItem";
+import type { Product } from "@/types/types";
 
 const NewDrops = () => {
-  const { products } = useContext(ShopContext);
-  const [latestProducts, setLatestProducts] = useState([]);
+  const shopContext = useContext(ShopContext); // No destructuring, as it might be null
+
+  const [latestProducts, setLatestProducts] = useState<Product[]>([]);
 
   useEffect(() => {
-    setLatestProducts(products.slice(0, 10));
-  }, [products]);
+    if (shopContext?.products) {
+      setLatestProducts(shopContext.products.slice(0, 10));
+    }
+  }, [shopContext]);
 
-  console.log(products);
 
   return (
     <div className="h-screen md:grid grid-cols-1 md:grid-cols-4 grid-rows-2 md:grid-rows-1 gap-4 p-4">

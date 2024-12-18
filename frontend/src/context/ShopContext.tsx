@@ -13,10 +13,14 @@ interface ShopContextProviderProps {
 }
 
 // eslint-disable-next-line react-refresh/only-export-components
-export const ShopContext = createContext<ShopContextType | null>(null);
+export const ShopContext = createContext<ShopContextType>({
+  products: [],
+  currency: "$",
+  delivery_fee: 0,
+});
 
 const ShopContextProvider: FC<ShopContextProviderProps> = ({ children }) => {
-  const currency = `$`
+  const currency = `$`;
   const delivery_fee = 10;
 
   const value: ShopContextType = {
@@ -25,11 +29,7 @@ const ShopContextProvider: FC<ShopContextProviderProps> = ({ children }) => {
     delivery_fee,
   };
 
-  return (
-    <ShopContext.Provider value={value}>
-      {children}
-    </ShopContext.Provider>
-  );
+  return <ShopContext.Provider value={value}>{children}</ShopContext.Provider>;
 };
 
 export default ShopContextProvider;

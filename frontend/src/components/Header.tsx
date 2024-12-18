@@ -4,9 +4,8 @@ import logo from "/home/vare/project/microservices_1/ecommerce_1/Barnes-Clone-Fr
 import { NavLink, useLocation } from "react-router-dom";
 
 const Header: React.FC = () => {
-  const [visible, setVisible] = useState(false);
+  const [cartVisible, setCartVisible] = useState(false);
   const [menuVisible, setMenuVisible] = useState(false);
-
   const [isProductosHovered, setIsProductosHovered] = useState(false);
   const location = useLocation();
 
@@ -17,6 +16,7 @@ const Header: React.FC = () => {
 
   return (
     <div className="relative w-full">
+      
       {/* Black Bar: moving bar */}
       <MovingBar />
 
@@ -109,7 +109,7 @@ const Header: React.FC = () => {
           {/* Cart button */}
           <button className="relative text-black py-2 px-4 flex items-center justify-center">
             <h1
-              onClick={() => setVisible(true)}
+              onClick={() => setCartVisible(true)}
               className="text-gray-500 font-normal text-md md:text-lg"
             >
               Carrito
@@ -123,7 +123,7 @@ const Header: React.FC = () => {
           {/* Sidebar Cart for small screens */}
           <div
             className={`fixed top-0 right-0 bg-white shadow-lg transform ${
-              visible ? "translate-x-0" : "translate-x-full"
+              cartVisible ? "translate-x-0" : "translate-x-full"
             } transition-transform duration-500 ease-in-out z-10 w-full md:w-1/2 lg:w-1/3 h-full overflow-y-auto`}
           >
             <div className="p-3 w-full min-h-screen flex flex-col">
@@ -133,7 +133,7 @@ const Header: React.FC = () => {
                 </h2>
                 <button
                   className="text-2xl font-medium text-gray-600"
-                  onClick={() => setVisible(false)}
+                  onClick={() => setCartVisible(false)}
                 >
                   <svg
                     className="w-6 h-6 text-gray-500"
@@ -251,6 +251,7 @@ const Header: React.FC = () => {
               </>
             </div>
           </div>
+
         </div>
       </header>
 

@@ -17,6 +17,7 @@ const App = () => {
   return (
     <div>
       <Header/>
+
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
@@ -28,6 +29,7 @@ const App = () => {
         <Route path="/placeorder" element={<PlaceOrder />} />
         <Route path="/product/:productId" element={<Product />} />
       </Routes>
+      
       <Footer/>
     </div>
   );

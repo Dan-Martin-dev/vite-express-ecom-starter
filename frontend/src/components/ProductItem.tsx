@@ -1,13 +1,15 @@
 import { Link } from "react-router-dom";
 import type { Product } from "@/types/types";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { ShopContext } from "@/context/ShopContext";
 
 interface ProductItemProps {
   product: Product;
 }
 
 const ProductItem: React.FC<ProductItemProps> = ({ product }) => {
-  const [hover, setHover] = useState(false)
+  const [hover, setHover] = useState(false);
+  const { currency } = useContext(ShopContext)
 
   return (
     <div className="max-w-full mt-4 min-h-max">
@@ -45,11 +47,11 @@ const ProductItem: React.FC<ProductItemProps> = ({ product }) => {
         <h2 className="text-md font-semibold text-gray-600">{product.name}</h2>
         <div className="flex items-center space-x-2">
           <span className="text-md font-normal text-gray-500">
-            ${product.price}
+            {currency}{product.price}
           </span>
           {product.beforePrice && (
             <span className="text-xs text-gray-400 line-through">
-              ${product.beforePrice}
+              {currency}{product.beforePrice}
             </span>
           )}
         </div>
@@ -58,7 +60,7 @@ const ProductItem: React.FC<ProductItemProps> = ({ product }) => {
         {/* Link to product detail page */}
         <button
           className="mt-2 w-full text-gray-500 text-sm font-normal py-2 text-left underline"
-          /*          onClick={() => {
+/*           onClick={() => {
             setIsPopupVisible(true);
             addToCart(product);
           }} */
@@ -67,7 +69,7 @@ const ProductItem: React.FC<ProductItemProps> = ({ product }) => {
         </button>
 
         {/* Render ProductPopup when visible */}
-        {/*         {isPopupVisible && (
+{/*         {isPopupVisible && (
           <ProductPopup
             product={product}
             onClose={() => {

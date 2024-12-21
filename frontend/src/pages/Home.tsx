@@ -1,6 +1,6 @@
-import Hero from "@/components/Hero"
-import HomeSecond from "@/components/HomeSecond";
-import NewDrops from "@/components/NewDrops"
+import Hero from "@/components/Hero/Hero.tsx"
+import HomeSecond from "@/components/Hero/HeroSecond.tsx";
+import NewDrops from "@/components/Hero/NewDrops.tsx"
 
 const Home = () => {
   return (

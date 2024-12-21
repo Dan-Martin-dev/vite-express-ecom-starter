@@ -1,6 +1,6 @@
 import { ShopContext } from "@/context/ShopContext";
 import { useContext, useEffect, useState } from "react";
-import ProductItem from "./ProductItem";
+import ProductItem from "../Products/ProductItem.tsx";
 import type { Product } from "@/types/types";
 
 const NewDrops = () => {

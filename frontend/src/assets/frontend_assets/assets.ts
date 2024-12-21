@@ -72,6 +72,7 @@ import contact_img from "./contact_img.png";
 import razorpay_logo from "./razorpay_logo.png";
 import stripe_logo from "./stripe_logo.png";
 import cross_icon from "./cross_icon.png";
+import Collection from "@/pages/Collection";
 
 export const assets = {
   logo,
@@ -103,8 +104,9 @@ export const products = [
     price: 100,
     image: [p_img1],
     share: "6 x $6.200,00 sin interés",
-    category: "Women",
-    subCategory: "Topwear",
+    category: "Abrigos",
+    subCategory: "Sweaters",
+    collection: "NewDrops",
     sizes: ["S", "M", "L", "XL"],
     date: 1716634345448,
     createdAt: "123123",
@@ -118,8 +120,9 @@ export const products = [
       "A lightweight, usually knitted, pullover shirt, close-fitting and with a round neckline and short sleeves, worn as an undershirt or outer garment.",
     price: 200,
     image: [p_img2_1, p_img2_2, p_img2_3, p_img2_4],
-    category: "Men",
-    subCategory: "Topwear",
+    category: "Abrigos",
+    subCategory: "Jackets",    
+    collection: "NewDrops",
     sizes: ["S", "M", "L", "XL"],
     date: 1716634345448,
     createdAt: "123123",
@@ -134,8 +137,10 @@ export const products = [
       "A lightweight, usually knitted, pullover shirt, close-fitting and with a round neckline and short sleeves, worn as an undershirt or outer garment.",
     price: 220,
     image: [p_img3],
-    category: "Kids",
-    subCategory: "Topwear",
+    category: "Abrigos",
+    collection: "NewDrops",
+
+    subCategory: "Hoodies",
     sizes: ["S", "M", "L", "XL"],
     date: 1716634345448,
     createdAt: "123123",
@@ -151,17 +156,16 @@ export const products = [
       "A lightweight, usually knitted, pullover shirt, close-fitting and with a round neckline and short sleeves, worn as an undershirt or outer garment.",
     price: 110,
     image: [p_img4],
-    category: "Men",
+    category: "Remeras",
     sizes: ["S", "M", "L", "XL"],
+    collection: "NewDrops",
+
     date: 1716634345448,
     createdAt: "123123",
-    subCategory: "Topwear",
+    subCategory: "Boxy",
     updatedAt: "123213",
     beforePrice: 80,
     share: "6 x $6.200,00 sin interés",
-
-
-
   },
   {
     id: 5,
@@ -170,11 +174,13 @@ export const products = [
       "A lightweight, usually knitted, pullover shirt, close-fitting and with a round neckline and short sleeves, worn as an undershirt or outer garment.",
     price: 130,
     image: [p_img5],
-    category: "Women",
+    category: "Remeras",
     sizes: ["S", "M", "L", "XL"],
+    collection: "NewDrops",
+
     date: 1716634345448,
     createdAt: "123123",
-    subCategory: "Topwear",
+    subCategory: "Oversize",
     updatedAt: "123213",
     beforePrice: 80,
     share: "6 x $6.200,00 sin interés",
@@ -187,15 +193,16 @@ export const products = [
       "A lightweight, usually knitted, pullover shirt, close-fitting and with a round neckline and short sleeves, worn as an undershirt or outer garment.",
     price: 140,
     image: [p_img6],
-    category: "Kids",
-    subCategory: "Topwear",
+    category: "Remeras",
+    collection: "NewDrops",
+
+    subCategory: "Heavyweight",
     sizes: ["S", "M", "L", "XL"],
     date: 1716634345448,
     createdAt: "123123",
     updatedAt: "123213",
     beforePrice: 80,
     share: "6 x $6.200,00 sin interés",
-
   },
   {
     id: 7,
@@ -204,8 +211,10 @@ export const products = [
       "A lightweight, usually knitted, pullover shirt, close-fitting and with a round neckline and short sleeves, worn as an undershirt or outer garment.",
     price: 190,
     image: [p_img7],
-    category: "Men",
-    subCategory: "Bottomwear",
+    category: "Pants",
+    collection: "NewDrops",
+
+    subCategory: "Bermudas",
     sizes: ["S", "M", "L", "XL"],
     date: 1716634345448,
     createdAt: "123123",
@@ -221,8 +230,8 @@ export const products = [
       "A lightweight, usually knitted, pullover shirt, close-fitting and with a round neckline and short sleeves, worn as an undershirt or outer garment.",
     price: 140,
     image: [p_img8],
-    category: "Men",
-    subCategory: "Topwear",
+    category: "Pants",
+    subCategory: "Shorts",
     sizes: ["S", "M", "L", "XL"],
     date: 1716634345448,
     createdAt: "123123",
@@ -238,8 +247,8 @@ export const products = [
       "A lightweight, usually knitted, pullover shirt, close-fitting and with a round neckline and short sleeves, worn as an undershirt or outer garment.",
     price: 100,
     image: [p_img9],
-    category: "Kids",
-    subCategory: "Topwear",
+    category: "Pants",
+    subCategory: "Jeans",
     sizes: ["S", "M", "L", "XL"],
     date: 1716634345448,
     createdAt: "123123",

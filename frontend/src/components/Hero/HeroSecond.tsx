@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import heroSecond2 from "@/assets/frontend_assets/heroSecond2.webp";
 import heroSecond1 from "@/assets/frontend_assets/heroSecond1.webp";
 
-const HomeSecond = () => {
+const HeroSecond = () => {
 
   return (
     <div className="w-full relative">
@@ -99,4 +99,4 @@ const HomeSecond = () => {
   );
 };
 
-export default HomeSecond;
+export default HeroSecond;

@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
-import MovingBar from "@/components/MovingBar";
 import logo from "/home/vare/project/microservices_1/ecommerce_1/Barnes-Clone-Frontend/public/logo.webp"; // Adjust this path according to your structure
 import { NavLink, useLocation } from "react-router-dom";
 
-const Header: React.FC = () => {
+const Navbar = () => {
   const [cartVisible, setCartVisible] = useState(false);
   const [menuVisible, setMenuVisible] = useState(false);
   const [isProductosHovered, setIsProductosHovered] = useState(false);
@@ -15,10 +14,7 @@ const Header: React.FC = () => {
   }, [location]);
 
   return (
-    <div className="relative w-full">
-      
-      {/* Black Bar: moving bar */}
-      <MovingBar />
+    <div>
 
       {/* Header: logos y botones */}
       <header className="bg-white text-white p-4 md:p-6 flex items-center justify-between">
@@ -48,7 +44,6 @@ const Header: React.FC = () => {
         >
           {/* Sliding Menu container */}
           <div className="p-3 w-full min-h-screen flex flex-col">
-
             {/* Close button */}
             <div className="flex justify-end items-center">
               <button
@@ -251,7 +246,6 @@ const Header: React.FC = () => {
               </>
             </div>
           </div>
-
         </div>
       </header>
 
@@ -382,8 +376,9 @@ const Header: React.FC = () => {
           SALE
         </NavLink>
       </div>
+
     </div>
   );
 };
 
-export default Header;
+export default Navbar;

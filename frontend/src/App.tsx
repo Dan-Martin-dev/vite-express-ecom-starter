@@ -9,7 +9,7 @@ import Login from './pages/Login';
 import Orders from './pages/Orders';
 import PlaceOrder from './pages/PlaceOrder';
 import Product from './pages/Product';
-import Header from './components/Header';
+import Header from './components/Header/Header.tsx';
 import Sale from './pages/Sale';
 import Footer from './components/Footer';
 

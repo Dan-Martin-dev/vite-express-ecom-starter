@@ -10,25 +10,25 @@ const Footer = () => {
         <div className="md:w-1/2 flex flex-col space-y-4">
           <a
             href="#"
-            className="relative pt-6 text-5xl font-light hover:text-gray-400 before:content-[''] before:absolute before:-bottom-3 before:left-0 before:w-[200%] before:h-[1px] before:bg-black"
+            className="relative pt-6 text-5xl font-light hover:text-gray-400 before:content-[''] before:absolute before:-bottom-3 before:left-0 before:w-[200%] before:h-[1px] before:bg-black md:before:w-[90%]"
             >
             CAMBIOS
           </a>
           <a
             href="#"
-            className="relative pt-6 text-5xl font-light hover:text-gray-400 before:content-[''] before:absolute before:-bottom-3 before:left-0 before:w-[200%] before:h-[1px] before:bg-black"
+            className="relative pt-6 text-5xl font-light hover:text-gray-400 before:content-[''] before:absolute before:-bottom-3 before:left-0 before:w-[200%] before:h-[1px] before:bg-black md:before:w-[90%]"
             >
             CUIDADOS
           </a>
           <a
             href="#"
-            className="relative pt-6 text-5xl font-light hover:text-gray-400 before:content-[''] before:absolute before:-bottom-3 before:left-0 before:w-[200%] before:h-[1px] before:bg-black"
+            className="relative pt-6 text-5xl font-light hover:text-gray-400 before:content-[''] before:absolute before:-bottom-3 before:left-0 before:w-[200%] before:h-[1px] before:bg-black md:before:w-[90%]"
             >
             VISITANOS
           </a>
           <a
             href="#"
-            className="relative pt-6 text-5xl font-light hover:text-gray-400 before:content-[''] before:absolute before:-bottom-3 before:left-0 before:w-[200%] before:h-[1px] before:bg-black"
+            className="relative pt-6 text-5xl font-light hover:text-gray-400 before:content-[''] before:absolute before:-bottom-3 before:left-0 before:w-[200%] before:h-[1px] before:bg-black md:before:w-[90%]"
             >
             MAYORISTA
           </a>
@@ -83,9 +83,9 @@ const Footer = () => {
       </div>
 
       {/* Copyright Bar */}
-      <div className="border-t border-gray-700 mt-6 pt-4 text-center text-sm text-gray-400">
+      <div className="mt-6 pt-4 font-normal text-center text-sm text-black">
         © {new Date().getFullYear()} Your Brand. All rights reserved.
-      </div>
+      </div>  
     </footer>
   );
 };

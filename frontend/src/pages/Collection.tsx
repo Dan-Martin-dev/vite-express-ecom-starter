@@ -1,6 +1,10 @@
+import DynamicCollections from "@/components/Collections/DynamicCollections"
+
 const Collection = () => {
   return (
-    <div>Collection</div>
+    <div>
+      <DynamicCollections />
+    </div>
   )
 }
 

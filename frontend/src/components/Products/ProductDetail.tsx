@@ -20,6 +20,7 @@ const ProductDetail = () => {
 	return (
 		/* Product detail component */
 		<div className="w-full min-h-max flex flex-col sm:flex-row sm:space-x-4">
+			
 			{/* image section */}
 			<div className="w-full sm:w-1/2">
 				{/* counter/arrows */}

@@ -139,7 +139,6 @@ export const products = [
     image: [p_img3],
     category: "Abrigos",
     collection: "NewDrops",
-
     subCategory: "Hoodies",
     sizes: ["S", "M", "L", "XL"],
     date: 1716634345448,
@@ -159,7 +158,6 @@ export const products = [
     category: "Remeras",
     sizes: ["S", "M", "L", "XL"],
     collection: "NewDrops",
-
     date: 1716634345448,
     createdAt: "123123",
     subCategory: "Boxy",
@@ -177,7 +175,6 @@ export const products = [
     category: "Remeras",
     sizes: ["S", "M", "L", "XL"],
     collection: "NewDrops",
-
     date: 1716634345448,
     createdAt: "123123",
     subCategory: "Oversize",
@@ -195,7 +192,6 @@ export const products = [
     image: [p_img6],
     category: "Remeras",
     collection: "NewDrops",
-
     subCategory: "Heavyweight",
     sizes: ["S", "M", "L", "XL"],
     date: 1716634345448,
@@ -213,7 +209,6 @@ export const products = [
     image: [p_img7],
     category: "Pants",
     collection: "NewDrops",
-
     subCategory: "Bermudas",
     sizes: ["S", "M", "L", "XL"],
     date: 1716634345448,
@@ -230,6 +225,7 @@ export const products = [
       "A lightweight, usually knitted, pullover shirt, close-fitting and with a round neckline and short sleeves, worn as an undershirt or outer garment.",
     price: 140,
     image: [p_img8],
+    collection: "NewDrops",
     category: "Pants",
     subCategory: "Shorts",
     sizes: ["S", "M", "L", "XL"],
@@ -247,6 +243,7 @@ export const products = [
       "A lightweight, usually knitted, pullover shirt, close-fitting and with a round neckline and short sleeves, worn as an undershirt or outer garment.",
     price: 100,
     image: [p_img9],
+    collection: "NewDrops",
     category: "Pants",
     subCategory: "Jeans",
     sizes: ["S", "M", "L", "XL"],
@@ -264,6 +261,7 @@ export const products = [
       "A lightweight, usually knitted, pullover shirt, close-fitting and with a round neckline and short sleeves, worn as an undershirt or outer garment.",
     price: 110,
     image: [p_img10],
+    collection: "OldDrops",
     category: "Men",
     subCategory: "Bottomwear",
     sizes: ["S", "M", "L", "XL"],
@@ -281,6 +279,8 @@ export const products = [
       "A lightweight, usually knitted, pullover shirt, close-fitting and with a round neckline and short sleeves, worn as an undershirt or outer garment.",
     price: 120,
     image: [p_img11],
+    collection: "OldDrops",
+
     category: "Men",
     subCategory: "Topwear",
     sizes: ["S", "M", "L", "XL"],
@@ -298,6 +298,8 @@ export const products = [
       "A lightweight, usually knitted, pullover shirt, close-fitting and with a round neckline and short sleeves, worn as an undershirt or outer garment.",
     price: 150,
     image: [p_img12],
+    collection: "OldDrops",
+
     category: "Men",
     subCategory: "Topwear",
     sizes: ["S", "M", "L", "XL"],
@@ -315,6 +317,8 @@ export const products = [
       "A lightweight, usually knitted, pullover shirt, close-fitting and with a round neckline and short sleeves, worn as an undershirt or outer garment.",
     price: 130,
     image: [p_img13],
+    collection: "OldDrops",
+
     category: "Women",
     subCategory: "Topwear",
     sizes: ["S", "M", "L", "XL"],
@@ -332,6 +336,8 @@ export const products = [
       "A lightweight, usually knitted, pullover shirt, close-fitting and with a round neckline and short sleeves, worn as an undershirt or outer garment.",
     price: 160,
     image: [p_img14],
+    collection: "OldDrops",
+
     category: "Kids",
     subCategory: "Topwear",
     sizes: ["S", "M", "L", "XL"],
@@ -349,6 +355,8 @@ export const products = [
       "A lightweight, usually knitted, pullover shirt, close-fitting and with a round neckline and short sleeves, worn as an undershirt or outer garment.",
     price: 140,
     image: [p_img15],
+    collection: "OldDrops",
+
     category: "Men",
     subCategory: "Bottomwear",
     sizes: ["S", "M", "L", "XL"],
@@ -366,6 +374,8 @@ export const products = [
       "A lightweight, usually knitted, pullover shirt, close-fitting and with a round neckline and short sleeves, worn as an undershirt or outer garment.",
     price: 170,
     image: [p_img16],
+    collection: "OldDrops",
+
     category: "Kids",
     subCategory: "Topwear",
     sizes: ["S", "M", "L", "XL"],
@@ -383,6 +393,8 @@ export const products = [
       "A lightweight, usually knitted, pullover shirt, close-fitting and with a round neckline and short sleeves, worn as an undershirt or outer garment.",
     price: 150,
     image: [p_img17],
+    collection: "OldDrops",
+
     category: "Men",
     subCategory: "Bottomwear",
     sizes: ["S", "M", "L", "XL"],
@@ -400,6 +412,8 @@ export const products = [
       "A lightweight, usually knitted, pullover shirt, close-fitting and with a round neckline and short sleeves, worn as an undershirt or outer garment.",
     price: 180,
     image: [p_img18],
+    collection: "OldDrops",
+
     category: "Kids",
     subCategory: "Topwear",
     sizes: ["S", "M", "L", "XL"],
@@ -417,6 +431,8 @@ export const products = [
       "A lightweight, usually knitted, pullover shirt, close-fitting and with a round neckline and short sleeves, worn as an undershirt or outer garment.",
     price: 160,
     image: [p_img19],
+    collection: "OldDrops",
+
     category: "Kids",
     subCategory: "Topwear",
     sizes: ["S", "M", "L", "XL"],
@@ -434,6 +450,8 @@ export const products = [
       "A lightweight, usually knitted, pullover shirt, close-fitting and with a round neckline and short sleeves, worn as an undershirt or outer garment.",
     price: 190,
     image: [p_img20],
+    collection: "OldDrops",
+
     category: "Women",
     subCategory: "Bottomwear",
     sizes: ["S", "M", "L", "XL"],

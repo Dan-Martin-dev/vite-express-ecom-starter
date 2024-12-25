@@ -13,6 +13,8 @@ const ProductItem: React.FC<ProductItemProps> = ({ product }) => {
 
   return (
     <div className="max-w-full mt-4 min-h-max">
+      
+      {/* Product Image */}
       <div
         className="relative overflow-hidden bg-white shadow-lg"
         onMouseEnter={() => {
@@ -23,14 +25,17 @@ const ProductItem: React.FC<ProductItemProps> = ({ product }) => {
         }}
       >
         {/* Red Tag */}
-        <div className="absolute top-1/2 left-0 transform -translate-y-1/2 bg-red-600 text-white text-xs font-bold px-2 py-1 z-10">
-          -25% OFF
-        </div>
+        {product.discount && (
+          <div className="absolute top-1/2 left-0 transform -translate-y-1/2 bg-red-600 text-white text-[0.60rem] font-bold px-2 py-1 z-10">
+            {product.discount}
+          </div>
+          )
+        }
 
         {/* Product Image */}
 
         <Link to={`/products/${product.id}`}>
-          <div className="w-full max-h-full h-[500px] sm:h-[900px] md:h-[300px] lg:h-[500px] overflow-hidden relative">
+          <div className="w-full max-h-full ">
             <img
               alt={product.name}
               className={`transform transition-transform duration-500 ease-in-out ${
@@ -78,6 +83,7 @@ const ProductItem: React.FC<ProductItemProps> = ({ product }) => {
           />
         )} */}
       </div>
+
     </div>
   );
 };

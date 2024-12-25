@@ -112,6 +112,7 @@ export const products = [
     createdAt: "123123",
     updatedAt: "123213",
     beforePrice: 80,
+    discount: '-25% OFF'
   },
   {
     id: 2,

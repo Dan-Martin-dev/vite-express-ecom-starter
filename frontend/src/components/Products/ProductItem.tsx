@@ -32,7 +32,7 @@ const ProductItem: React.FC<ProductItemProps> = ({ product }) => {
           )
         }
 
-        {/* Product Image */}
+        {/* Product Ima ge */}
 
         <Link to={`/products/${product.id}`}>
           <div className="w-full max-h-full ">

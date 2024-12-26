@@ -9,21 +9,15 @@ const DynamicCollections = () => {
   const [category, setCategory] = useState<string[]>([]);
   const [subCategory, setSubCategory] = useState<string[]>([]);
 
-  const toggleCategory = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setCategory((prev) =>
-      prev.includes(value)
-        ? prev.filter((item) => item !== value)
-        : [...prev, value]
-    );
-  };
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [filteredProducts, setFilteredProducts] = useState(products);
 
-  const toggleSubCategory = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setSubCategory((prev) =>
-      prev.includes(value)
-        ? prev.filter((item) => item !== value)
-        : [...prev, value]
+  const handleCategoryChange = (category:any) => {
+    setSelectedCategory(category);
+    setFilteredProducts(
+      category
+        ? products.filter((product) => product.category === category)
+        : products
     );
   };
 
@@ -32,12 +26,12 @@ const DynamicCollections = () => {
   }, [products]);
 
   return (
-    
     /* Container */
     <div className="">
 
       {/* Description */}
       <div className="ml-5 mb-16">
+
         {/* Links */}
         <div className="flex items-center space-x-2 text-xs text-gray-500 mt-6 ">
           {/* Link 1 */}
@@ -52,7 +46,6 @@ const DynamicCollections = () => {
           <a className="hover:text-gray-600" href="#">
             NEW COLLECTION
           </a>
-
         </div>
 
         {/* Title */}
@@ -69,20 +62,76 @@ const DynamicCollections = () => {
             versatilidad, calidad y utilidad de todas las prendas.{" "}
           </h2>
         </div>
+        
       </div>
 
       {/* Collection */}
       <div className="md:grid grid-cols-1 md:grid-cols-4 grid-rows-2 md:grid-rows-1 gap-4 p-4">
 
-        <div className="col-span-1 row-span-1 md:row-span-2 ">
-          <div className="min-w-60">
-            <p onClick={()=>setShowFilter(!showFilter)}></p>
+        {/* Filters */}
+        <div className="w-screen">
+          <div>
+
+            {/* Filter Section */}
+            <div className="hidden md:block bg-gray-100 p-4">
+              <h2 className="text-lg font-semibold mb-2">Filter by Category</h2>
+              <ul className="space-y-2">
+                <li>
+                  <button
+                    className={`px-3 py-1 text-sm rounded ${
+                      selectedCategory === ""
+                        ? "bg-blue-500 text-white"
+                        : "bg-gray-200"
+                    }`}
+                    onClick={() => handleCategoryChange("")}
+                  >
+                    All
+                  </button>
+                </li>
+                <li>
+                  <button
+                    className={`px-3 py-1 text-sm rounded ${
+                      selectedCategory === "Clothing"
+                        ? "bg-blue-500 text-white"
+                        : "bg-gray-200"
+                    }`}
+                    onClick={() => handleCategoryChange("Clothing")}
+                  >
+                    Clothing
+                  </button>
+                </li>
+                <li>
+                  <button
+                    className={`px-3 py-1 text-sm rounded ${
+                      selectedCategory === "Electronics"
+                        ? "bg-blue-500 text-white"
+                        : "bg-gray-200"
+                    }`}
+                    onClick={() => handleCategoryChange("Electronics")}
+                  >
+                    Electronics
+                  </button>
+                </li>
+                <li>
+                  <button
+                    className={`px-3 py-1 text-sm rounded ${
+                      selectedCategory === "Accessories"
+                        ? "bg-blue-500 text-white"
+                        : "bg-gray-200"
+                    }`}
+                    onClick={() => handleCategoryChange("Accessories")}
+                  >
+                    Accessories
+                  </button>
+                </li>
+              </ul>
+            </div>
+            
           </div>
         </div>
 
         {/* Grid Items */}
-        <div className="grid grid-cols-2 col-span-2 md:col-span-3  md:grid-cols-3 lg:grid-cols-3 gap-4">
-
+        <div className="grid grid-cols-2 md:col-span-3 md:grid-cols-3 gap-4">
           {products.slice(0, 6).map((product: unknown, index: number) => {
             return (
               <div
@@ -92,11 +141,9 @@ const DynamicCollections = () => {
               </div>
             );
           })}
-
         </div>
-          
-      </div>
 
+      </div>
     </div>
   );
 };

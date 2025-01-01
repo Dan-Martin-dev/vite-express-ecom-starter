@@ -31,3 +31,15 @@ export interface User {
 	createdAt: string; // or Date
 	updatedAt: string; // or Date
 }
+
+export interface UseLoginReturn {
+	email: string;
+	setEmail: React.Dispatch<React.SetStateAction<string>>;
+	name: string;
+	setName: React.Dispatch<React.SetStateAction<string>>;
+	password: string;
+	setPassword: React.Dispatch<React.SetStateAction<string>>;
+	isClient: boolean;
+	handleSubmit: (event: React.FormEvent) => Promise<void>;
+	nameError: string;
+  }

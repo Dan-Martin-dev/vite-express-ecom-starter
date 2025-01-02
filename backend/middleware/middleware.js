@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'your_secret_key';
+const JWT_SECRET = process.env.JWT_SECRET;
 
 // Middleware to check if the user is an admin
 export const verifyAdmin = (req, res, next) => {

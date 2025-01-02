@@ -1,36 +1,43 @@
-import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
-import { PrismaClient } from '@prisma/client';
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import { PrismaClient } from "@prisma/client";
+import validator from 'validator';
 
 const prisma = new PrismaClient();
-const JWT_SECRET = process.env.JWT_SECRET || 'your_secret_key';
+const JWT_SECRET = process.env.JWT_SECRET || "your_secret_key";
 
 // Register a new user
 export const registerUser = async (req, res) => {
   const { name, email, password } = req.body;
 
   try {
-    
+
     /* validators */
-    if (name.trim().length < 2 || name.length > 50 || !/^[a-zA-Z\s]+$/.test(name)) {
-      return res.status(400).json({ message: 'Invalid name format' });
+    if (
+      name.trim().length < 2 ||
+      name.length > 50 ||
+      !/^[a-zA-Z\s]+$/.test(name)
+    ) {
+      return res.status(400).json({ message: "Invalid name format" });
     }
-    if (password.length < 8 || !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/.test(password)) {
-      return res.status(400).json({ 
-        message: 'Password must be at least 8 characters long, include uppercase, lowercase, a number, and a special character.' 
+  
+    if (password.length < 6 || !/^(?=.*[a-zA-Z])(?=.*\d).{6,}$/.test(password)) {
+      return res.status(400).json({
+        message: "Password must be at least 6 characters long and include both letters and numbers.",
       });
     }
+  
     if (!validator.isEmail(email)) {
-      return res.status(400).json({ message: 'Invalid email format' });
+      return res.status(400).json({ message: "Invalid email format" });
     }
-
+  
     const existingUser = await prisma.user.findUnique({ where: { email } });
     if (existingUser) {
-      return res.status(400).json({ message: 'User already exists' });
+      return res.status(400).json({ message: "User already exists" });
     }
-
+  
     const hashedPassword = await bcrypt.hash(password, 10);
-
+  
     const newUser = await prisma.user.create({
       data: {
         name,
@@ -38,13 +45,30 @@ export const registerUser = async (req, res) => {
         password: hashedPassword,
       },
     });
-
-    res.status(201).json({ message: 'User  registered successfully', user: newUser });
-  } 
-  catch (error) {
-    res.status(500).json({ message: 'Error registering user', error });
+  
+    // Generate JWT Token
+    const token = jwt.sign(
+      { id: newUser.id, email: newUser.email },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: "1h",
+      }
+    );
+  
+    res.status(201).json({
+      message: "User registered successfully",
+      user: { id: newUser.id, name: newUser.name, email: newUser.email },
+      token,
+    });
+  
+  } catch (error) {
+    console.error("Error registering user:", error);  // Log the actual error for debugging
+    res.status(500).json({
+      message: "Error registering user",
+      error: error.message || "Unknown error occurred",
+    });
   }
-};
+}
 
 // User login
 export const loginUser = async (req, res) => {
@@ -53,48 +77,49 @@ export const loginUser = async (req, res) => {
   try {
     const user = await prisma.user.findUnique({ where: { email } });
     if (!user) {
-      return res.status(404).json({ message: 'User not found' });
+      return res.status(404).json({ message: "User not found" });
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
-      return res.status(401).json({ message: 'Invalid credentials' });
+      return res.status(401).json({ message: "Invalid credentials" });
     }
 
-    const token = jwt.sign({ userId: user.id }, JWT_SECRET, { expiresIn: '1h' });
-    res.json({ message: 'Login successful', token });
-  } 
-  catch (error) {
-    res.status(500).json({ message: 'Error logging in', error });
+    const token = jwt.sign({ userId: user.id }, JWT_SECRET, {
+      expiresIn: "1h",
+    });
+    res.json({ message: "Login successful", token });
+  } catch (error) {
+    res.status(500).json({ message: "Error logging in", error });
   }
 };
 
 // Admin login
 export const adminLogin = async (req, res) => {
-    const { email, password } = req.body;
-  
-    try {
-      // Check if the admin exists
-      const admin = await prisma.user.findUnique({ where: { email } });
-      if (!admin || !admin.isAdmin) {
-        return res.status(404).json({ message: 'Admin not found' });
-      }
-  
-      // Validate password
-      const isPasswordValid = await bcrypt.compare(password, admin.password);
-      if (!isPasswordValid) {
-        return res.status(401).json({ message: 'Invalid credentials' });
-      }
-  
-      // Generate JWT token
-      const token = jwt.sign({ userId: admin.id, isAdmin: true }, JWT_SECRET, {
-        expiresIn: '1h',
-      });
-  
-      res.json({ message: 'Admin login successful', token });
-    } catch (error) {
-      res.status(500).json({ message: 'Error logging in', error });
+  const { email, password } = req.body;
+
+  try {
+    // Check if the admin exists
+    const admin = await prisma.user.findUnique({ where: { email } });
+    if (!admin || !admin.isAdmin) {
+      return res.status(404).json({ message: "Admin not found" });
     }
+
+    // Validate password
+    const isPasswordValid = await bcrypt.compare(password, admin.password);
+    if (!isPasswordValid) {
+      return res.status(401).json({ message: "Invalid credentials" });
+    }
+
+    // Generate JWT token
+    const token = jwt.sign({ userId: admin.id, isAdmin: true }, JWT_SECRET, {
+      expiresIn: "1h",
+    });
+
+    res.json({ message: "Admin login successful", token });
+  } catch (error) {
+    res.status(500).json({ message: "Error logging in", error });
+  }
 };
 
 // Get user profile
@@ -108,12 +133,12 @@ export const getUserProfile = async (req, res) => {
     });
 
     if (!user) {
-      return res.status(404).json({ message: 'User not found' });
+      return res.status(404).json({ message: "User not found" });
     }
 
     res.json(user);
   } catch (error) {
-    res.status(500).json({ message: 'Error fetching user profile', error });
+    res.status(500).json({ message: "Error fetching user profile", error });
   }
 };
 
@@ -131,7 +156,7 @@ export const updateUserProfile = async (req, res) => {
 
     res.json(updatedUser);
   } catch (error) {
-    res.status(500).json({ message: 'Error updating profile', error });
+    res.status(500).json({ message: "Error updating profile", error });
   }
 };
 
@@ -141,9 +166,11 @@ export const addToCart = async (req, res) => {
   const { productId, quantity } = req.body;
 
   try {
-    const product = await prisma.product.findUnique({ where: { id: productId } });
+    const product = await prisma.product.findUnique({
+      where: { id: productId },
+    });
     if (!product) {
-      return res.status(404).json({ message: 'Product not found' });
+      return res.status(404).json({ message: "Product not found" });
     }
 
     const user = await prisma.user.findUnique({ where: { id: userId } });
@@ -161,9 +188,9 @@ export const addToCart = async (req, res) => {
       data: { cartData: cart },
     });
 
-    res.json({ message: 'Product added to cart', cart: updatedUser.cartData });
+    res.json({ message: "Product added to cart", cart: updatedUser.cartData });
   } catch (error) {
-    res.status(500).json({ message: 'Error adding to cart', error });
+    res.status(500).json({ message: "Error adding to cart", error });
   }
 };
 
@@ -183,9 +210,12 @@ export const removeFromCart = async (req, res) => {
       data: { cartData: updatedCart },
     });
 
-    res.json({ message: 'Product removed from cart', cart: updatedUser.cartData });
+    res.json({
+      message: "Product removed from cart",
+      cart: updatedUser.cartData,
+    });
   } catch (error) {
-    res.status(500).json({ message: 'Error removing from cart', error });
+    res.status(500).json({ message: "Error removing from cart", error });
   }
 };
 
@@ -197,14 +227,17 @@ export const placeOrder = async (req, res) => {
     const user = await prisma.user.findUnique({ where: { id: userId } });
 
     if (!user.cartData || user.cartData.length === 0) {
-      return res.status(400).json({ message: 'Cart is empty' });
+      return res.status(400).json({ message: "Cart is empty" });
     }
 
     const order = await prisma.order.create({
       data: {
         userId,
         items: user.cartData,
-        total: user.cartData.reduce((sum, item) => sum + item.quantity * item.price, 0),
+        total: user.cartData.reduce(
+          (sum, item) => sum + item.quantity * item.price,
+          0
+        ),
       },
     });
 
@@ -213,9 +246,9 @@ export const placeOrder = async (req, res) => {
       data: { cartData: [] }, // Clear cart
     });
 
-    res.json({ message: 'Order placed successfully', order });
+    res.json({ message: "Order placed successfully", order });
   } catch (error) {
-    res.status(500).json({ message: 'Error placing order', error });
+    res.status(500).json({ message: "Error placing order", error });
   }
 };
 
@@ -226,11 +259,11 @@ export const getOrderHistory = async (req, res) => {
   try {
     const orders = await prisma.order.findMany({
       where: { userId },
-      orderBy: { createdAt: 'desc' },
+      orderBy: { createdAt: "desc" },
     });
 
     res.json(orders);
   } catch (error) {
-    res.status(500).json({ message: 'Error fetching order history', error });
+    res.status(500).json({ message: "Error fetching order history", error });
   }
 };

@@ -18,6 +18,7 @@ const Navbar = () => {
 
       {/* Header: logos y botones */}
       <header className="bg-white text-white p-4 md:p-6 flex items-center justify-between">
+
         {/* Search Button */}
         <div className="hidden md:block flex-shrink-0 ">
           <button className="">
@@ -42,6 +43,7 @@ const Navbar = () => {
             menuVisible ? "translate-x-0" : "-translate-x-full"
           } transition-transform duration-500 ease-in-out z-10 w-full md:w-1/2 lg:w-1/3 h-full overflow-y-auto`}
         >
+          
           {/* Sliding Menu container */}
           <div className="p-3 w-full min-h-screen flex flex-col">
             {/* Close button */}

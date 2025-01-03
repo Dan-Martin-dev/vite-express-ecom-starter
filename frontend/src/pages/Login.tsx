@@ -3,7 +3,7 @@ import { Toaster } from "sonner";
 import useLogin from "../../src/hooks/useLogin";
 
 const Login: React.FC = () => {
-  const { email, setEmail, password, setPassword, name, setName, isClient, handleSubmit } = useLogin();
+  const { email, setEmail, password, setPassword, name, setName, isClient, handleSubmit, nameError} = useLogin();
 
   if (!isClient) {
     return null; // Optionally, render a loader here
@@ -96,10 +96,12 @@ const Login: React.FC = () => {
                   }}
                 />
               </div>
+
             </div>
 
             {/* Forgot/Remember */}
             <div className="flex items-center justify-between">
+
               <div className="flex items-center">
                 <input
                   className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
@@ -114,11 +116,13 @@ const Login: React.FC = () => {
                   Remember me
                 </label>
               </div>
+
               <div className="text-sm">
                 <a className="font-medium text-gray-500" href="#">
                   Forgot your password?
                 </a>
               </div>
+
             </div>
 
             {/* Submit */}
@@ -130,6 +134,7 @@ const Login: React.FC = () => {
                 Sign in
               </button>
             </div>
+
           </form>
         </div>
       </div>

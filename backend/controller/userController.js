@@ -6,38 +6,49 @@ import validator from 'validator';
 const prisma = new PrismaClient();
 const JWT_SECRET = process.env.JWT_SECRET || "your_secret_key";
 
+
+const validateInputs = (name, email, password) => {
+  if (name.trim().length < 2 || name.trim().length > 50) {
+    return "Name must be between 2 and 50 characters.";
+  }
+  if (!/^[a-zA-Z\s]+$/.test(name)) {
+    return "Name must only contain letters and spaces.";
+  }
+  if (!validator.isEmail(email)) {
+    return "Invalid email format.";
+  }
+  if (password.length < 6 || !/^(?=.*[a-zA-Z])(?=.*\d).{6,}$/.test(password)) {
+    return "Password must be at least 6 characters long and include both letters and numbers.";
+  }
+  return null;
+};
+
 // Register a new user
 export const registerUser = async (req, res) => {
   const { name, email, password } = req.body;
 
   try {
+    const validationError = validateInputs(name, email, password);
+    if (validationError) {
+      return res.status(400).json({ message: validationError });
+    }
 
-    /* validators */
-    if (
-      name.trim().length < 2 ||
-      name.length > 50 ||
-      !/^[a-zA-Z\s]+$/.test(name)
-    ) {
-      return res.status(400).json({ message: "Invalid name format" });
+    // Check if the name already exists
+    const existingName = await prisma.user.findUnique({ where: { name } });
+    if (existingName) {
+      return res.status(400).json({ message: "User with this name already exists" });
     }
-  
-    if (password.length < 6 || !/^(?=.*[a-zA-Z])(?=.*\d).{6,}$/.test(password)) {
-      return res.status(400).json({
-        message: "Password must be at least 6 characters long and include both letters and numbers.",
-      });
+
+    // Check if the email already exists
+    const existingEmail = await prisma.user.findUnique({ where: { email } });
+    if (existingEmail) {
+      return res.status(400).json({ message: "Email is already in use" });
     }
-  
-    if (!validator.isEmail(email)) {
-      return res.status(400).json({ message: "Invalid email format" });
-    }
-  
-    const existingUser = await prisma.user.findUnique({ where: { email } });
-    if (existingUser) {
-      return res.status(400).json({ message: "User already exists" });
-    }
-  
+
+    // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
-  
+
+    // Create user
     const newUser = await prisma.user.create({
       data: {
         name,
@@ -45,17 +56,15 @@ export const registerUser = async (req, res) => {
         password: hashedPassword,
       },
     });
-  
-    // Generate JWT Token
+
+    // Generate JWT token
     const token = jwt.sign(
       { id: newUser.id, email: newUser.email },
       process.env.JWT_SECRET,
-      {
-        expiresIn: "1h",
-      }
+      { expiresIn: "1h" }
     );
   
-    res.status(201).json({
+    return res.status(201).json({
       message: "User registered successfully",
       user: { id: newUser.id, name: newUser.name, email: newUser.email },
       token,

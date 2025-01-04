@@ -3,7 +3,7 @@ import { Toaster } from "sonner";
 import useLogin from "../../src/hooks/useLogin";
 
 const Login: React.FC = () => {
-  const { email, setEmail, password, setPassword, name, setName, isClient, handleSubmit, nameError} = useLogin();
+  const { email, setEmail, password, setPassword, name, setName, isClient, handleSubmit} = useLogin();
 
   if (!isClient) {
     return null; // Optionally, render a loader here

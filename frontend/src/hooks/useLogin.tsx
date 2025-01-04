@@ -5,7 +5,11 @@ import { useNavigate } from "react-router-dom";
 import { UseLoginReturn } from "../../src/types/types.tsx";
 
 // Validation function reused from the backend
-const validateInputs = (name: string, email: string, password: string): string | null => {
+const validateInputs = (
+  name: string,
+  email: string,
+  password: string
+): string | null => {
   if (name.trim().length < 2 || name.trim().length > 50) {
     return "Name must be between 2 and 50 characters.";
   }
@@ -26,7 +30,6 @@ const useLogin = (): UseLoginReturn => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isClient, setIsClient] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
   const navigate = useNavigate(); // React Router navigation hook
 
@@ -40,9 +43,8 @@ const useLogin = (): UseLoginReturn => {
 
     const validationError = validateInputs(name, email, password);
 
-
     if (validationError) {
-      setError(validationError); // Display validation error
+      toast.error(validationError, { position: "top-right" }); // Display validation error using toast
       return;
     }
 
@@ -66,12 +68,18 @@ const useLogin = (): UseLoginReturn => {
         if (message === "User with this name already exists") {
           toast.error("Este nombre ya está en uso.", { position: "top-right" });
         } else if (message === "Email is already in use") {
-          toast.error("Este email ya ha sido utilizado.", { position: "top-right" });
+          toast.error("Este email ya ha sido utilizado.", {
+            position: "top-right",
+          });
         } else {
-          toast.error("Ha habido un error, intente nuevamente.", { position: "top-right" });
+          toast.error("Ha habido un error, intente nuevamente.", {
+            position: "top-right",
+          });
         }
       } else {
-        toast.error("An unexpected error occurred. Please try again.", { position: "top-right" });
+        toast.error("An unexpec ted error occurred. Please try again.", {
+          position: "top-right",
+        });
       }
     }
   };
@@ -85,7 +93,6 @@ const useLogin = (): UseLoginReturn => {
     setPassword,
     isClient,
     handleSubmit,
-    error,
   };
 };
 

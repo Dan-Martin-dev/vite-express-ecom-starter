@@ -41,5 +41,4 @@ export interface UseLoginReturn {
 	setPassword: React.Dispatch<React.SetStateAction<string>>;
 	isClient: boolean;
 	handleSubmit: (event: React.FormEvent) => Promise<void>;
-	error: string | null;
   }

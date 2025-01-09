@@ -1,8 +1,9 @@
 // app.js
+import "module-alias/register.js";
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
-import userRouter from "@/routes/userRouter.js"; // Adjust path as needed
+import userRouter from "../backend/routes/userRouter.js"; // Adjust path as needed
 
 dotenv.config(); // Load environment variables
 

@@ -24,7 +24,6 @@ export const verifyAdmin = (req, res, next) => {
   }
 };
 
-
 export const authenticateToken = async (req, res, next) => {
   const token = req.headers.authorization?.split(" ")[1];
 

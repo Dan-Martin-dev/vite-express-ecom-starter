@@ -97,7 +97,7 @@ const Register: React.FC = () => {
                 />
               </div>
 
-            </div>
+        </div>
 
             {/* Forgot/Remember */}
             <div className="flex items-center justify-between">

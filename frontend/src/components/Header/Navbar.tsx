@@ -1,13 +1,15 @@
 import { useEffect, useState } from "react";
 import logo from "/home/vare/project/microservices_1/ecommerce_1/Barnes-Clone-Frontend/public/logo.webp"; // Adjust this path according to your structure
 import { NavLink, useLocation } from "react-router-dom";
+import useAuth from "@/context/AuthContext";
 
 const Navbar = () => {
   const [cartVisible, setCartVisible] = useState(false);
   const [menuVisible, setMenuVisible] = useState(false);
   const [isProductosHovered, setIsProductosHovered] = useState(false);
+  const { isAuthenticated } = useAuth();
   const location = useLocation();
-
+  const { setIsAuthenticated } = useAuth();
   useEffect(() => {
     setIsProductosHovered(false);
     setMenuVisible(false);
@@ -15,10 +17,8 @@ const Navbar = () => {
 
   return (
     <div>
-
       {/* Header: logos y botones */}
       <header className="bg-white text-white p-4 md:p-6 flex items-center justify-between">
-
         {/* Search Button */}
         <div className="hidden md:block flex-shrink-0 ">
           <button className="">
@@ -43,7 +43,6 @@ const Navbar = () => {
             menuVisible ? "translate-x-0" : "-translate-x-full"
           } transition-transform duration-500 ease-in-out z-10 w-full md:w-1/2 lg:w-1/3 h-full overflow-y-auto`}
         >
-          
           {/* Sliding Menu container */}
           <div className="p-3 w-full min-h-screen flex flex-col">
             {/* Close button */}
@@ -91,18 +90,28 @@ const Navbar = () => {
 
         {/* Right: Login and Cart Buttons with toggle */}
         <div className="flex-shrink-0 flex space-x-2 mr-2 sm:mr-10">
-
           {/* Login button conditional */}
-          <button className="hidden md:block">
-            <div>
+          {isAuthenticated ? (
+            // Show Logout when authenticated
+            <button
+              onClick={() => setIsAuthenticated(false)} // Logout sets `isAuthenticated` to false
+              className="hidden md:block"
+            >
+              <div className="text-gray-500 font-normal text-md md:text-lg">
+                Logout
+              </div>
+            </button>
+          ) : (
+            // Show Login when not authenticated
+            <button className="hidden md:block">
               <NavLink
                 to="/login"
                 className="text-gray-500 font-normal text-md md:text-lg"
               >
                 Login
               </NavLink>
-            </div>
-          </button>
+            </button>
+          )}
 
           {/* Cart button */}
           <button className="relative text-black py-2 px-4 flex items-center justify-center">
@@ -250,7 +259,6 @@ const Navbar = () => {
             </div>
           </div>
         </div>
-
       </header>
 
       {/* Categorias: hay eventos */}
@@ -380,7 +388,6 @@ const Navbar = () => {
           SALE
         </NavLink>
       </div>
-
     </div>
   );
 };

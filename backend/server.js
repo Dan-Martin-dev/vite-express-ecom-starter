@@ -1,6 +1,6 @@
 // server.js
 import app from "./app.js";
-import { scheduleTokenCleanup } from "@/jobs/cleanupTokens.js";
+import { scheduleTokenCleanup } from "/home/vare/project/microservices_1/ecommerce_1/vite-express-ecom-starter/backend/jobs/cleanupTokens.js";
 
 // Start the server
 const port = process.env.PORT || 4000;

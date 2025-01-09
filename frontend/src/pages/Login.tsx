@@ -1,10 +1,11 @@
 // Import necessary libraries and styles
+import useAuth from "@/context/AuthContext";
 import useLogin from "/home/vare/project/microservices_1/ecommerce_1/vite-express-ecom-starter/frontend/src/hooks/useLogin.tsx";
 import { Toaster } from "sonner";
 
 const Login: React.FC = () => {
   const { email, setEmail, password, setPassword, isClient, setIsClient, handleSubmit } = useLogin();
-
+  const { setIsAuthenticated } = useAuth();
   if (!isClient) {
     return null; // Optionally, render a loader here
   }
@@ -106,6 +107,7 @@ const Login: React.FC = () => {
               <button
                 className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-black"
                 type="submit"
+                onClick={() => setIsAuthenticated(true)} // Log in by setting `isAuthenticated` to true
               >
                 Sign in
               </button>

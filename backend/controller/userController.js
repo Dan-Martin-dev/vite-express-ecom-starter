@@ -97,11 +97,36 @@ export const loginUser = async (req, res) => {
 
     const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, {
       expiresIn: "1h"
-    })
+    });
 
-    res.json({ message: "Login successful", token })
+    res.json({ message: "Login successful", token });
   } catch (error) {
-    res.status(500).json({ message: "Error logging in", error })
+    res.status(500).json({ message: "Error logging in", error });
+  }
+};
+
+// User logout
+export const logoutUser = async (req, res) => {
+  const token = req.headers.authorization?.split(" ")[1];
+
+  if (!token) {
+    return res.status(400).json({ message: "Token is required for logout" });
+  }
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    // Add the token to the blacklist with its expiration time
+    await prisma.tokenBlacklist.create({
+      data: {
+        token,
+        expiresAt: new Date(decoded.exp * 1000), // JWT `exp` is in seconds, convert to milliseconds
+      },
+    });
+
+    res.json({ message: "Logout successful" });
+  } catch (error) {
+    res.status(500).json({ message: "Error logging out", error });
   }
 };
 

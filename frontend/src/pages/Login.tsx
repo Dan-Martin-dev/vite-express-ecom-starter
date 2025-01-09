@@ -21,8 +21,8 @@ const Login: React.FC = () => {
           {/* Card header */}
           <div>
             <h2 className="text-center text-2xl font-bold text-black">Login</h2>
-            <p className="mt-2 text-center text-sm text-gray-600">
-              Enter your email and password below to create an accoun t.
+            <p className="mt-2 text-center text-sm text-gray-800">
+              Enter your email and password below to create an account.
             </p>
           </div>
 
@@ -47,7 +47,7 @@ const Login: React.FC = () => {
                 </label>
                 <input
                   required
-                  className="appearance-none rounded-xl relative block w-full mb-2 px-3 py-2 hover:border-gray-600 placeholder-gray-500 text-gray-900 bg-white focus:bg-white focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                  className="appearance-none border-black rounded-xl relative block w-full mb-2 px-3 py-2 hover:border-gray-600 placeholder-gray-600 text-gray-500 bg-white focus:bg-white focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                   id="email-address"
                   name="email"
                   placeholder="Email address"
@@ -66,7 +66,7 @@ const Login: React.FC = () => {
                 </label>
                 <input
                   required
-                  className="appearance-none rounded-xl relative block w-full mb-2 px-3 py-2 border-gray-300 placeholder-gray-500 text-gray-900 bg-white focus:bg-white focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                  className="appearance-none border-black rounded-xl relative block w-full mb-2 px-3 py-2 hover:border-gray-600 placeholder-gray-600 text-gray-500 bg-white focus:bg-white focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                   id="password"
                   name="password"
                   placeholder="Password"
@@ -96,7 +96,7 @@ const Login: React.FC = () => {
                 </label>
               </div>
               <div className="text-sm">
-                <a className="font-medium text-gray-500" href="#">
+                <a className="text-sm text-gray-500" href="#">
                   Forgot your password?
                 </a>
               </div>
@@ -112,14 +112,15 @@ const Login: React.FC = () => {
                 Sign in
               </button>
             </div>
+
           </form>
 
           {/* Create account */}
           <div className="flex justify-between items-center">
-            <h1 className="flex-grow text-left">
+            <h1 className="flex-grow text-left text-sm text-gray-900">
               Don't you have an account yet?
             </h1>
-            <h2 className="text-right">Register</h2>
+            <h2 className="text-right text-gray-500 text-sm mr-5">Register</h2>
           </div>
 
         </div>

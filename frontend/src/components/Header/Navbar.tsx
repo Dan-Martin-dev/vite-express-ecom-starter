@@ -91,6 +91,7 @@ const Navbar = () => {
 
         {/* Right: Login and Cart Buttons with toggle */}
         <div className="flex-shrink-0 flex space-x-2 mr-2 sm:mr-10">
+
           {/* Login button conditional */}
           <button className="hidden md:block">
             <div>
@@ -249,6 +250,7 @@ const Navbar = () => {
             </div>
           </div>
         </div>
+
       </header>
 
       {/* Categorias: hay eventos */}

@@ -2,31 +2,19 @@ import { useState, useEffect } from "react";
 import axios, { AxiosError } from "axios";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
-import { UseLoginReturn } from "../../src/types/types.tsx";
+import { UseLoginReturn } from "../types/types.tsx";
 
-// Validation function reused from the backend
-const validateInputs = (
-  name: string,
-  email: string,
-  password: string
-): string | null => {
-  if (name.trim().length < 2 || name.trim().length > 50) {
-    return "Name must be between 2 and 50 characters.";
-  }
-  if (!/^[a-zA-Z\s]+$/.test(name)) {
-    return "Name must only contain letters and spaces.";
-  }
+const validateInputs = (email: string, password: string): string | null => {
   if (!/^\S+@\S+\.\S+$/.test(email)) {
     return "Invalid email format.";
   }
-  if (password.length < 6 || !/^(?=.*[a-zA-Z])(?=.*\d).{6,}$/.test(password)) {
-    return "Password must be at least 6 characters long and include both letters and numbers.";
+  if (password.length < 6) {
+    return "Password must be at least 6 characters long.";
   }
   return null;
 };
 
 const useLogin = (): UseLoginReturn => {
-  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isClient, setIsClient] = useState(false);
@@ -39,59 +27,48 @@ const useLogin = (): UseLoginReturn => {
 
   const handleSubmit = async (event: React.FormEvent): Promise<void> => {
     event.preventDefault();
-    if (!isClient) return;
-
-    const validationError = validateInputs(name, email, password);
+    console.log("Form submitted!"); 
+  
+    console.log("EmailUU:", email);
+    console.log("PasswordUUU:", password);
+  
+    const validationError = validateInputs(email, password);
+    console.log("Validation resultUUU:", validationError);
 
     if (validationError) {
-      toast.error(validationError, { position: "top-right" }); // Display validation error using toast
+      toast.error(validationError, { position: "top-right" });
       return;
     }
-
+  
     try {
+      console.log("Sending API request...");
       const response = await axios.post(
-        `http://localhost:4000/api/users/register`,
-        { name, email, password }
+        `http://localhost:4000/api/users/login`,
+        { email, password },
+        { withCredentials: true }
       );
-
-      if (response.status === 201) {
-        toast.success("Felicitaciones! Tu usuario ha sido creado!");
+      console.log("API response status code:", response.status);
+  
+      if (response.status === 200) {
+        toast.success("Login successful");
         setTimeout(() => {
-          navigate("/"); // Navigate to home page
-        }, 3000);
+          console.log("Navigating to home page...");
+          navigate("/");
+        }, 1000);
       }
     } catch (error) {
-      const axiosError = error as AxiosError<{ message: string }>;
-
-      if (axiosError.response) {
-        const { message } = axiosError.response.data;
-        if (message === "User with this name already exists") {
-          toast.error("Este nombre ya está en uso.", { position: "top-right" });
-        } else if (message === "Email is already in use") {
-          toast.error("Este email ya ha sido utilizado.", {
-            position: "top-right",
-          });
-        } else {
-          toast.error("Ha habido un error, intente nuevamente.", {
-            position: "top-right",
-          });
-        }
-      } else {
-        toast.error("An unexpec ted error occurred. Please try again.", {
-          position: "top-right",
-        });
-      }
+      console.error("Login failed:", error);
+      toast.error("An unexpected error occurred.");
     }
   };
-
+  
   return {
     email,
     setEmail,
-    name,
-    setName,
     password,
     setPassword,
     isClient,
+    setIsClient,
     handleSubmit,
   };
 };

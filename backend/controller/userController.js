@@ -70,7 +70,8 @@ export const registerUser = async (req, res) => {
       token,
     });
   
-  } catch (error) {
+  } 
+  catch (error) {
     console.error("Error registering user:", error);  // Log the actual error for debugging
     res.status(500).json({
       message: "Error registering user",
@@ -86,7 +87,7 @@ export const loginUser = async (req, res) => {
   try {
     const user = await prisma.user.findUnique({ where: { email } });
     if (!user) {
-      return res.status(404).json({ message: "User not found" });
+      return res.status(404).json({ message: "Email not found" });
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
@@ -94,12 +95,13 @@ export const loginUser = async (req, res) => {
       return res.status(401).json({ message: "Invalid credentials" });
     }
 
-    const token = jwt.sign({ userId: user.id }, JWT_SECRET, {
-      expiresIn: "1h",
-    });
-    res.json({ message: "Login successful", token });
+    const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, {
+      expiresIn: "1h"
+    })
+
+    res.json({ message: "Login successful", token })
   } catch (error) {
-    res.status(500).json({ message: "Error logging in", error });
+    res.status(500).json({ message: "Error logging in", error })
   }
 };
 

@@ -14,7 +14,12 @@ const app = express();
 const prisma = new PrismaClient();
 
 // Middleware setup
-app.use(cors({ origin: "http://localhost:5173" }));
+app.use(cors({
+    origin: ['http://localhost:5173',],
+    methods: ['GET', 'POST', 'PUT', 'DELETE'], 
+    credentials: true, 
+}));
+app.options('*', cors());
 app.use(express.json()); // Parse JSON bodies
 
 // Routes setup

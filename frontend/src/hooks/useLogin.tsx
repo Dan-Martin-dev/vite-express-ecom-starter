@@ -50,6 +50,14 @@ const useLogin = (): UseLoginReturn => {
       console.log("API response status code:", response.status);
   
       if (response.status === 200) {
+        const { token } = response.data; // Ensure API returns token
+
+        if (token) {
+          localStorage.setItem("token", token); // Save token to localStorage
+          toast.success("Congratulations! Your user has been created");
+        } else {
+          toast.error("No token received. Please try logging in.");
+        }
         toast.success("Login successful");
         setTimeout(() => {
           console.log("Navigating to home page...");

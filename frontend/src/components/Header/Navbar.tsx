@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import logo from "/home/vare/project/microservices_1/ecommerce_1/Barnes-Clone-Frontend/public/logo.webp"; // Adjust this path according to your structure
 import { NavLink, useLocation } from "react-router-dom";
 import useAuth from "@/context/AuthContext";
+import useLogout from "@/hooks/useLogout";
 
 const Navbar = () => {
   const [cartVisible, setCartVisible] = useState(false);
@@ -9,7 +10,8 @@ const Navbar = () => {
   const [isProductosHovered, setIsProductosHovered] = useState(false);
   const { isAuthenticated } = useAuth();
   const location = useLocation();
-  const { setIsAuthenticated } = useAuth();
+  const { handleLogout } = useLogout();
+  
   useEffect(() => {
     setIsProductosHovered(false);
     setMenuVisible(false);
@@ -84,17 +86,18 @@ const Navbar = () => {
         {/* Center: Logo */}
         <div className="flex-grow flex justify-center ml-10 md:ml-[105px]">
           <NavLink to="/" className="text-xl text-black font-bold">
-            <img alt="logo" src={logo} width={180} height={100} />
+          <img alt="logo" src={logo} width={180} height={100} />
           </NavLink>
         </div>
 
         {/* Right: Login and Cart Buttons with toggle */}
         <div className="flex-shrink-0 flex space-x-2 mr-2 sm:mr-10">
+          
           {/* Login button conditional */}
           {isAuthenticated ? (
             // Show Logout when authenticated
             <button
-              onClick={() => setIsAuthenticated(false)} // Logout sets `isAuthenticated` to false
+              onClick={handleLogout}
               className="hidden md:block"
             >
               <div className="text-gray-500 font-normal text-md md:text-lg">

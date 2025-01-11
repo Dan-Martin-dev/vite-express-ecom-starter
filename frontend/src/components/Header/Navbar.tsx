@@ -44,6 +44,10 @@ const Navbar = () => {
           className={`fixed top-0 left-0 bg-white shadow-lg transform ${
             menuVisible ? "translate-x-0" : "-translate-x-full"
           } transition-transform duration-500 ease-in-out z-10 w-full md:w-1/2 lg:w-1/3 h-full overflow-y-auto`}
+          style={{
+            width: '100vw', // Explicitly set width to 100% of the viewport
+            willChange: 'transform', // Improve rendering in Firefox
+          }}
         >
           {/* Sliding Menu container */}
           <div className="p-3 w-full min-h-screen flex flex-col">
@@ -261,6 +265,7 @@ const Navbar = () => {
               </>
             </div>
           </div>
+          
         </div>
       </header>
 

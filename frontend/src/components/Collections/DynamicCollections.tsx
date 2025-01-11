@@ -34,6 +34,7 @@ const DynamicCollections = () => {
 
         {/* Links */}
         <div className="flex items-center space-x-2 text-xs text-gray-500 mt-6 ">
+
           {/* Link 1 */}
           <a className="hover:text-gray-600" href="#">
             Inicio
@@ -46,6 +47,7 @@ const DynamicCollections = () => {
           <a className="hover:text-gray-600" href="#">
             NEW COLLECTION
           </a>
+          
         </div>
 
         {/* Title */}

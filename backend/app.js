@@ -4,6 +4,7 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import userRouter from "../backend/routes/userRouter.js"; // Adjust path as needed
+import productRouter from "./routes/productRoutes.js";
 
 dotenv.config(); // Load environment variables
 
@@ -24,7 +25,8 @@ app.get("/", (req, res) => {
   res.send("Welcome to the backend API");
 });
 
-// Use the userRouter for all user-related routes
-app.use("/api/users", userRouter);
+// api endpoints
+app.use("/api/user", userRouter);
+app.use("/api/product", productRouter);
 
 export default app;

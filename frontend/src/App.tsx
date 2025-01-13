@@ -14,6 +14,8 @@ import Sale from './pages/Sale';
 import Footer from './components/Footer';
 import Login from './pages/Login.tsx';
 
+import '../../frontend/src/App.css'
+
 const App = () => { 
   return (
     <div>

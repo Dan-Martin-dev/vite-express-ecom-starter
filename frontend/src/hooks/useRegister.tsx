@@ -26,6 +26,8 @@ const validateInputs = (
 };
 
 const useRegister = (): UseRegisterReturn => {
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL; // For React
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -50,7 +52,7 @@ const useRegister = (): UseRegisterReturn => {
 
     try {
       const response = await axios.post(
-        `http://localhost:4000/api/users/register`,
+        `${API_BASE_URL}/users/register`,
         { name, email, password }
       );
 

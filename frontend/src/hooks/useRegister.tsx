@@ -52,7 +52,7 @@ const useRegister = (): UseRegisterReturn => {
 
     try {
       const response = await axios.post(
-        `${API_BASE_URL}/users/register`,
+        `${API_BASE_URL}/user/register`,
         { name, email, password }
       );
 

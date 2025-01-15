@@ -3,7 +3,7 @@ import Navbar from "./Navbar";
 
 const Header: React.FC = () => {
   return (
-    <div className="relative w-full">
+    <div className="relative w-full bg-black">
       
       {/* Black Bar: moving bar */}
       <MovingBar />

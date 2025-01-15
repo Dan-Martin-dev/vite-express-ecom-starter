@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import logo from "/home/vare/project/microservices_1/ecommerce_1/Barnes-Clone-Frontend/public/logo.webp"; // Adjust this path according to your structure
 import { NavLink, useLocation } from "react-router-dom";
 import useAuth from "@/context/AuthContext";
 import useLogout from "@/hooks/useLogout";
@@ -20,12 +19,12 @@ const Navbar = () => {
   return (
     <div>
       {/* Header: logos y botones */}
-      <header className="bg-white text-white p-4 md:p-6 flex items-center justify-between">
+      <header className="bg-black text-white p-4 md:p-6 flex items-center justify-between">
         {/* Search Button */}
         <div className="hidden md:block flex-shrink-0 ">
           <button className="">
-            <h1 className="text-gray-500 font-normal text-md md:text-lg  md:ml-10">
-              Buscar
+            <h1 className="text-white font-neue font-medium md:text-3xl  md:ml-10">
+              BUSCAR
             </h1>
           </button>
         </div>
@@ -33,8 +32,8 @@ const Navbar = () => {
         {/* Menu Button */}
         <div className="block md:hidden lg:hidden flex-shrink-0 sm:ml-10 ml-6">
           <button className="" onClick={() => setMenuVisible(true)}>
-            <h1 className="text-gray-500 font-normal text-md md:text-lg">
-              Menu
+            <h1 className="text-white font-neue font-medium text-lg md:text-lg">
+              MENU
             </h1>
           </button>
         </div>
@@ -51,6 +50,7 @@ const Navbar = () => {
         >
           {/* Sliding Menu container */}
           <div className="p-3 w-full min-h-screen flex flex-col">
+            
             {/* Close button */}
             <div className="flex justify-end items-center">
               <button
@@ -58,7 +58,7 @@ const Navbar = () => {
                 onClick={() => setMenuVisible(false)}
               >
                 <svg
-                  className="w-6 h-6 text-gray-500"
+                  className="w-6 h-6 text-black"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -75,13 +75,13 @@ const Navbar = () => {
             </div>
 
             {/* Links */}
-            <NavLink className="text-4xl text-red-600" to="/">
-              Home
+            <NavLink className="text-4xl font-neue font-medium text-black" to="/">
+              HOME
             </NavLink>
-            <NavLink className="text-4xl text-red-600" to="/collection">
+            <NavLink className="text-4xl font-neue font-medium text-black" to="/">
               NEW COLLECTION
             </NavLink>
-            <NavLink className="text-4xl text-red-600" to="/sale">
+            <NavLink className="text-4xl font-neue font-medium text-black" to="/">
               SALE
             </NavLink>
           </div>
@@ -89,8 +89,8 @@ const Navbar = () => {
 
         {/* Center: Logo */}
         <div className="flex-grow flex justify-center ml-10 md:ml-[105px]">
-          <NavLink to="/" className="text-xl text-black font-bold">
-          <img alt="logo" src={logo} width={180} height={100} />
+          <NavLink to="/" className="text-black font-bold">
+            <h1 className="font-neue text-4xl text-white">CULTIST CLUB</h1>
           </NavLink>
         </div>
 
@@ -104,8 +104,8 @@ const Navbar = () => {
               onClick={handleLogout}
               className="hidden md:block"
             >
-              <div className="text-gray-500 font-normal text-md md:text-lg">
-                Logout
+            <div className="text-black font-neue font-medium md:text-3xl  md:ml-10">
+            LOGOUT
               </div>
             </button>
           ) : (
@@ -113,9 +113,9 @@ const Navbar = () => {
             <button className="hidden md:block">
               <NavLink
                 to="/login"
-                className="text-gray-500 font-normal text-md md:text-lg"
+                className="text-white font-neue font-medium md:text-3xl  md:ml-10"
               >
-                Login
+                LOGIN
               </NavLink>
             </button>
           )}
@@ -124,12 +124,12 @@ const Navbar = () => {
           <button className="relative text-black py-2 px-4 flex items-center justify-center">
             <h1
               onClick={() => setCartVisible(true)}
-              className="text-gray-500 font-normal text-md md:text-lg"
+              className="text-3xl font-neue font-medium text-white"
             >
-              Carrito
+              CART
             </h1>
 
-            <div className="absolute top-0 right-2 -mt-1 -mr-1 flex items-center justify-center w-4 h-4 bg-gray-500 text-white text-xs rounded-full">
+            <div className="absolute top-0 right-2 -mt-1  flex items-center justify-center w-4 h-4 bg-black text-white text-xs rounded-full">
               <span className="text-xxs font-light">2</span>
             </div>
           </button>
@@ -138,7 +138,7 @@ const Navbar = () => {
           <div
             className={`fixed top-0 right-0 bg-white shadow-lg transform ${
               cartVisible ? "translate-x-0" : "translate-x-full"
-            } transition-transform duration-500 ease-in-out z-10 w-full md:w-1/2 lg:w-1/3 h-full overflow-y-auto`}
+            } transition-transform duration-500 ease-in-out z-10 w-full md:w-1/2 lg:w-1/3 h-full my-scrollable-container`}
           >
             <div className="p-3 w-full min-h-screen flex flex-col">
               <div className="flex justify-between items-center">
@@ -267,14 +267,15 @@ const Navbar = () => {
           </div>
           
         </div>
+
       </header>
 
       {/* Categorias: hay eventos */}
-      <div className="hidden md:flex justify-center items-center space-x-8 pt-2 py-6 bg-white">
-        <NavLink className="text-gray-500 font-normal text-sm" to="/">
+      <div className="hidden md:flex justify-center items-center space-x-8 pt-2 py-6 bg-black">
+        <NavLink className="text-white font-neue font-normal text-xl" to="/">
           INICIO
         </NavLink>
-        <NavLink className="text-gray-500 font-normal text-sm" to="/collection">
+        <NavLink className="text-white font-neue font-normal text-xl" to="/collection">
           NEW COLLECTION
         </NavLink>
 
@@ -288,13 +289,13 @@ const Navbar = () => {
           }}
         >
           {/* Products button */}
-          <a className="text-gray-500 font-normal text-sm mt-[-1px]">
+          <a className="text-white font-normal font-neue text-xl  mt-[-1px]">
             PRODUCTOS
           </a>
 
           {/* Panel */}
           <div
-            className={`absolute left-0 w-full bg-white shadow-lg transition-opacity duration-500 
+            className={`absolute left-0 w-full bg-black shadow-lg transition-opacity duration-500 
               ${
                 isProductosHovered
                   ? "opacity-100 z-50"
@@ -303,87 +304,87 @@ const Navbar = () => {
           >
             <div className="grid grid-cols-6 p-8">
               {/* Column 1 */}
-              <div>
+              <div className="text-xl">
                 <ul>
-                  <li className="text-gray-500 font-normal text-sm relative mb-3">
+                  <li className="text-white font-normal font-neue text-md  relative mb-3">
                     <NavLink to="/collection">NEW COLLECTION</NavLink>
                   </li>
                 </ul>
               </div>
 
               {/* Column 2 */}
-              <div>
+              <div className="text-xl">
                 <ul className="mb-2">
-                  <li className="text-gray-500 font-normal text-sm relative mb-3">
+                  <li className="text-white font-neue text-md  font-normal relative mb-3">
                     ABRIGOS
                   </li>
-                  <li className="text-gray-500 font-normal text-sm relative mb-1">
+                  <li className="text-white font-normal font-neue text-md  relative mb-1">
                     Sweaters
                   </li>
-                  <li className="text-gray-500 font-normal text-sm relative mb-1">
+                  <li className="text-white font-normal font-neue text-md relative mb-1">
                     Jackets
                   </li>
-                  <li className="text-gray-500 font-normal text-sm relative mb-1">
+                  <li className="text-white font-normal font-neue text-md relative mb-1">
                     Hoodies
                   </li>
                 </ul>
               </div>
 
               {/* Column 3 */}
-              <div>
+              <div className="text-xl">
                 <ul>
-                  <li className="text-gray-500 font-normal text-sm relative mb-3">
+                  <li className="text-white font-normal font-neue text-md  relative mb-3">
                     REMERAS
                   </li>
-                  <li className="text-gray-500 font-normal text-sm relative mb-1">
+                  <li className="text-white font-normal font-neue text-md relative mb-3">
                     Boxy
                   </li>
-                  <li className="text-gray-500 font-normal text-sm relative mb-1">
+                  <li className="text-white font-normal font-neue text-md  relative mb-3">
                     Oversize
                   </li>
-                  <li className="text-gray-500 font-normal text-sm relative mb-1">
+                  <li className="text-white font-normal font-neue text-md  relative mb-3">
                     Heavyweight
                   </li>
                 </ul>
               </div>
 
               {/* Column 4 */}
-              <div>
+              <div className="text-xl">
                 <ul>
-                  <li className="text-gray-500 font-normal text-sm relative mb-3">
+                  <li className="text-white font-normal font-neue text-md  relative mb-3">
                     PANTS
                   </li>
-                  <li className="text-gray-500 font-normal text-sm relative mb-1">
+                  <li className="text-white font-normal font-neue text-md  relative mb-3">
                     SHORTS
                   </li>
-                  <li className="text-gray-500 font-normal text-sm relative mb-1">
+                  <li className="text-white font-normal font-neue text-md  relative mb-3">
                     SALE
                   </li>
                 </ul>
               </div>
 
               {/* Column 5 */}
-              <div>
+              <div className="text-xl">
                 <ul>
-                  <li className="text-gray-500 font-normal text-sm relative mb-3">
+                  <li className="text-white font-normal font-neue text-md  relative mb-3">
                     ACCESORIOS
                   </li>
-                  <li className="text-gray-500 font-normal text-sm relative mb-1">
+                  <li className="text-white font-normal font-neue text-md relative mb-3">
                     Beanies
                   </li>
-                  <li className="text-gray-500 font-normal text-sm relative mb-1">
+                  <li className="text-white font-normal font-neue text-md  relative mb-3">
                     &nbsp;
                   </li>
-                  <li className="text-gray-500 font-normal text-sm relative mb-1">
+                  <li className="text-white font-normal font-neue text-md  relative mb-3">
                     VER TODO
                   </li>
                 </ul>
               </div>
 
               {/* Column 6 */}
-              <div>
+              <div className="text-xl">
                 <ul>
-                  <li className="text-gray-500 font-normal text-sm relative">
+                  <li className="text-white font-normal font-neue text-md  relative">
                     GIFT CARDS
                   </li>
                 </ul>
@@ -392,7 +393,7 @@ const Navbar = () => {
           </div>
         </div>
 
-        <NavLink className="text-gray-500 font-normal text-sm" to="/sale">
+        <NavLink className="text-white font-neue font-normal text-xl" to="/sale">
           SALE
         </NavLink>
       </div>

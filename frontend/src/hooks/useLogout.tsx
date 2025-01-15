@@ -3,8 +3,9 @@ import axios, { AxiosError } from "axios";
 import { toast } from "sonner";
 
 const useLogout = () => {
-  const { setIsAuthenticated } = useAuth();
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL; // For React
 
+  const { setIsAuthenticated } = useAuth();
   const handleLogout = async () => {
     const token = localStorage.getItem("token");
 
@@ -14,7 +15,7 @@ const useLogout = () => {
     }
     try {
       const response = await axios.post(
-        "http://localhost:4000/api/users/logout",
+        `${API_BASE_URL}/user/logout`,
         {}, // No body for logout
         {
           headers: {
@@ -48,5 +49,5 @@ const useLogout = () => {
 
   return { handleLogout };
 };
-  
+
 export default useLogout;

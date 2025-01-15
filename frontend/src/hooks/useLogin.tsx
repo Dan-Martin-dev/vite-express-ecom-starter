@@ -15,7 +15,7 @@ const validateInputs = (email: string, password: string): string | null => {
 };
 
 const useLogin = (): UseLoginReturn => {
-  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL; // For React
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL; // For React
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

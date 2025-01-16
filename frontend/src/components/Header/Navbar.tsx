@@ -16,11 +16,12 @@ const Navbar = () => {
     setMenuVisible(false);
   }, [location]);
 
+
   return (
     <div className="bg-black">
 
       {/* Header: logos y botones */}
-      <header className="bg-black text-white p-6 flex items-center justify-between">
+      <header className="bg-black text-white p-4 md:p-5 flex items-center justify-between">
 
         {/* Search Button */}
         <div className="hidden md:block flex-shrink-0 ">
@@ -107,12 +108,12 @@ const Navbar = () => {
         </div>
 
         {/* Right: Login and Cart Buttons with toggle */}
-        <div className="bg-black flex-shrink-0 flex space-x-2 mr-2">
+        <div className="bg-black flex-shrink-0 flex space-x-2 mr-2">  
           {/* Login button conditional */}
           {isAuthenticated ? (
             // Show Logout when authenticated
             <button onClick={handleLogout} className="hidden md:block">
-              <div className="text-black font-neue font-medium md:text-3xl  md:ml-10">
+              <div className="text-white font-neue font-medium md:text-3xl md:ml-6">
                 LOGOUT
               </div>
             </button>
@@ -274,7 +275,6 @@ const Navbar = () => {
             </div>
           </div>
         </div>
-
       </header>
 
       {/* Categorias: hay eventos */}
@@ -410,6 +410,7 @@ const Navbar = () => {
           SALE
         </NavLink>
       </div>
+
     </div>
   );
 };

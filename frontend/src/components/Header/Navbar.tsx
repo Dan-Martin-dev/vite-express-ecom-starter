@@ -10,29 +10,31 @@ const Navbar = () => {
   const { isAuthenticated } = useAuth();
   const location = useLocation();
   const { handleLogout } = useLogout();
-  
+
   useEffect(() => {
     setIsProductosHovered(false);
     setMenuVisible(false);
   }, [location]);
 
   return (
-    <div>
+    <div className="bg-black">
+
       {/* Header: logos y botones */}
-      <header className="bg-black text-white p-4 md:p-6 flex items-center justify-between">
+      <header className="bg-black text-white p-6 flex items-center justify-between">
+
         {/* Search Button */}
         <div className="hidden md:block flex-shrink-0 ">
           <button className="">
-            <h1 className="text-white font-neue font-medium md:text-3xl  md:ml-10">
+            <h1 className="text-white font-neue font-medium md:text-3xl md:ml-5">
               BUSCAR
             </h1>
           </button>
         </div>
 
         {/* Menu Button */}
-        <div className="block md:hidden lg:hidden flex-shrink-0 sm:ml-10 ml-6">
+        <div className="block md:hidden lg:hidden flex-shrink-0 ml-0 sm:ml-5">
           <button className="" onClick={() => setMenuVisible(true)}>
-            <h1 className="text-white font-neue font-medium text-lg md:text-lg">
+            <h1 className="text-lg xs:text-xl sm:text-3xl font-neue font-medium text-white">
               MENU
             </h1>
           </button>
@@ -44,13 +46,12 @@ const Navbar = () => {
             menuVisible ? "translate-x-0" : "-translate-x-full"
           } transition-transform duration-500 ease-in-out z-10 w-full md:w-1/2 lg:w-1/3 h-full overflow-y-auto`}
           style={{
-            width: '100vw', // Explicitly set width to 100% of the viewport
-            willChange: 'transform', // Improve rendering in Firefox
+            width: "100vw", // Explicitly set width to 100% of the viewport
+            willChange: "transform", // Improve rendering in Firefox
           }}
         >
           {/* Sliding Menu container */}
           <div className="p-3 w-full min-h-screen flex flex-col">
-            
             {/* Close button */}
             <div className="flex justify-end items-center">
               <button
@@ -75,37 +76,44 @@ const Navbar = () => {
             </div>
 
             {/* Links */}
-            <NavLink className="text-4xl font-neue font-medium text-black" to="/">
+            <NavLink
+              className="text-4xl font-neue font-medium text-black"
+              to="/"
+            >
               HOME
             </NavLink>
-            <NavLink className="text-4xl font-neue font-medium text-black" to="/">
+            <NavLink
+              className="text-4xl font-neue font-medium text-black"
+              to="/"
+            >
               NEW COLLECTION
             </NavLink>
-            <NavLink className="text-4xl font-neue font-medium text-black" to="/">
+            <NavLink
+              className="text-4xl font-neue font-medium text-black"
+              to="/"
+            >
               SALE
             </NavLink>
           </div>
         </div>
 
         {/* Center: Logo */}
-        <div className="flex-grow flex justify-center ml-10 md:ml-[105px]">
+        <div className="flex-grow flex justify-center ml-5 md:ml-16">
           <NavLink to="/" className="text-black font-bold">
-            <h1 className="font-neue text-4xl text-white">CULTIST CLUB</h1>
+            <h1 className="font-neue text-3xl xs:text-4xl sm:text-5xl text-white">
+              CULTIST CLUB
+            </h1>
           </NavLink>
         </div>
 
         {/* Right: Login and Cart Buttons with toggle */}
-        <div className="flex-shrink-0 flex space-x-2 mr-2 sm:mr-10">
-          
+        <div className="bg-black flex-shrink-0 flex space-x-2 mr-2">
           {/* Login button conditional */}
           {isAuthenticated ? (
             // Show Logout when authenticated
-            <button
-              onClick={handleLogout}
-              className="hidden md:block"
-            >
-            <div className="text-black font-neue font-medium md:text-3xl  md:ml-10">
-            LOGOUT
+            <button onClick={handleLogout} className="hidden md:block">
+              <div className="text-black font-neue font-medium md:text-3xl  md:ml-10">
+                LOGOUT
               </div>
             </button>
           ) : (
@@ -121,16 +129,16 @@ const Navbar = () => {
           )}
 
           {/* Cart button */}
-          <button className="relative text-black py-2 px-4 flex items-center justify-center">
+          <button className="relative text-black flex items-center justify-center">
             <h1
+              className="text-lg xs:text-xl sm:text-3xl font-neue font-medium text-white"
               onClick={() => setCartVisible(true)}
-              className="text-3xl font-neue font-medium text-white"
             >
               CART
             </h1>
 
-            <div className="absolute top-0 right-2 -mt-1  flex items-center justify-center w-4 h-4 bg-black text-white text-xs rounded-full">
-              <span className="text-xxs font-light">2</span>
+            <div className="absolute top-0 left-7 sm:left-10 -mt-2 text-black flex items-center justify-center w-4 h-4 bg-white text-xs rounded-full">
+              <span className="text-xs font-bold">2</span>
             </div>
           </button>
 
@@ -265,7 +273,6 @@ const Navbar = () => {
               </>
             </div>
           </div>
-          
         </div>
 
       </header>
@@ -275,7 +282,10 @@ const Navbar = () => {
         <NavLink className="text-white font-neue font-normal text-xl" to="/">
           INICIO
         </NavLink>
-        <NavLink className="text-white font-neue font-normal text-xl" to="/collection">
+        <NavLink
+          className="text-white font-neue font-normal text-xl"
+          to="/collection"
+        >
           NEW COLLECTION
         </NavLink>
 
@@ -393,7 +403,10 @@ const Navbar = () => {
           </div>
         </div>
 
-        <NavLink className="text-white font-neue font-normal text-xl" to="/sale">
+        <NavLink
+          className="text-white font-neue font-normal text-xl"
+          to="/sale"
+        >
           SALE
         </NavLink>
       </div>

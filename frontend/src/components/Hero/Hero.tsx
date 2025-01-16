@@ -11,7 +11,7 @@ const images = {
   ],
   medium: [
     hero1,
-	hero2
+hero2
   ],
 };
 

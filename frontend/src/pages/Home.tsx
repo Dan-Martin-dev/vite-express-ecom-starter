@@ -4,7 +4,7 @@ import NewDrops from "@/components/Hero/NewDrops.tsx"
 
 const Home = () => {
   return (
-    <div>
+    <div className="">
       <Hero/>
       <HomeSecond/>
       <NewDrops/>

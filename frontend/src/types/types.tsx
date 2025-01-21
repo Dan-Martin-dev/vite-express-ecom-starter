@@ -19,7 +19,6 @@ export interface Category {
   id: number;
   title: string;
   description: string;
-  s;
   createdAt: string; // or Date if you prefer to handle dates as Date objects
   updatedAt: string; // or Date if you prefer to handle dates as Date objects
 }

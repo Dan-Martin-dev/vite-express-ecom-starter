@@ -123,7 +123,7 @@ const Login: React.FC = () => {
               Don't you have an account yet?
             </p>
             <Link className="" to="/register">
-            <button className="text-right md:text-base font-roboto font-normal text-gray-600 text-sm mr-5">Register</button>
+              <button className="text-right md:text-base font-roboto font-normal text-gray-600 text-sm mr-5">Register</button>
             </Link>
           </div>
 

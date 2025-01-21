@@ -57,7 +57,7 @@ const Register: React.FC = () => {
 
               {/* Name */}
               <div>
-                <label className="font-roboto sr-only" htmlFor="email-address">
+                <label className="font-roboto sr-only" htmlFor="name">
                   Name
                 </label>
                 <input
@@ -66,7 +66,7 @@ const Register: React.FC = () => {
                   id="name"
                   name="name"
                   placeholder="Name"
-                  type="email"
+                  type="text"
                   value={name}
                   onChange={(e) => {
                     setName(e.target.value);
@@ -142,12 +142,12 @@ const Register: React.FC = () => {
               <button
                 className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-black"
                 type="submit"
-                onClick={() => setIsAuthenticated(true)} // Log in by setting `isAuthenticated` to true
               >
                 Sign in
               </button>
             </div>
           </form>
+
           <div className="flex justify-between items-center">
             <p className="flex-grow md:text-base text-left text-sm font-roboto font-normal text-gray-600">
               Do you have an account already?
@@ -156,6 +156,7 @@ const Register: React.FC = () => {
             <button className="text-right md:text-base font-roboto font-normal text-gray-600 text-sm mr-5">Login</button>
             </Link>
           </div>
+
         </div>
       </div>
     </div>

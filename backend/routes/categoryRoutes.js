@@ -1,27 +1,18 @@
 import express from "express";
 import { 
-  getCart, 
-  addToCart, 
-  updateCartItem, 
-  removeCartItem, 
-  clearCart 
-} from "../controller/cartController.js";
+  getCategories, 
+  getCategoryById, 
+  addCategory, 
+  updateCategory, 
+  deleteCategory 
+} from "../controllers/categoryController.js";
 
-const categoryRouter = express.Router();
+const router = express.Router();
 
-// Get user's cart
-categoryRouter.get("/:userId", getCart);
-
-// Add item to cart
-categoryRouter.post("/:userId", addToCart);
-
-// Update cart item
-categoryRouter.put("/:userId", updateCartItem);
-
-// Remove item from cart
-categoryRouter.delete("/:userId", removeCartItem);
-
-// Clear entire cart
-categoryRouter.delete("/:userId/clear", clearCart);
+router.get("/", getCategories);
+router.get("/:id", getCategoryById);
+router.post("/", addCategory);
+router.put("/:id", updateCategory);
+router.delete("/:id", deleteCategory);
 
 export default router;

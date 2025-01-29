@@ -2,18 +2,18 @@ import express from 'express';
 import { adminLogin } from './adminController.js';
 import { verifyAdmin } from './middlewares.js';
 
-const router = express.Router();
+const adminRouter = express.Router();
 
 // Admin login route
-router.post('/login', adminLogin);
+adminRouter.post('/login', adminLogin);
 
 // Protected admin route example
-router.get('/dashboard', verifyAdmin, (req, res) => {
+adminRouter.get('/dashboard', verifyAdmin, (req, res) => {
   res.json({ message: 'Welcome to the admin dashboard' });
 });
 
 // Another protected route example
-router.get('/manage-users', verifyAdmin, async (req, res) => {
+adminRouter.get('/manage-users', verifyAdmin, async (req, res) => {
     try {
       const users = await prisma.user.findMany();
       res.json({ users });

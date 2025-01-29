@@ -1,117 +1,102 @@
-import express from "express";
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-// Controller Functions
+// POST endpoint to add a product
 export const addProduct = async (req, res) => {
+  
   try {
-    const productData = JSON.parse(req.body.productData); // Parse the JSON string
-    // Destructure required fields from req.body
-    const {
-      id,
-      name,
-      price,
-      description,
-      collection,
-      category,
-      subCategory,
-      sizes,
-      bestseller,
-    } = productData;
+    let { name, description, price, categoryId, subcategoryId, variants } = req.body;
 
-    // Validate required fields
-    if (!id || !name || !price || !description) {
-      return res.status(400).json({ error: "All fields are requireddd!" });
+    variants = Array.isArray(variants) ? variants : JSON.parse(variants || "[]");
+    const invalidVariants = variants.some(
+      (variant) => !variant.size || variant.stock == null
+    );
+
+
+    // Validation
+    if (!name || !description || !price || !categoryId) {
+      return res.status(400).json({ message: "Required fields are missing." });
     }
-
-    if (!req.files || !req.files.image1 || !req.files.image2) {
+    if (!variants || !Array.isArray(variants) || variants.length === 0) {
       return res.status(400).json({
-        error: "At least two images (image1 and image2) are required!",
+        message: "Variants are required and should be an array with size and stock values.",
       });
     }
+    if (invalidVariants) {
+      return res.status(400).json({ message: "Each variant must have size and stock." });
+    } 
 
-    // Extract uploaded images
-    const image1 = req.files.image1[0]?.path;
-    const image2 = req.files.image2[0]?.path;
-    if (!req.files || Object.keys(req.files).length === 0) {
-      return res.status(400).json({ error: "No files were uploaded!" });
-    }
-    
-    if (!req.files.image1 || !req.files.image2) {
-      return res.status(400).json({ error: "At least two images (image1 and image2) are required!" });
-    }
-    if (!image1 || !image2) {
-      return res.status(400).json({
-        error: "At least two images (image1 and image2) are required!",
-      });
-    }
-
-    // Extract optional images (if provided)
-    const image3 = req.files.image3 ? req.files.image3[0]?.path : null;
-    const image4 = req.files.image4 ? req.files.image4[0]?.path : null;
-
-    // Check if the category exists
-    const categoryRecord = await prisma.category.findUnique({
-      where: { name: category },
+    // Validate category existence
+    const categoryExists = await prisma.category.findUnique({
+      where: { id: parseInt(categoryId) },
     });
 
-    if (!categoryRecord) {
-      return res.status(404).json({ error: "Category not found!" });
+    if (!categoryExists) {
+      return res.status(404).json({ message: "Category not found." });
+    }
+    if (imagePaths.length === 0) {
+      return res.status(400).json({ message: "At least one product image is required." });
     }
 
-    // Check if the subcategory exists (if provided)
-    let subCategoryId = null;
-    if (subCategory) {
-      const subCategoryRecord = await prisma.subcategory.findUnique({
-        where: { name: subCategory },
-      });
-
-      if (!subCategoryRecord) {
-        return res.status(404).json({ error: "Subcategory not found!" });
-      }
-
-      subCategoryId = subCategoryRecord.id;
+    if (!variants || !Array.isArray(variants)) {
+      return res.status(400).json({ message: "Variants must be a valid array." });
     }
 
-    // Create the product record
-    const product = await prisma.product.create({
+    // Prepare sizes and stock
+    const totalStock = (variants || []).reduce((acc, variant) => acc + (variant.stock || 0), 0);
+    const sizes = [...new Set(variants.map((variant) => variant.size))];
+
+    // Handle image paths
+    const imagePaths = [
+      req.files?.image1?.[0]?.path,
+      req.files?.image2?.[0]?.path,
+      req.files?.image3?.[0]?.path,
+      req.files?.image4?.[0]?.path,
+    ].filter(Boolean);
+
+    if (imagePaths.length === 0) {
+      return res.status(400).json({ message: "At least one product image is required." });
+    }
+
+    console.log(name, description, price, variants, categoryId, subcategoryId);
+    console.log(imagePaths);
+    console.log("Request body:", req.body);
+    console.log("Request files:", req.files);
+
+    // Create the product
+    const newProduct = await prisma.product.create({
       data: {
         name,
-        price: parseFloat(price),
         description,
-        stock: 0, // Set default stock; adjust logic if stock is part of req.body
-        imageUrl: image1, // Use the first image as primary; adjust as needed
-        sizes: parsedSizes,
-        categoryId: categoryRecord.id,
-        subcategoryId: subCategoryId,
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        price: parseFloat(price),     
+        stock: totalStock,
+        sizes,
+        categoryId: parseInt(categoryId),
+        subcategoryId: subcategoryExists ? parseInt(subcategoryId) : null,
+        images: {
+          create: imagePaths.map((url) => ({ url })),
+        },
+        variants: {
+          create: variants.map((variant) => ({
+            size: variant.size,
+            stock: parseInt(variant.stock),
+          })),
+        },
+      },
+      include: {
+        images: true,
+        variants: true,
       },
     });
-    // Store additional images (optional logic for storing image references)
-    const additionalImages = [image2, image3, image4].filter((img) => img);
-    if (additionalImages.length > 0) {
-      await prisma.image.createMany({
-        data: additionalImages.map((img) => ({
-          url: img,
-          productId: product.id,
-        })),
-      });
-    }
-    console.log("Body:", req.body);
-    console.log("Files:", req.files);
-    console.log("Category:", categoryRecord);
-    console.log("Subcategory:", subCategoryRecord);
-    console.log(req.files)
-    // Response
-    return res.status(201).json({
-      message: "Product added successfully!",
-      product,
+
+    res.status(201).json({
+      message: "Product created successfully",
+      product: newProduct,
     });
   } catch (error) {
-    console.error(error);
-    return res.status(500).json({ success: false, message: error.message });
+    console.error("Error adding product:", error);
+    res.status(500).json({ message: "Internal server error", error: error.message });
   }
 };
 

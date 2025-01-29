@@ -18,7 +18,12 @@ app.use(
     credentials: true,
   })
 );
-app.use(express.json()); // Parse JSON bodies
+
+// Parse JSON bodies
+app.use(express.json()); 
+
+// Middleware to parse form-data (required for file uploads with multer)
+app.use(express.urlencoded({ extended: true }));
 
 // Routes setup
 app.get("/", (req, res) => {

@@ -1,9 +1,6 @@
 // This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
+/* DEFAULT */
 generator client {
   provider = "prisma-client-js"
 }
@@ -13,33 +10,34 @@ datasource db {
   url      = env("DATABASE_URL") // Make sure DATABASE_URL is in your .env file
 }
 
-model User {
-  id        Int      @id @default(autoincrement())
-  name      String   @unique
-  email     String   @unique
-  password  String
-  cartData  Json     @default("{}")
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
+/* Products */
 model Product {
-  id          Int       @id @default(autoincrement())
+  id          Int      @id @default(autoincrement())
   name        String
   description String?
   price       Float
-  stock       Int
-  imageUrl    String?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  sizes       String[]
-  categoryId  Int?
-  category    Category? @relation(fields: [categoryId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   // Relations
+  categoryId    Int?
   subcategoryId Int? // Optional: If a product is tied to a subcategory
   subcategory   Subcategory? @relation(fields: [subcategoryId], references: [id])
+  category      Category?    @relation(fields: [categoryId], references: [id])
   images        Image[]
+  variants      ProductVariant[]
+}
+
+model ProductVariant {
+  id        Int      @id @default(autoincrement())
+  size      String   // E.g., "S", "M", "L", "XL"
+  stock     Int      // Stock available for this size
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relation to Product
+  productId Int
+  product   Product  @relation(fields: [productId], references: [id])
 }
 
 model Image {
@@ -65,6 +63,18 @@ model Subcategory {
   products    Product[] // Relation to the Product model  
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
+}
+
+
+/* Users */
+model User {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  email     String   @unique
+  password  String
+  cartData  Json     @default("{}")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model TokenBlacklist {

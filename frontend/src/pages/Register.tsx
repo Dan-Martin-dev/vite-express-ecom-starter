@@ -1,5 +1,4 @@
 // Import necessary libraries and styles
-import useAuth from "@/context/AuthContext";
 import { Toaster } from "sonner";
 import "../index.css";
 import { Link } from "react-router-dom";
@@ -16,7 +15,6 @@ const Register: React.FC = () => {
     isClient,
     handleSubmit,
   } = useRegister();
-  const { setIsAuthenticated } = useAuth();
 
   if (!isClient) {
     return null; // Optionally, render a loader here
@@ -150,7 +148,7 @@ const Register: React.FC = () => {
 
           <div className="flex justify-between items-center">
             <p className="flex-grow md:text-base text-left text-sm font-roboto font-normal text-gray-600">
-              Do you have an account already?
+              Already have an account?
             </p>
             <Link className="" to="/login">
             <button className="text-right md:text-base font-roboto font-normal text-gray-600 text-sm mr-5">Login</button>

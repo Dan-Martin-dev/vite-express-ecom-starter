@@ -3,15 +3,16 @@ import "module-alias/register.js";
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
-import userRouter from ",/routes/userRouter.js"; // Adjust path as needed
-import productRouter from "./routes/productRoutes.js";
-import categoryRoutes from "./routes/categoryRoutes.js";
-import subcategoryRoutes from "./routes/subcategoryRoutes.js";
-import variantRoutes from "./routes/variantRoutes.js";
-import imageRoutes from "./routes/imageRoutes.js";
-import userRoutes from "./routes/userRoutes.js";
-import cartRoutes from "./routes/cartRoutes.js";
+import userRouter from "./routes/userRouter.js";
+import productRouter from "./routes/productRouter.js";
+import categoryRouter from "./routes/categoryRouter.js";
 
+
+import subcategoryRouter from "./routes/subcategoryRouter.js";
+/* import variantRouter from "./routes/variantRouter.js";
+import imageRouter from "./routes/imageRouter.js";
+import cartRouter from "./routes/cartRouter.js";
+ */
 dotenv.config(); // Load environment variables
 
 const app = express();
@@ -39,11 +40,13 @@ app.get("/", (req, res) => {
 // api endpoints
 app.use("/api/user", userRouter);
 app.use("/api/product", productRouter);
-app.use("/api/categories", categoryRoutes);
-app.use("/api/subcategories", subcategoryRoutes);
-app.use("/api/variants", variantRoutes);
+app.use("/api/categories", categoryRouter)
+
+
+app.use("/api/subcategories", subcategoryRouter);
+/* app.use("/api/variants", variantRoutes);
 app.use("/api/images", imageRoutes);
-app.use("/api/users", userRoutes);
-app.use("/api/cart", cartRoutes);
+app.use("/api/cart", cartRoutes);  */
+
 
 export default app;

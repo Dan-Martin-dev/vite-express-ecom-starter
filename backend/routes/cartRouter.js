@@ -24,4 +24,4 @@ cartRouter.delete("/:userId", removeCartItem);
 // Clear entire cart
 cartRouter.delete("/:userId/clear", clearCart);
 
-export default router;
+export default cartRouter;

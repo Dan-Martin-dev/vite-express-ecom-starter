@@ -22,4 +22,4 @@ adminRouter.get('/manage-users', verifyAdmin, async (req, res) => {
     }
 });
 
-export default router;
+export default adminRouter;

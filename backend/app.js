@@ -6,13 +6,12 @@ import dotenv from "dotenv";
 import userRouter from "./routes/userRouter.js";
 import productRouter from "./routes/productRouter.js";
 import categoryRouter from "./routes/categoryRouter.js";
-
-
 import subcategoryRouter from "./routes/subcategoryRouter.js";
-/* import variantRouter from "./routes/variantRouter.js";
-import imageRouter from "./routes/imageRouter.js";
+import productVariantsRouter from "./routes/productVariantsRouter.js";
+
+/* import imageRouter from "./routes/imageRouter.js";
 import cartRouter from "./routes/cartRouter.js";
- */
+  */
 dotenv.config(); // Load environment variables
 
 const app = express();
@@ -41,11 +40,11 @@ app.get("/", (req, res) => {
 app.use("/api/user", userRouter);
 app.use("/api/product", productRouter);
 app.use("/api/categories", categoryRouter)
-
-
 app.use("/api/subcategories", subcategoryRouter);
-/* app.use("/api/variants", variantRoutes);
-app.use("/api/images", imageRoutes);
+app.use("/api/product-variants", productVariantsRouter);
+
+
+/* app.use("/api/images", imageRoutes);
 app.use("/api/cart", cartRoutes);  */
 
 

@@ -4,15 +4,29 @@ const prisma = new PrismaClient();
 
 // POST endpoint to add a product
 export const addProduct = async (req, res) => {
-  
+  console.log("🛠️ Request received!");
+  console.log("Uploaded files:", req.files); // Check what Multer receives
+  console.log("Request body:", req.body);
   try {
     let { name, description, price, categoryId, subcategoryId, variants } = req.body;
 
     variants = Array.isArray(variants) ? variants : JSON.parse(variants || "[]");
+
     const invalidVariants = variants.some(
       (variant) => !variant.size || variant.stock == null
     );
 
+    const imagePaths = req.files
+    ? [
+        req.files.image1?.[0]?.path,
+        req.files.image2?.[0]?.path,
+        req.files.image3?.[0]?.path,
+        req.files.image4?.[0]?.path,
+      ].filter(Boolean)
+    : [];
+    if (imagePaths.length === 0) {
+      return res.status(400).json({ message: "At least one product image is required." });
+    }
 
     // Validation
     if (!name || !description || !price || !categoryId) {
@@ -38,7 +52,6 @@ export const addProduct = async (req, res) => {
     if (imagePaths.length === 0) {
       return res.status(400).json({ message: "At least one product image is required." });
     }
-
     if (!variants || !Array.isArray(variants)) {
       return res.status(400).json({ message: "Variants must be a valid array." });
     }
@@ -47,22 +60,8 @@ export const addProduct = async (req, res) => {
     const totalStock = (variants || []).reduce((acc, variant) => acc + (variant.stock || 0), 0);
     const sizes = [...new Set(variants.map((variant) => variant.size))];
 
-    // Handle image paths
-    const imagePaths = [
-      req.files?.image1?.[0]?.path,
-      req.files?.image2?.[0]?.path,
-      req.files?.image3?.[0]?.path,
-      req.files?.image4?.[0]?.path,
-    ].filter(Boolean);
 
-    if (imagePaths.length === 0) {
-      return res.status(400).json({ message: "At least one product image is required." });
-    }
 
-    console.log(name, description, price, variants, categoryId, subcategoryId);
-    console.log(imagePaths);
-    console.log("Request body:", req.body);
-    console.log("Request files:", req.files);
 
     // Create the product
     const newProduct = await prisma.product.create({
@@ -89,6 +88,8 @@ export const addProduct = async (req, res) => {
         variants: true,
       },
     });
+
+    console.log("Extracted image paths:", imagePaths);
 
     res.status(201).json({
       message: "Product created successfully",

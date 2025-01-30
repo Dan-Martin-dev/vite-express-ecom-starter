@@ -18,10 +18,10 @@ model Product {
   price       Float
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  categoryId    Int? // Optional: If a product is tied to a category
+  subcategoryId Int? // Optional: If a product is tied to a subcategory
 
   // Relations
-  categoryId    Int?
-  subcategoryId Int? // Optional: If a product is tied to a subcategory
   subcategory   Subcategory? @relation(fields: [subcategoryId], references: [id])
   category      Category?    @relation(fields: [categoryId], references: [id])
   images        Image[]
@@ -54,17 +54,21 @@ model Category {
   products    Product[]
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
+
+  subcategories Subcategory[]
 }
 
-model Subcategory {
+model Subcategory { 
   id          Int       @id @default(autoincrement())
   name        String    @unique
   description String?
-  products    Product[] // Relation to the Product model  
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
+  
+  products    Product[] // Relation to the Product model  
+  categoryId  Int       // ✅
+  category    Category  @relation(fields: [categoryId], references: [id]) // ✅ Add relation
 }
-
 
 /* Users */
 model User {

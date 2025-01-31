@@ -2,8 +2,8 @@ import express from "express";
 import {
   addProduct,
   singleProduct,
-  listProduct,
-  removeProduct,
+  getAllProducts,
+  deleteProduct,
 } from "../controller/productController.js";
 import upload from "../middleware/multer.js";
 
@@ -23,7 +23,7 @@ productRouter.post("/add", upload.fields(uploadFields), addProduct);
 });  */
 
 productRouter.post("/single", singleProduct);
-productRouter.post("/list", listProduct);
-productRouter.post("/remove", removeProduct);
+productRouter.get("/getall", getAllProducts);
+productRouter.delete("/delete/:id", deleteProduct);
 
 export default productRouter;

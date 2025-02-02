@@ -8,6 +8,7 @@ import productRouter from "./routes/productRouter.js";
 import categoryRouter from "./routes/categoryRouter.js";
 import subcategoryRouter from "./routes/subcategoryRouter.js";
 import productVariantsRouter from "./routes/productVariantsRouter.js";
+import adminRouter from "./routes/adminRouter.js";
 
 /* import imageRouter from "./routes/imageRouter.js";
 import cartRouter from "./routes/cartRouter.js";
@@ -40,12 +41,11 @@ app.get("/", (req, res) => {
 app.use("/api/user", userRouter);
 app.use("/api/product", productRouter);
 app.use("/api/categories", categoryRouter)
+app.use("/api/admin", adminRouter);
 app.use("/api/subcategories", subcategoryRouter);
 app.use("/api/product-variants", productVariantsRouter);
 
-
 /* app.use("/api/images", imageRoutes);
 app.use("/api/cart", cartRoutes);  */
-
 
 export default app;

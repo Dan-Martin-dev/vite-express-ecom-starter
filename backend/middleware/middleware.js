@@ -1,8 +1,8 @@
-import jwt from 'jsonwebtoken';
+import jwt from "jsonwebtoken"
+import { body } from 'express-validator';
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
-// Middleware to check if the user is an admin
 export const verifyAdmin = (req, res, next) => {
   const token = req.headers.authorization?.split(' ')[1];
 
@@ -48,3 +48,16 @@ export const authenticateToken = async (req, res, next) => {
     res.status(403).json({ message: "Invalid or expired token" });
   }
 };
+
+export const handleValidationErrors = (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+  next();
+};
+
+export const validateAdminLogin = [
+  body('email').isEmail().withMessage('Please provide a valid email address.'),
+  body('password').notEmpty().withMessage('Password is required.'),
+];

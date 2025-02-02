@@ -17,10 +17,12 @@ const uploadFields = [
 ];
 productRouter.post("/add", upload.fields(uploadFields), addProduct);
 
-/* productRouter.post("/add",   (req, res) => {
+/* 
+productRouter.post("/add",   (req, res) => {
   console.log("Route hit!");
   res.status(200).send("Route is working!");
-});  */
+});  
+*/
 
 productRouter.post("/single", singleProduct);
 productRouter.get("/getall", getAllProducts);

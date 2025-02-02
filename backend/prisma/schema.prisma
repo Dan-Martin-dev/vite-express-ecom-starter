@@ -10,8 +10,9 @@ datasource db {
   url      = env("DATABASE_URL") // Make sure DATABASE_URL is in your .env file
 }
 
-/* Products */
+/* Products */  
 model Product {
+  
   id          Int      @id @default(autoincrement())
   name        String
   description String?
@@ -28,7 +29,6 @@ model Product {
   /* autogenerate */
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-
 }
 
 model ProductVariant {
@@ -89,4 +89,14 @@ model TokenBlacklist {
   token     String   @unique
   expiresAt DateTime
   createdAt DateTime @default(now())
+}
+
+/* Admin */
+model Admin {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  name      String   @unique
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

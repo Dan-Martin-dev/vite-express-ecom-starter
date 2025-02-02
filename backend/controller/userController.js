@@ -4,8 +4,6 @@ import { PrismaClient } from "@prisma/client";
 import validator from 'validator';
 
 const prisma = new PrismaClient();
-const JWT_SECRET = process.env.JWT_SECRET || "your_secret_key";
-
 
 const validateInputs = (name, email, password) => {
   if (name.trim().length < 2 || name.trim().length > 50) {
@@ -130,33 +128,6 @@ export const logoutUser = async (req, res) => {
   }
 };
 
-// Admin login
-export const adminLogin = async (req, res) => {
-  const { email, password } = req.body;
-
-  try {
-    // Check if the admin exists
-    const admin = await prisma.user.findUnique({ where: { email } });
-    if (!admin || !admin.isAdmin) {
-      return res.status(404).json({ message: "Admin not found" });
-    }
-
-    // Validate password
-    const isPasswordValid = await bcrypt.compare(password, admin.password);
-    if (!isPasswordValid) {
-      return res.status(401).json({ message: "Invalid credentials" });
-    }
-
-    // Generate JWT token
-    const token = jwt.sign({ userId: admin.id, isAdmin: true }, JWT_SECRET, {
-      expiresIn: "1h",
-    });
-
-    res.json({ message: "Admin login successful", token });
-  } catch (error) {
-    res.status(500).json({ message: "Error logging in", error });
-  }
-};
 
 // Get user profile
 export const getUserProfile = async (req, res) => {

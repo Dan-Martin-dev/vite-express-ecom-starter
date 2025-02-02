@@ -7,6 +7,7 @@ export const addProduct = async (req, res) => {
   console.log("🛠️ Request received!");
   console.log("Uploaded files:", req.files); // Check what Multer receives
   console.log("Request body:", req.body);
+  
   try {
     let { name, description, price, categoryId, subcategoryId, variants } =
       req.body;

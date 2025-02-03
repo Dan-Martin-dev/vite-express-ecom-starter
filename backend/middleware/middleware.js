@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken"
-import { body } from 'express-validator';
+import { body, validationResult } from 'express-validator'; 
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
@@ -49,6 +49,7 @@ export const authenticateToken = async (req, res, next) => {
   }
 };
 
+// Handles any validation errors and sends a response if there are errors.
 export const handleValidationErrors = (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {

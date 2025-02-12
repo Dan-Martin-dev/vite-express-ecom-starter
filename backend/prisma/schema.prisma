@@ -1,6 +1,8 @@
 // This is your Prisma schema file,
 
-/* DEFAULT */
+/**
+ * DEFAULT
+ */
 generator client {
   provider = "prisma-client-js"
 }
@@ -10,76 +12,187 @@ datasource db {
   url      = env("DATABASE_URL") // Make sure DATABASE_URL is in your .env file
 }
 
-/* Products */  
+/**
+ * Products
+ */
+
 model Product {
-  
-  id          Int      @id @default(autoincrement())
-  name        String
-  description String?
-  price       Float
+  id            Int     @id @default(autoincrement())
+  name          String
+  description   String?
+  price         Float
   categoryId    Int? // Optional: If a product is tied to a category
   subcategoryId Int? // Optional: If a product is tied to a subcategory
+  beforePrice   String?
+  discount      Float?  @default(0) // Store discount as a percentage (e.g., 20 for 20%)
+  share         String?
+  stock         Int     @default(0) // Default stock count
 
   // Relations
-  subcategory   Subcategory? @relation(fields: [subcategoryId], references: [id])
-  category      Category?    @relation(fields: [categoryId], references: [id])
-  images        Image[]
-  variants      ProductVariant[]
+  subcategory Subcategory?     @relation(fields: [subcategoryId], references: [id])
+  category    Category?        @relation(fields: [categoryId], references: [id])
+  images      Image[]
+  variants    ProductVariant[]
+  reviews     Review[]
+  orderItems  OrderItem[]
+  cartItems   CartItem[]
 
-  /* autogenerate */
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  /**
+   * autogenerate
+   */
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model ProductVariant {
-  id        Int      @id @default(autoincrement())
-  size      String   // E.g., "S", "M", "L", "XL"
-  stock     Int      // Stock available for this size
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id    Int    @id @default(autoincrement())
+  size  String // E.g., "S", "M", "L", "XL"
+  stock Int    @default(0) // Stock available for this variant  createdAt DateTime @default(now())
+  price Float?
 
   // Relation to Product
-  productId Int
-  product   Product  @relation(fields: [productId], references: [id])
+  productId  Int
+  product    Product     @relation(fields: [productId], references: [id])
+  orderItems OrderItem[]
+  cartItem   CartItem[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Image {
-  id        Int     @id @default(autoincrement())
+  id        Int    @id @default(autoincrement())
   url       String
   productId Int
-  product   Product @relation(fields: [productId], references: [id])
+
+  // Optional relation: A product might not have an image yet
+  product Product? @relation(fields: [productId], references: [id], onDelete: Cascade)
 }
 
 model Category {
-  id          Int       @id @default(autoincrement())
-  name        String    @unique
-  description String?
-  products    Product[]
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-
+  id            Int           @id @default(autoincrement())
+  name          String        @unique
+  description   String?
+  products      Product[]
   subcategories Subcategory[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
-model Subcategory { 
-  id          Int       @id @default(autoincrement())
-  name        String    @unique
+model Subcategory {
+  id          Int     @id @default(autoincrement())
+  name        String  @unique
   description String?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  
-  products    Product[] // Relation to the Product model  
-  categoryId  Int       // ✅
-  category    Category  @relation(fields: [categoryId], references: [id]) // ✅ Add relation
+  categoryId  Int // ✅
+
+  products Product[] // Relation to the Product model  
+  category Category  @relation(fields: [categoryId], references: [id]) // ✅ Add relation
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
-/* Users */
-model User {
+/**
+ * Orders
+ */
+model Order {
+  id          Int    @id @default(autoincrement())
+  userId      Int
+  user        User   @relation(fields: [userId], references: [id])
+  totalAmount Float
+  status      String @default("pending")
+
+  items   OrderItem[]
+  payment Payment?
+
+  createdAt DateTime @default(now())
+}
+
+model OrderItem {
+  id        Int             @id @default(autoincrement())
+  orderId   Int
+  order     Order           @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId Int
+  product   Product         @relation(fields: [productId], references: [id])
+  variantId Int? // Optional variant
+  variant   ProductVariant? @relation(fields: [variantId], references: [id])
+  quantity  Int             @default(1)
+  price     Float
+}
+
+/**
+ * Cart
+ */
+model CartItem {
+  id        Int             @id @default(autoincrement())
+  userId    Int
+  user      User            @relation(fields: [userId], references: [id])
+  productId Int
+  product   Product         @relation(fields: [productId], references: [id])
+  variantId Int?
+  variant   ProductVariant? @relation(fields: [variantId], references: [id])
+  quantity  Int             @default(1)
+
+  createdAt DateTime @default(now())
+}
+
+
+ /* Payment */
+
+model Payment {
+  id            Int      @id @default(autoincrement())
+  orderId       Int      @unique // ✅ Ensure one-to-one relation
+  order         Order    @relation(fields: [orderId], references: [id])
+  status        String   @default("pending") // pending, success, failed
+  transactionId String? // Store Stripe/PayPal transaction ID
+  createdAt     DateTime @default(now())
+}
+
+/**
+ * Reviews
+ */
+model Review {
   id        Int      @id @default(autoincrement())
-  name      String   @unique
-  email     String   @unique
-  password  String
-  cartData  Json     @default("{}")
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
+  productId Int
+  product   Product  @relation(fields: [productId], references: [id])
+  rating    Int      @default(5) // 1 to 5 stars
+  comment   String?
+  createdAt DateTime @default(now())
+}
+
+/**
+ * Adress
+ */
+model Address {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
+  street    String
+  city      String
+  state     String
+  zipCode   String
+  country   String
+  createdAt DateTime @default(now())
+}
+
+/**
+ * Users
+ */
+model User {
+  id       Int    @id @default(autoincrement())
+  name     String @unique
+  email    String @unique
+  password String
+  cartData Json   @default("{}")
+
+  orders    Order[]
+  cartItems CartItem[]
+  reviews   Review[]
+  addresses Address[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -91,12 +204,15 @@ model TokenBlacklist {
   createdAt DateTime @default(now())
 }
 
-/* Admin */
+/**
+ * Admin
+ */
 model Admin {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique
-  name      String   @unique
-  password  String
+  id       Int    @id @default(autoincrement())
+  email    String @unique
+  name     String @unique
+  password String
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }

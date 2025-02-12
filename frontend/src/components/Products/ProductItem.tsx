@@ -1,15 +1,10 @@
 import { Link } from "react-router-dom";
-import type { Product } from "@/types/types";
-import { useContext, useState } from "react";
-import { ShopContext } from "@/context/ShopContext";
+import {  useState } from "react";
+import { ProductItemProps } from "@/types/types";
 
-interface ProductItemProps {
-  product: Product;
-}
+const ProductItem: React.FC<ProductItemProps> = ({ product, currency }) => { 
 
-const ProductItem: React.FC<ProductItemProps> = ({ product }) => {
   const [hover, setHover] = useState(false);
-  const { currency } = useContext(ShopContext)
 
   return (
     <div className="max-w-full mt-4 min-h-max">
@@ -32,7 +27,7 @@ const ProductItem: React.FC<ProductItemProps> = ({ product }) => {
           )
         }
 
-        {/* Product Ima ge */}
+        {/* Product Images */}
 
         <Link to={`/products/${product.id}`}>
           <div className="w-full max-h-full ">
@@ -41,7 +36,7 @@ const ProductItem: React.FC<ProductItemProps> = ({ product }) => {
               className={`transform transition-transform duration-500 ease-in-out ${
                 hover ? "scale-110" : "scale-100"
               } w-full h-full object-cover`}
-              src={product.image[0]}
+              src={product.images[0].url} 
             />
           </div>
         </Link>

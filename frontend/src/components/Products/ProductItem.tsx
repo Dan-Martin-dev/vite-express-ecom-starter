@@ -1,10 +1,14 @@
 import { Link } from "react-router-dom";
 import {  useState } from "react";
 import { ProductItemProps } from "@/types/types";
+import { VITE_BASE_URL } from "@/utils/config";
 
 const ProductItem: React.FC<ProductItemProps> = ({ product, currency }) => { 
 
+  const imageUrl = `${VITE_BASE_URL}/${product.images[0]?.url}`;
   const [hover, setHover] = useState(false);
+
+  console.log(`Imagen URL: ${imageUrl}`)
 
   return (
     <div className="max-w-full mt-4 min-h-max">
@@ -28,7 +32,6 @@ const ProductItem: React.FC<ProductItemProps> = ({ product, currency }) => {
         }
 
         {/* Product Images */}
-
         <Link to={`/products/${product.id}`}>
           <div className="w-full max-h-full ">
             <img
@@ -36,10 +39,11 @@ const ProductItem: React.FC<ProductItemProps> = ({ product, currency }) => {
               className={`transform transition-transform duration-500 ease-in-out ${
                 hover ? "scale-110" : "scale-100"
               } w-full h-full object-cover`}
-              src={product.images[0].url} 
+              src={imageUrl} 
             />
           </div>
         </Link>
+
       </div>
 
       {/* Product Info */}

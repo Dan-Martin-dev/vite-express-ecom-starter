@@ -130,10 +130,27 @@ export const getAllProducts = async (req, res) => {
       },
     });
 
+    // Function to format price
+    const formatCurrency = (value) => {
+      return value.toLocaleString("es-AR", { minimumFractionDigits: 2 });
+    };
+
+    // Format each product with installment details
+    const formattedProducts = products.map((product) => {
+      const installments = product.installments || 6; // Default to 6 installments
+      const installmentPrice = (product.price / installments).toFixed(2);
+
+      return {
+        ...product,
+        formattedPrice: `$${formatCurrency(product.price)}`,
+        share: `${installments} x $${formatCurrency(Number(installmentPrice))} sin interés`,
+      };
+    });
+
     // Respond with the product data
     res.status(200).json({
       message: "Products retrieved successfully",
-      products,
+      products: formattedProducts,
     });
   } catch (error) {
     console.error("Error fetching products:", error);

@@ -8,12 +8,12 @@ import Home from './pages/Home';
 import Register from './pages/Register.tsx';
 import Orders from './pages/Orders';
 import PlaceOrder from './pages/PlaceOrder';
-import Product from './pages/Product';
 import Header from './components/Header/Header.tsx';
 import Sale from './pages/Sale';
 import Footer from './components/Footer';
 import Login from './pages/Login.tsx';
 import '../../frontend/src/App.css'
+import ProductDetail from './components/Products/ProductDetail3.tsx';
 
 const App = () => { 
   return (
@@ -30,8 +30,8 @@ const App = () => {
         <Route path="/sale" element={<Sale />} />
         <Route path="/orders" element={<Orders />} />
         <Route path="/placeorder" element={<PlaceOrder />} />
-        <Route path="/product/:productId" element={<Product />} />
-      </Routes>
+        <Route path="/products/:id" element={<ProductDetail/>} />
+      </Routes> 
       
       <Footer/>
     </div>

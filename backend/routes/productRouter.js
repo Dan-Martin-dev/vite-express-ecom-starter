@@ -1,7 +1,7 @@
 import express from "express";
 import {
   addProduct,
-  singleProduct,
+/*   getSingleProduct,  */
   getAllProducts,
   deleteProduct,
 } from "../controller/productController.js";
@@ -17,14 +17,14 @@ const uploadFields = [
 ];
 productRouter.post("/add", upload.fields(uploadFields), addProduct);
 
-/* 
+
 productRouter.post("/add",   (req, res) => {
   console.log("Route hit!");
   res.status(200).send("Route is working!");
 });  
-*/
 
-productRouter.post("/single", singleProduct);
+
+/* productRouter.get("/:id", getSingleProduct);  */
 productRouter.get("/getall", getAllProducts);
 productRouter.delete("/delete/:id", deleteProduct);
 

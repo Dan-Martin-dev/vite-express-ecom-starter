@@ -2,14 +2,15 @@ import { ReactNode } from "react";
 
 /* PRODUCT TYPES */
 export interface Product {
-
   id: number;
   name: string;
+  slug:string;
   description?: string;
   price: number;
   share: ReactNode;
   beforePrice: number;
   discount: number;
+  stock: number;
   categoryId?: number;
   subcategoryId?: number;
   subcategory?: Subcategory;

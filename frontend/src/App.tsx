@@ -1,4 +1,5 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { ReactLocation, Router, Outlet } from '@tanstack/react-location';
+import { ReactLocationDevtools } from '@tanstack/react-location-devtools';
 
 // Import pages
 import About from './pages/About';
@@ -12,28 +13,39 @@ import Header from './components/Header/Header.tsx';
 import Sale from './pages/Sale';
 import Footer from './components/Footer';
 import Login from './pages/Login.tsx';
-import '../../frontend/src/App.css'
 import ProductDetail from './components/Products/ProductDetail3.tsx';
+import '../../frontend/src/App.css';
 
-const App = () => { 
+// Create a new instance of ReactLocation
+const location = new ReactLocation();
+
+const App = () => {
   return (
     <div>
-      <Header/>
+      <Header />
 
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/cart" element={<Cart />} />
-        <Route path="/collection" element={<Collection />} />
-        <Route path="/login" element={<Login/>} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/sale" element={<Sale />} />
-        <Route path="/orders" element={<Orders />} />
-        <Route path="/placeorder" element={<PlaceOrder />} />
-        <Route path="/products/:id" element={<ProductDetail/>} />
-      </Routes> 
-      
-      <Footer/>
+      <Router
+        location={location}
+        routes={[
+          { path: '/', element: <Home /> },
+          { path: '/about', element: <About /> },
+          { path: '/cart', element: <Cart /> },
+          { path: '/collection', element: <Collection /> },
+          { path: '/login', element: <Login /> },
+          { path: '/register', element: <Register /> },
+          { path: '/sale', element: <Sale /> },
+          { path: '/orders', element: <Orders /> },
+          { path: '/placeorder', element: <PlaceOrder /> },
+          { path: '/products/:id', element: <ProductDetail /> }, 
+        ]}
+      >
+        <Outlet />
+        <ReactLocationDevtools initialIsOpen={false} />
+
+      </Router>
+
+
+      <Footer />
     </div>
   );
 };

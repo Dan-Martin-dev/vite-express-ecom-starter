@@ -1,0 +1,19 @@
+{
+    "compilerOptions": {
+      "target": "ES2022",
+      "module": "NodeNext",
+      "outDir": "./dist",
+      "rootDir": "./src",
+      "strict": true,
+      "esModuleInterop": true,
+      "skipLibCheck": true,
+      "forceConsistentCasingInFileNames": true,
+      "resolveJsonModule": true,
+      "baseUrl": "./src", // Base directory for path resolution
+      "paths": {
+        "@/*": ["./*"] // Map @ to the src directory
+      },
+    },
+    "include": ["src/**/*"],
+    "exclude": ["node_modules"]
+  }

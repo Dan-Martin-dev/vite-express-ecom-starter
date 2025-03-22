@@ -1,44 +1,16 @@
 // components/ProductDetail.tsx
 import React from 'react';
-import { useParams } from 'react-router-dom';
-import useFetchSingleProduct from '@/hooks/useFetchSingleProduct';
-import { useEffect, useState } from 'react';
-import axios from 'axios';
+import { useParams } from "@tanstack/react-router";
+import { useFetchProduct } from '@/hooks/useFetchProduct';
 
 const ProductDetail: React.FC = () => {
-  const { id } = useParams();
-  const { slug } = useParams<{ slug: string }>(); // Extract the slug from the URL
-  const { product, loading, error } = useFetchSingleProduct(slug || ''); // Fetch product data
-  
-  useEffect(() => {
-    const fetchProduct = async () => {
-      try {
-        setLoading(true);
-        const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/api/products/${id}`);
-        setProduct(response.data.product);
-      } catch (err) {
-        console.error('Error fetching product:', err);
-        setError('Failed to load product details');
-      } finally {
-        setLoading(false);
-      }
-    };
-    
-    if (id) {
-      fetchProduct();
-    }
-  }, [id]);
-  if (loading) {
-    return <div className="p-4">Loading...</div>;
-  }
+  const { id } = useParams({ from: "/products/$id" }); // Get ID from URL  const { slug } = useParams<{ slug: string }>(); // Extract the slug from the URL
+  const { product, loading, error } = useFetchProduct(id);  
 
-  if (error) {
-    return <div className="p-4 text-red-500">Error: {error}</div>;
-  }
 
-  if (!product) {
-    return <div className="p-4">Product not found</div>;
-  }
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error}</p>;
+  if (!product) return <p>Product not found</p>;
 
   return (
     <div className="p-4">

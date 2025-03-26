@@ -1,56 +1,95 @@
-import { carts, orderItems, orders, products, reviews } from '@/db/schema'
+import { pgEnum } from "drizzle-orm/pg-core";
 
-export type AppError = {
-    status: number;
-    message: string;
-  };
-  
-import {
-  cartItemSchema,
-  paymentResultSchema,
-  shippingAddressSchema,
-} from '@/lib/validator'
-import { InferSelectModel } from 'drizzle-orm'
-import { z } from 'zod'
-
-// PRODUCTS
-export type Product = InferSelectModel<typeof products>
-export type Review = InferSelectModel<typeof reviews> & {
-  user?: { name: string }
-}
-
-export type ProviderType = "oauth" | "oidc" | "email" | "webauthn" | "other";
-
-export type AdapterAccountType = Extract<
-  ProviderType,
-  "oauth" | "oidc" | "email" | "webauthn"
->;
-export type Category = {
-  id: string; // UUID
-  name: string;
-  slug: string;
-  description?: string | null; // Optional
-  image?: string | null; // Optional
-  icon?: string | null; // Optional
-  metaTitle?: string | null; // Optional
-  metaDescription?: string | null; // Optional
-  parentId?: string | null; // UUID, optional (self-referential)
-  displayOrder: number; // Defaults to 0
-  isActive: boolean; // Defaults to true
-  createdAt: Date; // Timestamp with timezone
-  updatedAt: Date; // Timestamp with timezone
+// Types
+export type ShippingAddress = {
+  fullName: string;
+  address: string;
+  city: string;
+  postalCode: string;
+  country: string;
+  state?: string;
+  phoneNumber?: string;
+  isDefault?: boolean;
 };
-// CART
-export type Cart = InferSelectModel<typeof carts>
-export type CartItem = z.infer<typeof cartItemSchema>
 
-export type ShippingAddress = z.infer<typeof shippingAddressSchema>
-export type PaymentResult = z.infer<typeof paymentResultSchema>
+export type PaymentResult = {
+  id: string;
+  status: string;
+  update_time: string;
+  email_address: string;
+  provider: string;
+};
 
-// ORDERS
+export type CartItem = {
+  productId: string;
+  name: string; 
+  slug: string;
+  image: string;
+  price: number;
+  qty: number;
+  attributes?: Record<string, string>;
+};
 
-export type Order = InferSelectModel<typeof orders> & {
-  orderItems: OrderItem[]
-  user: { name: string | null; email: string }
+export type AdapterAccountType = 'oauth' | 'email' | 'credentials';
+
+// Enums
+export const userRoleEnum = pgEnum('user_role', ['admin', 'user', 'staff', 'vendor']);
+export const orderStatusEnum = pgEnum('order_status', [
+  'pending', 
+  'processing', 
+  'shipped', 
+  'delivered', 
+  'cancelled', 
+  'refunded'
+]);
+export const paymentStatusEnum = pgEnum('payment_status', [
+  'pending', 
+  'completed', 
+  'failed', 
+  'refunded', 
+  'partially_refunded'
+]);
+
+export class AppError extends Error {
+  status: number;
+  isOperational: boolean;
+
+  constructor(
+    message: string, 
+    status: number = 500, 
+    isOperational: boolean = true
+  ) {
+    super(message);
+    
+    // Ensures the correct prototype chain is maintained
+    Object.setPrototypeOf(this, AppError.prototype);
+
+    this.name = this.constructor.name;
+    this.status = status;
+    this.isOperational = isOperational;
+
+    // Captures the stack trace, excluding the constructor call from it
+    Error.captureStackTrace(this, this.constructor);
+  }
+
+  // Optional: Method to create common error types
+  static badRequest(message: string = 'Bad Request') {
+    return new AppError(message, 400);
+  }
+
+  static unauthorized(message: string = 'Unauthorized') {
+    return new AppError(message, 401);
+  }
+
+  static forbidden(message: string = 'Forbidden') {
+    return new AppError(message, 403);
+  }
+
+  static notFound(message: string = 'Not Found') {
+    return new AppError(message, 404);
+  }
+
+  static internalServer(message: string = 'Internal Server Error') {
+    return new AppError(message, 500, false);
+  }
 }
-export type OrderItem = InferSelectModel<typeof orderItems>

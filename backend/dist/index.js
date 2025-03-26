@@ -1,11 +1,9 @@
-// src/index.ts
-import 'module-alias/register';
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import dotenv from 'dotenv';
-import routes from './routes';
-import { errorHandler } from '@/middleware/error-handler';
+import routes from './routes/index.js'; // Use relative import
+import { errorHandler } from './middleware/error-handler.js'; // Use relative import
 // Load environment variables
 dotenv.config();
 // Create Express app

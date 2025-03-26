@@ -14,59 +14,7 @@ import {
   varchar,
 } from 'drizzle-orm/pg-core';
 import { primaryKey } from 'drizzle-orm/pg-core/primary-keys';
-import { Category } from '@/types/index.js';
-
-// Types
-export type ShippingAddress = {
-  fullName: string;
-  address: string;
-  city: string;
-  postalCode: string;
-  country: string;
-  state?: string;
-  phoneNumber?: string;
-  isDefault?: boolean;
-};
-
-export type PaymentResult = {
-  id: string;
-  status: string;
-  update_time: string;
-  email_address: string;
-  provider: string;
-};
-
-export type CartItem = {
-  productId: string;
-  name: string;
-  slug: string;
-  image: string;
-  price: number;
-  qty: number;
-  attributes?: Record<string, string>;
-};
-
-
-
-export type AdapterAccountType = 'oauth' | 'email' | 'credentials';
-
-// Enums
-export const userRoleEnum = pgEnum('user_role', ['admin', 'user', 'staff', 'vendor']);
-export const orderStatusEnum = pgEnum('order_status', [
-  'pending', 
-  'processing', 
-  'shipped', 
-  'delivered', 
-  'cancelled', 
-  'refunded'
-]);
-export const paymentStatusEnum = pgEnum('payment_status', [
-  'pending', 
-  'completed', 
-  'failed', 
-  'refunded', 
-  'partially_refunded'
-]);
+import { AdapterAccountType, CartItem, PaymentResult, orderStatusEnum, paymentStatusEnum, ShippingAddress, userRoleEnum } from '../types/index.js';
 
 // USERS & AUTH
 export const users = pgTable(

@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  postgres-test:
+    image: postgres:15
+    container_name: postgres-test-db
+    restart: always
+    ports:
+      - "5433:5432" # Maps port 5433 on host to 5432 in container
+    environment:
+      POSTGRES_USER: test_user
+      POSTGRES_PASSWORD: test_password
+      POSTGRES_DB: test_db
+    volumes:
+      - postgres-test-data:/var/lib/postgresql/data
+
+volumes:
+  postgres-test-data:

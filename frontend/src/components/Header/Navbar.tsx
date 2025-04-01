@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import useAuth from "@/context/AuthContext";
 import useLogout from "@/hooks/useLogout";
+import { Link } from "@tanstack/react-router";
 
 const Navbar = () => {
   const [cartVisible, setCartVisible] = useState(false);
@@ -120,12 +121,11 @@ const Navbar = () => {
           ) : (
             // Show Login when not authenticated
             <button className="hidden md:block">
-              <NavLink
-                to="/login"
+              <div
                 className="text-white font-neue font-medium md:text-3xl  md:ml-10"
               >
                 LOGIN
-              </NavLink>
+              </div>
             </button>
           )}
 

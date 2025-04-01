@@ -10,10 +10,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@tanstack/react-location": "^3.7.4",
-    "@tanstack/react-location-devtools": "^3.4.4",
     "@tanstack/react-query-devtools": "^5.68.0",
-    "@tanstack/react-router": "^1.114.25",
+    "@tanstack/react-router": "^1.114.29",
+    "@tanstack/react-router-devtools": "^1.114.29",
     "axios": "^1.7.9",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",

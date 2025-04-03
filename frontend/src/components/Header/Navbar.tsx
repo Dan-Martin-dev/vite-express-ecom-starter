@@ -78,24 +78,24 @@ const Navbar = () => {
             </div>
 
             {/* Links */}
-            <NavLink
+            <Link
               className="text-4xl font-neue font-medium text-black"
               to="/"
             >
               HOME
-            </NavLink>
-            <NavLink
+            </Link>
+            <Link
               className="text-4xl font-neue font-medium text-black"
               to="/"
             >
               NEW COLLECTION
-            </NavLink>
-            <NavLink
+            </Link>
+            <Link
               className="text-4xl font-neue font-medium text-black"
               to="/"
             >
               SALE
-            </NavLink>
+            </Link>
           </div>
         </div>
 
@@ -120,13 +120,15 @@ const Navbar = () => {
             </button>
           ) : (
             // Show Login when not authenticated
-            <button className="hidden md:block">
-              <div
-                className="text-white font-neue font-medium md:text-3xl  md:ml-10"
-              >
-                LOGIN
-              </div>
-            </button>
+            <Link to="/login">
+              <button className="hidden md:block">
+                <div
+                  className="text-white font-neue font-medium md:text-3xl  md:ml-10"
+                >
+                  LOGIN
+                </div>
+              </button>
+            </Link>
           )}
 
           {/* Cart button */}
@@ -279,15 +281,15 @@ const Navbar = () => {
 
       {/* Categorias: hay eventos */}
       <div className="hidden md:flex justify-center items-center space-x-8 pt-2 py-6 bg-black">
-        <NavLink className="text-white font-neue font-normal text-xl" to="/">
+        <Link className="text-white font-neue font-normal text-xl" to="/">
           INICIO
-        </NavLink>
-        <NavLink
+        </Link>
+        <Link
           className="text-white font-neue font-normal text-xl"
           to="/collection"
         >
           NEW COLLECTION
-        </NavLink>
+        </Link>
 
         {/* Panel desplegable */}
         <div
@@ -317,7 +319,7 @@ const Navbar = () => {
               <div className="text-xl">
                 <ul>
                   <li className="text-white font-normal font-neue text-md  relative mb-3">
-                    <NavLink to="/collection">NEW COLLECTION</NavLink>
+                    <Link to="/collection">NEW COLLECTION</Link>
                   </li>
                 </ul>
               </div>
@@ -403,12 +405,12 @@ const Navbar = () => {
           </div>
         </div>
 
-        <NavLink
+        <Link
           className="text-white font-neue font-normal text-xl"
           to="/sale"
         >
           SALE
-        </NavLink>
+        </Link>
       </div>
 
     </div>

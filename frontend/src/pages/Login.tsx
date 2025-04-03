@@ -6,7 +6,7 @@ import '../index.css'
 import { Link } from 'react-router-dom';
 
 const Login: React.FC = () => {
-  const { email, setEmail, password, setPassword, isClient, setIsClient, handleSubmit } = useLogin();
+  const { email, setEmail, password, setPassword, isClient, handleSubmit } = useLogin();
   const { setIsAuthenticated } = useAuth();
 
   if (!isClient) {
@@ -52,6 +52,7 @@ const Login: React.FC = () => {
                   className="font-roboto appearance-none border-black rounded-xl relative block w-full mb-2 px-3 py-2 hover:border-gray-600 placeholder-gray-600 text-black bg-white focus:bg-white focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                     id="email-address"
                   name="email"
+                  
                   placeholder="Email address"
                   type="email"
                   value={email}

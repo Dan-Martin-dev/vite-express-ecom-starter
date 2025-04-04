@@ -6,7 +6,6 @@ export const loginRoute = createRoute({
   getParentRoute: () => Route,
   path: '/login',
   component: Login,
-  // Optional: Add route metadata
   meta: () => ({
     title: 'Login',
     requiresAuth: false

@@ -7,9 +7,10 @@
     "strict": true,
     "skipLibCheck": true,
     "outDir": "./dist",
-    "baseUrl": ".",
+    "baseUrl": "./",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["src/*"],
+      "@/db": ["src/db/index"] // or wherever your db files are
     },
     "types": ["node"]
   },

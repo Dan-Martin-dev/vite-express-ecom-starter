@@ -1,0 +1,28 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  push-images:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_TOKEN }}
+
+      - name: Build and Push Frontend
+        run: |
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/vite-express-ecom-frontend:latest ./client
+          docker push ${{ secrets.DOCKER_USERNAME }}/vite-express-ecom-frontend:latest
+
+      - name: Build and Push Backend
+        run: |
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/vite-express-ecom-backend:latest ./server
+          docker push ${{ secrets.DOCKER_USERNAME }}/vite-express-ecom-backend:latest

@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
-import routes from './routes/index.js';
+import routes from './api/v1/index.js';
 import { errorHandler } from './middleware/error-handler.js';
 
 export const createApp = () => {

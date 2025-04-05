@@ -2,9 +2,10 @@
 import { createRouter } from '@tanstack/react-router'
 import { Route as rootRoute } from '@/routes/__root.tsx'
 import { Route as indexRoute } from '@/routes/index.tsx'
+import { Route as loginRoute } from '@/routes/login.route.ts'
 
 // Combine routes into a tree
-const routeTree = rootRoute.addChildren([indexRoute])
+const routeTree = rootRoute.addChildren([indexRoute, loginRoute])
 
 // Register types
 declare module '@tanstack/react-router' {
@@ -12,7 +13,9 @@ declare module '@tanstack/react-router' {
     router: typeof router
   }
 
-}// Extend the route types to include meta
+}
+
+// Extend the route types to include meta
 declare module '@tanstack/react-router' {
   interface RouteMeta {
     title?: string

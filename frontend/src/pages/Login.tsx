@@ -1,17 +1,9 @@
 // Import necessary libraries and styles
-import useAuth from "@/context/AuthContext";
-import useLogin from "/home/vare/project/microservices_1/ecommerce_1/vite-express-ecom-starter/frontend/src/hooks/useLogin.tsx";
 import { Toaster } from "sonner";
 import '../index.css'
-import { Link } from 'react-router-dom';
+import { Link } from "@tanstack/react-router";
 
 const Login: React.FC = () => {
-  const { email, setEmail, password, setPassword, isClient, handleSubmit } = useLogin();
-  const { setIsAuthenticated } = useAuth();
-
-  if (!isClient) {
-    return null; // Optionally, render a loader here
-  }
 
   return (
     <div>
@@ -35,7 +27,6 @@ const Login: React.FC = () => {
             action="#"
             className="mt-8 space-y-6"
             method="POST"
-            onSubmit={handleSubmit}
           >
             <input name="remember" type="hidden" value="true" />
 
@@ -55,10 +46,6 @@ const Login: React.FC = () => {
                   
                   placeholder="Email address"
                   type="email"
-                  value={email}
-                  onChange={(e) => {
-                    setEmail(e.target.value);
-                  }}
                 />
               </div>
 
@@ -74,10 +61,6 @@ const Login: React.FC = () => {
                   name="password"
                   placeholder="Password"
                   type="password"
-                  value={password}
-                  onChange={(e) => {
-                    setPassword(e.target.value);
-                  }}
                 />
               </div>
             </div>
@@ -110,7 +93,6 @@ const Login: React.FC = () => {
               <button
                 className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-black"
                 type="submit"
-                onClick={() => setIsAuthenticated(true)} // Log in by setting `isAuthenticated` to true
               >
                 Sign in
               </button>
@@ -123,7 +105,7 @@ const Login: React.FC = () => {
             <p className="flex-grow md:text-base text-left text-sm font-roboto font-normal text-gray-600">
               Don't you have an account yet?
             </p>
-            <Link className="" to="/register">
+            <Link>
               <button className="text-right md:text-base font-roboto font-normal text-gray-600 text-sm mr-5">Register</button>
             </Link>
           </div>

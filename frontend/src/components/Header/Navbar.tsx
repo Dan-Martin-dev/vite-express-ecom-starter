@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import useAuth from "@/context/AuthContext";
 import useLogout from "@/hooks/useLogout";
-import { Link } from "@tanstack/react-router";
+import { Link } from '@tanstack/react-router';
 
 const Navbar = () => {
   const [cartVisible, setCartVisible] = useState(false);

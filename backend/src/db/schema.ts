@@ -41,7 +41,7 @@ export const users = pgTable(
   (table) => {
     return {
       userEmailIdx: uniqueIndex('user_email_idx').on(table.email),
-    }
+    } 
   }
 );
 

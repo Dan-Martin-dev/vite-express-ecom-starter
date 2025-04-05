@@ -1,86 +1,25 @@
-import { useState, useEffect } from "react";
-import axios, { AxiosError } from "axios";
-import { toast } from "sonner";
-import { useNavigate } from "react-router-dom";
-import { UseLoginReturn } from "../types/types.tsx";
+import { useMutation } from '@tanstack/react-query';
+import { loginUser } from '@/api/auth'; // Your API function
 
-const validateInputs = (email: string, password: string): string | null => {
-  if (!/^\S+@\S+\.\S+$/.test(email)) {
-    return "Invalid email format.";
-  }
-  if (password.length < 6) {
-    return "Password must be at least 6 characters long.";
-  }
-  return null;
-};
+export const useLogin = () => {
+  const { setIsAuthenticated } = useAuth();
 
-const useLogin = (): UseLoginReturn => {
-  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL; // For React
+  const loginMutation = useMutation({
+    mutationFn: (credentials: { email: string; password: string }) => 
+      loginUser(credentials),
+    onSuccess: (data) => {
+      // Store token, update state
+      localStorage.setItem('token', data.token);
+      setIsAuthenticated(true);
+    },
+    onError: (error) => {
+      // Handle errors (show toast)
+      console.error('Login failed:', error);
+    },
+  });
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [isClient, setIsClient] = useState(false);
-
-  const navigate = useNavigate(); // React Router navigation hook
-
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
-
-  const handleSubmit = async (event: React.FormEvent): Promise<void> => {
-    event.preventDefault();
-    console.log("Form submitted!"); 
-  
-    console.log("EmailUU:", email);
-    console.log("PasswordUUU:", password);
-  
-    const validationError = validateInputs(email, password);
-    console.log("Validation resultUUU:", validationError);
-
-    if (validationError) {
-      toast.error(validationError, { position: "top-right" });
-      return;
-    }
-  
-    try {
-      console.log("Sending API request...");
-      const response = await axios.post(
-        `${API_BASE_URL}/user/login`,
-        { email, password },
-        { withCredentials: true }
-      );
-      console.log("API response status code:", response.status);
-  
-      if (response.status === 200) {
-        const { token } = response.data; // Ensure API returns token
-
-        if (token) {
-          localStorage.setItem("token", token); // Save token to localStorage
-          toast.success("Congratulations! Your user has been created");
-        } else {
-          toast.error("No token received. Please try logging in.");
-        }
-        toast.success("Login successful");
-        setTimeout(() => {
-          console.log("Navigating to home page...");
-          navigate("/");
-        }, 1000);
-      }
-    } catch (error) {
-      console.error("Login failed:", error);
-      toast.error("An unexpected error occurred.");
-    }
-  };
-  
   return {
-    email,
-    setEmail,
-    password,
-    setPassword,
-    isClient,
-    setIsClient,
-    handleSubmit,
+    ...loginMutation,
+    isClient: typeof window !== 'undefined', // Simplify this check
   };
 };
-
-export default useLogin;

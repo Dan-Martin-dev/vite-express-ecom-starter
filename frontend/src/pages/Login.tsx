@@ -105,7 +105,7 @@ const Login: React.FC = () => {
             <p className="flex-grow md:text-base text-left text-sm font-roboto font-normal text-gray-600">
               Don't you have an account yet?
             </p>
-            <Link>
+            <Link to="/register">
               <button className="text-right md:text-base font-roboto font-normal text-gray-600 text-sm mr-5">Register</button>
             </Link>
           </div>

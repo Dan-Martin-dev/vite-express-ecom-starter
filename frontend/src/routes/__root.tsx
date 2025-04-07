@@ -1,6 +1,6 @@
 import { createRootRoute, Outlet } from '@tanstack/react-router'
-import Header from '@/components/Header/Header'
-import Footer from '@/components/Footer/Footer'
+import Header from '@/components/layout/header/header'
+import Footer from '@/components/layout/footer/footer'
 
 export const Route = createRootRoute({
   component: () => (

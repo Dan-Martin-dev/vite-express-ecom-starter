@@ -5,7 +5,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 export default {
-  schema: "./src/db/schema.ts",
+  schema: "./src/db/schema",
   out: "./drizzle",
   dialect: "postgresql", // Added dialect
   // driver: 'pg', // Removed driver as it conflicts with dialect

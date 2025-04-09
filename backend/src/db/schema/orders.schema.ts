@@ -137,6 +137,7 @@ export const orderHistoryRelations = relations(orderHistory, ({ one }) => ({
   creator: one(users, { fields: [orderHistory.createdBy], references: [users.id] }), // Link to the user who created the history entry
 }));
 
+
 // Note: userRelations depends on orders, defined in auth.schema.ts
 // Note: reviewsRelations depends on orders, defined in reviews.schema.ts
 // Note: productRelations depends on orderItems, defined in products.schema.ts

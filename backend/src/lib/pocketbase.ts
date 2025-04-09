@@ -1,10 +1,9 @@
 // src/lib/pocketbase.ts (Initialize PocketBase Admin SDK)
 import PocketBase from 'pocketbase';
-import { config } from '../config';
-
+import { config } from '@/config.js';
 // Use CommonJS import if ES modules cause issues with PocketBase v0.2x
 // const PocketBase = require('pocketbase/cjs')
-
+    
 export const pb = new PocketBase(config.pocketbaseUrl);
 
 // Authenticate as Admin globally (or handle per request if needed)

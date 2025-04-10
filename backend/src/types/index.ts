@@ -2,6 +2,7 @@ import { pgEnum } from "drizzle-orm/pg-core";
 
 // Types
 export type ShippingAddress = {
+  id: string; // Added ID field
   fullName: string;
   address: string;
   city: string;

@@ -1,180 +1,299 @@
-// src/features/auth/auth.routes.ts
+// src/api/v1/routes/auth.routes.ts
 import express, { Request, Response, NextFunction } from 'express';
-import { pb, ensurePbAdminAuth } from "@/lib/pocketbase.js"
+import { pb, ensurePbAdminAuth } from "@/lib/pocketbase.js";
 import { isAuthenticated } from '@/middleware/auth.middleware.js';
+import { validateRequestBody } from '@/middleware/validation.middleware.js'; // Import validation middleware
+import { authController } from '@/features/auth/auth.controller.js'; // Import Auth Controller
+import { UserCreateSchema, UserLoginSchema } from '@/features/auth/auth.types.js'; // Import Zod Schemas
 import { db } from '@/db/index.js';
-import * as schema from '@/db/schema.js'
+import * as schema from '@/db/schema/auth.schema.js';
 import { eq } from 'drizzle-orm';
 import crypto from 'crypto'; // For generating address IDs if needed
 import { ShippingAddress } from '@/types/index.js';
-
+import { EmailSchema, addressSchema, updateProfileSchema } from '@/features/auth/auth.validator.js';
+import { getUserAddresses } from '@/features/auth/auth.utils.js';
 // Call this when setting up routes or server
 ensurePbAdminAuth(); // Attempt admin authentication on startup
 
-
 const router = express.Router();
 
-// --- Input Validation (Placeholder - Use Zod or similar) ---
-const validate = (schema: any) => (req: Request, res: Response, next: NextFunction) => {
-    // Your validation logic here
-    next();
-};
-const registerSchema = {}; // Define Zod schema
-const loginSchema = {}; // Define Zod schema
-const updateProfileSchema = {}; // Define Zod schema
-const passwordChangeSchema = {}; // Define Zod schema
-const addressSchema = {}; // Define Zod schema
 
-router.post('/auth/register', validate(registerSchema), async (req: Request, res: Response, next: NextFunction) => {
-    const { email, password, passwordConfirm, name, ...otherData } = req.body;
+// --- Schemas for validation ---
+// Schema for routes needing only email
 
-    if (!email || !password || !passwordConfirm) {
-        return res.status(400).json({ message: 'Email, password, and password confirmation are required.' });
+
+// === CORE AUTH ROUTES (Using Controller/Service/Validation) ===
+router.post('/auth/register', validateRequestBody(UserCreateSchema), authController.register);
+router.post('/auth/login', validateRequestBody(UserLoginSchema), authController.login);
+router.post('/auth/logout', authController.logout); // No validation needed
+router.get('/auth/session', isAuthenticated, authController.getSession); // Protected by isAuthenticated
+router.post('/auth/request-password-reset', validateRequestBody(EmailSchema), authController.requestPasswordReset);
+
+// --- Placeholder/Informational Routes (Using Controller placeholders) ---
+router.post('/auth/refresh', authController.refresh);
+router.post('/auth/verify-email', authController.verifyEmail);
+router.post('/auth/reset-password', authController.resetPassword);
+
+
+// === USER PROFILE & ADDRESS ROUTES (Direct DB/PB interaction, kept separate for now) ===
+// These routes interact with both PocketBase and Drizzle user tables directly.
+// They could potentially be moved to a separate UserController/Service later if complexity grows.
+
+// USERS
+router.get('/users/me', isAuthenticated, (req: Request, res: Response) => {
+    // The middleware already verified the token and fetched the user
+    res.json({ user: req.user, token: req.token });
+});
+
+// Apply validation middleware to PUT /users/me
+router.put('/users/me', isAuthenticated, validateRequestBody(updateProfileSchema), async (req: Request, res: Response, next: NextFunction) => {
+    const userId = req.user?.id; // Get PocketBase User ID from authenticated request
+    if (!userId) {
+        return res.status(401).json({ message: 'Authentication required.' }); // Should be caught by middleware
     }
-    if (password !== passwordConfirm) {
-        return res.status(400).json({ message: 'Passwords do not match.' });
-    }
+
+    const { name, bio, image, phoneNumber, preferences, marketingOptIn, addresses, defaultPaymentMethod, ...otherData } = req.body;
+
+    // --- Option A: Update PocketBase User Record ---
+    // Use this if profile fields (name, bio, etc.) are primarily stored in PocketBase
+    const pbDataToUpdate: { [key: string]: any } = {};
+    if (name !== undefined) pbDataToUpdate.name = name;
+    // Add other PocketBase fields you want to update from req.body (e.g., custom fields)
+
+
+    // --- Option B: Update Drizzle User Record ---
+    // Use this for fields specific to your PostgreSQL DB (like preferences, marketingOptIn)
+    const drizzleDataToUpdate: Partial<typeof schema.users.$inferInsert> = {
+        updatedAt: new Date()
+    };
+    if (bio !== undefined) drizzleDataToUpdate.bio = bio;
+    if (image !== undefined) drizzleDataToUpdate.image = image; // Assuming image is a URL managed elsewhere or stored in PB
+    if (phoneNumber !== undefined) drizzleDataToUpdate.phoneNumber = phoneNumber;
+    if (preferences !== undefined) drizzleDataToUpdate.preferences = preferences; // Must be valid JSON
+    if (marketingOptIn !== undefined) drizzleDataToUpdate.marketingOptIn = Boolean(marketingOptIn);
+    if (defaultPaymentMethod !== undefined) drizzleDataToUpdate.defaultPaymentMethod = defaultPaymentMethod;
+    // Note: `addresses` JSONB is handled by separate endpoints below.
+    // Note: `role`, `email`, `password` should typically not be updated here.
 
     try {
-        // Data to send to PocketBase user creation
-        const data = {
-            email,
-            password,
-            passwordConfirm,
-            emailVisibility: false, // Default
-            name: name || '',
-            ...otherData // Include any other custom fields defined in your PocketBase 'users' collection
+        let updatedPbRecord = req.user; // Start with current user data
+
+        // Update PocketBase record if there's data for it
+        if (Object.keys(pbDataToUpdate).length > 0) {
+            updatedPbRecord = await pb.collection('users').update(userId, pbDataToUpdate);
+        }
+
+        // Update Drizzle record if there's data for it
+        let updatedDrizzleRecord = null;
+        if (Object.keys(drizzleDataToUpdate).length > 1) { // > 1 because updatedAt is always added
+             // Update Drizzle DB using the PocketBase User ID as the key
+            const result = await db.update(schema.users)
+                .set(drizzleDataToUpdate)
+                .where(eq(schema.users.id, userId)) // Assumes Drizzle `users.id` matches PocketBase `users.id`
+                .returning(); // Get updated record
+            if (result.length > 0) {
+                updatedDrizzleRecord = result[0];
+            } else {
+                 console.warn(`Attempted to update profile in Drizzle for user ID ${userId}, but no matching record found.`);
+                 // Decide how to handle this - maybe create the record if missing?
+            }
+        }
+
+        // Combine results (prioritize updated data)
+        // Be careful not to leak sensitive data like password hashes if they exist in updatedDrizzleRecord
+        const combinedUser = {
+           ...(updatedDrizzleRecord ? {
+               // Select safe fields from Drizzle record
+               id: updatedDrizzleRecord.id,
+               email: updatedDrizzleRecord.email, // Email likely won't change here
+               role: updatedDrizzleRecord.role,
+               name: updatedDrizzleRecord.name,
+               bio: updatedDrizzleRecord.bio,
+               image: updatedDrizzleRecord.image,
+               phoneNumber: updatedDrizzleRecord.phoneNumber,
+               preferences: updatedDrizzleRecord.preferences,
+               lastLoginAt: updatedDrizzleRecord.lastLoginAt,
+               addresses: updatedDrizzleRecord.addresses, // Addresses from Drizzle
+               defaultPaymentMethod: updatedDrizzleRecord.defaultPaymentMethod,
+               marketingOptIn: updatedDrizzleRecord.marketingOptIn,
+               createdAt: updatedDrizzleRecord.createdAt,
+               updatedAt: updatedDrizzleRecord.updatedAt,
+           } : {
+               // Fallback to PocketBase data if Drizzle update didn't happen or target Drizzle fields
+               id: updatedPbRecord?.id,
+               email: updatedPbRecord?.email,
+               name: updatedPbRecord?.name,
+               // ... other relevant safe fields from PocketBase model
+           }),
         };
 
-        // Use Admin SDK to create the user in PocketBase
-        const newUser = await pb.collection('users').create(data);
 
-        // --- Sync with your Drizzle `users` table (IMPORTANT) ---
-        // Create a corresponding user in your PostgreSQL DB using Drizzle
-        // You might want only essential info here, linking via PocketBase ID or email
-        try {
-            await db.insert(schema.users).values({
-                id: newUser.id, // Use PocketBase ID as primary key in Drizzle (RECOMMENDED)
-                email: newUser.email,
-                name: newUser.name || 'NO_NAME', // Match PB data
-                role: 'user', // Default role
-                // Add other fields as needed, potentially from newUser object
-            });
-            console.log(`User ${newUser.id} synced to local DB.`);
-        } catch (dbError) {
-            // Handle DB sync error - maybe log it, maybe try to delete the PB user? (complex)
-            console.error(`Failed to sync PocketBase user ${newUser.id} to local DB:`, dbError);
-            // Depending on strategy, you might want to inform the user or just log
-        }
-
-        // Optional: Request email verification immediately after creation
-        try {
-            await pb.collection('users').requestVerification(email);
-        } catch (verifyError) {
-            console.error(`Failed to send verification email to ${email} after registration:`, verifyError);
-            // Log this but don't fail the registration
-        }
-
-        // Don't return password hashes etc.
-        const { password: _p, passwordConfirm: _pc, ...safeUser } = data;
-        res.status(201).json({ ...newUser, message: 'Registration successful. Please check your email for verification.' });
+        res.json({ user: combinedUser });
 
     } catch (error: any) {
-        console.error("Registration Error:", error?.response || error)
-        // PocketBase often returns detailed errors in error.response.data
-        const message = error?.response?.message || 'Registration failed.';
+         console.error("Profile Update Error:", error?.response || error)
+         const message = error?.response?.message || 'Profile update failed.';
+         const details = error?.response?.data || {};
+         res.status(error?.response?.status || 400).json({ message, details });
+    }
+});
+
+// This route remains informational as password changes are complex
+router.patch('/auth/users/me/password', isAuthenticated, /* validateRequestBody(passwordChangeSchema), */ async (req: Request, res: Response, next: NextFunction) => {
+     // TODO: Define passwordChangeSchema if implementing this route
+     res.status(501).json({ message: 'Password changes should be handled via PocketBase password reset flow or SDK methods requiring the old password for security.' });
+
+    // If you absolutely must proxy the update (requires old password):
+    /*
+    const userId = req.user?.id;
+    const { oldPassword, password, passwordConfirm } = req.body;
+    if (!userId || !oldPassword || !password || !passwordConfirm) {
+         return res.status(400).json({ message: "Missing required fields." });
+    }
+     if (password !== passwordConfirm) {
+        return res.status(400).json({ message: 'New passwords do not match.' });
+    }
+    try {
+        // This requires ADMIN privileges or the user's current password
+        await pb.collection('users').update(userId, {
+            oldPassword: oldPassword, // Crucial for security check by PocketBase
+            password: password,
+            passwordConfirm: passwordConfirm
+        });
+        res.status(200).json({ message: 'Password updated successfully.' });
+    } catch (error: any) {
+        console.error("Password Update Error:", error?.response || error)
+        const message = error?.response?.message || 'Password update failed.';
         const details = error?.response?.data || {};
         res.status(error?.response?.status || 400).json({ message, details });
     }
+    */
 });
 
-router.post('/auth/login', validate(loginSchema), async (req: Request, res: Response, next: NextFunction) => {
-    const { email, password } = req.body;
-
-    if (!email || !password) {
-        return res.status(400).json({ message: 'Email and password are required.' });
-    }
+router.get('/auth/users/me/addresses', isAuthenticated, async (req: Request, res: Response, next: NextFunction) => {
+    const userId = req.user?.id;
+    if (!userId) return res.status(401).json({ message: 'Authentication required.' });
 
     try {
-        // Authenticate using PocketBase SDK (non-admin auth)
-        const authData = await pb.collection('users').authWithPassword(email, password);
+        const addresses = await getUserAddresses(userId);
+        res.json(addresses);
+    } catch (error) {
+        next(error);
+    }
+});
 
-        // --- Optional: Update lastLoginAt in your Drizzle DB ---
-        try {
-             if(authData.record?.id) {
-                await db.update(schema.users)
-                   .set({ lastLoginAt: new Date() })
-                   .where(eq(schema.users.id, authData.record.id)); // Assumes ID sync
-             }
-        } catch (dbError) {
-            console.error(`Failed to update lastLoginAt for user ${authData.record?.id}:`, dbError);
-            // Log but don't fail login
+// Apply validation middleware to POST /auth/users/me/addresses
+router.post('/auth/users/me/addresses', isAuthenticated, validateRequestBody(addressSchema), async (req: Request, res: Response, next: NextFunction) => {
+    const userId = req.user?.id;
+    if (!userId) return res.status(401).json({ message: 'Authentication required.' });
+
+    // Body is already validated by middleware
+    const newAddressData = req.body as Omit<ShippingAddress, 'id'>; // Type assertion after validation
+
+    try {
+        const currentAddresses = await getUserAddresses(userId);
+        // Generate a simple unique ID for the address within the JSON array
+        const newAddress: ShippingAddress = { // Use imported ShippingAddress
+            id: crypto.randomUUID(), // Add an ID to identify within the JSON
+            isDefault: newAddressData.isDefault || false, // Handle default flag
+            ...newAddressData,
+        };
+
+        // If setting new address as default, unset others
+        if (newAddress.isDefault) {
+            currentAddresses.forEach(addr => addr.isDefault = false);
         }
 
-        // Respond with the token and user record (client needs to store the token)
-        res.json({
-            token: authData.token,
-            user: authData.record // PocketBase user record
-        });
+        const updatedAddresses = [...currentAddresses, newAddress];
 
-    } catch (error: any) {
-         console.error("Login Error:", error?.response || error)
-         const message = error?.response?.message || 'Login failed.';
-        // Pocketbase returns 400 for failed auth attempt usually
-        res.status(error?.response?.status || 400).json({ message });
+        await db.update(schema.users)
+            .set({ addresses: updatedAddresses, updatedAt: new Date() })
+            .where(eq(schema.users.id, userId));
+
+        res.status(201).json(newAddress); // Return the newly added address with its ID
+    } catch (error) {
+        next(error);
     }
 });
 
-router.post('/auth/logout', (req: Request, res: Response) => {
-    // PocketBase tokens are typically stateless JWTs. Logout means the client discards the token.
-    // If using `pb.authStore.loadFromCookie` middleware, you might clear the cookie here.
-    // res.clearCookie('pb_auth'); // Requires cookie-parser
-    pb.authStore.clear(); // Clear any potentially loaded token in the *server's* authStore instance
-    res.status(200).json({ message: 'Logged out successfully.' });
-});
+// Apply validation middleware to PUT /auth/users/me/addresses/:addressId
+router.put('/auth/users/me/addresses/:addressId', isAuthenticated, validateRequestBody(addressSchema), async (req: Request, res: Response, next: NextFunction) => {
+    const userId = req.user?.id;
+    const { addressId } = req.params;
+    if (!userId) return res.status(401).json({ message: 'Authentication required.' });
 
-router.get('/auth/session', isAuthenticated, (req: Request, res: Response) => {
-    // isAuthenticated middleware attaches the verified PocketBase user model to req.user
-    res.json({ user: req.user, token: req.token }); // Return user data and potentially refreshed token
-});
-
-router.post('/auth/refresh', (req: Request, res: Response) => {
-    res.status(501).json({ message: 'Token refresh is typically handled automatically by PocketBase SDKs or during token verification. This endpoint is usually not required.' });
-});
+    // Body is already validated by middleware
+    const updatedAddressData = req.body as Partial<ShippingAddress>; // Type assertion after validation
 
 
-router.post('/api/v1/auth/verify-email', (req: Request, res: Response) => {
-     res.status(501).json({ message: 'Email verification link is handled by PocketBase or your frontend, not typically this backend endpoint.' });
-     // If you need to *trigger* sending the verification email again:
-     // Requires Admin SDK: await pb.collection('users').requestVerification('user_email@example.com');
-});
-
-router.post('/auth/request-password-reset', async (req: Request, res: Response, next: NextFunction) => {
-    const { email } = req.body;
-    if (!email) {
-        return res.status(400).json({ message: 'Email is required.' });
-    }
     try {
-        // Use Admin SDK or non-admin (depends on PB rules)
-        await pb.collection('users').requestPasswordReset(email);
-        res.status(200).json({ message: 'If an account exists for this email, a password reset link has been sent.' });
-    } catch (error: any) {
-         console.error("Password Reset Request Error:", error?.response || error)
-         // Don't reveal if email exists - send generic success message anyway for security
-        res.status(200).json({ message: 'If an account exists for this email, a password reset link has been sent.' });
-        // next(error); // Or just log internally
+        let currentAddresses = await getUserAddresses(userId);
+        let addressFound = false;
+        let resultingAddress: ShippingAddress | null = null; // Use imported ShippingAddress
+
+        // If setting this address as default, unset others first
+         if (updatedAddressData.isDefault) {
+            currentAddresses.forEach(addr => { if(addr.id !== addressId) addr.isDefault = false});
+        }
+
+        const updatedAddresses = currentAddresses.map(addr => {
+            if (addr.id === addressId) {
+                addressFound = true;
+                resultingAddress = {
+                    ...addr, // Keep original ID and other fields not being updated
+                    ...updatedAddressData, // Apply updates
+                     isDefault: updatedAddressData.isDefault !== undefined ? updatedAddressData.isDefault : addr.isDefault,
+                };
+                return resultingAddress;
+            }
+            return addr;
+        }).filter((addr): addr is ShippingAddress => addr !== null); // Ensure type correctness
+
+        if (!addressFound) {
+            return res.status(404).json({ message: `Address with ID ${addressId} not found.` });
+        }
+
+        await db.update(schema.users)
+            .set({ addresses: updatedAddresses, updatedAt: new Date() })
+            .where(eq(schema.users.id, userId));
+
+        res.json(resultingAddress);
+    } catch (error) {
+        next(error);
     }
 });
 
-router.post('/auth/reset-password', (req: Request, res: Response) => {
-    const { token, password, passwordConfirm } = req.body;
-     res.status(501).json({ message: 'Password reset confirmation is handled by PocketBase or your frontend using the token from the email link.' });
-     // If proxying: Requires Admin SDK: await pb.collection('users').confirmPasswordReset(token, password, passwordConfirm);
+router.delete('/auth/users/me/addresses/:addressId', isAuthenticated, async (req: Request, res: Response, next: NextFunction) => {
+     const userId = req.user?.id;
+     const { addressId } = req.params;
+    if (!userId) return res.status(401).json({ message: 'Authentication required.' });
+
+    try {
+         let currentAddresses = await getUserAddresses(userId);
+         const initialLength = currentAddresses.length;
+
+         const updatedAddresses = currentAddresses.filter(addr => addr.id !== addressId);
+
+          if (updatedAddresses.length === initialLength) {
+            return res.status(404).json({ message: `Address with ID ${addressId} not found.` });
+        }
+
+        // If the deleted address was the default, potentially set another one as default (optional logic)
+        // const wasDefault = currentAddresses.find(a => a.id === addressId)?.isDefault;
+        // if (wasDefault && updatedAddresses.length > 0 && !updatedAddresses.some(a => a.isDefault)) {
+        //     updatedAddresses[0].isDefault = true; // Example: set the first one as default
+        // }
+
+
+         await db.update(schema.users)
+            .set({ addresses: updatedAddresses, updatedAt: new Date() })
+            .where(eq(schema.users.id, userId));
+
+        res.status(204).send(); // No content on successful delete
+
+    } catch (error) {
+         next(error);
+    }
 });
-
-
-
-
-
 
 export default router; // Export the router

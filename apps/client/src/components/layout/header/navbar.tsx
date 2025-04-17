@@ -277,6 +277,7 @@ const Navbar = () => {
             </div>
           </div>
         </div>
+        
       </header>
 
       {/* Categorias: hay eventos */}

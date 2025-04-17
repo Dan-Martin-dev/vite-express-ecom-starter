@@ -1,6 +1,7 @@
 // src/db/scripts/pre-migrate.ts
 import dotenv from 'dotenv';
-import { Pool } from 'pg';
+import pg from 'pg'; // Import the CJS module's exports object as the default
+const { Pool } = pg;
 
 dotenv.config(); // Load environment variables (ensure DATABASE_URL is set)
 

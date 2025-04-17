@@ -28,7 +28,7 @@ router.post('/auth/login', validateRequestBody(UserLoginSchema), authController.
 router.post('/auth/logout', authController.logout); // No validation needed
 router.get('/auth/session', isAuthenticated, authController.getSession); // Protected by isAuthenticated
 router.post('/auth/request-password-reset', validateRequestBody(EmailSchema), authController.requestPasswordReset);
-
+    
 // --- Placeholder/Informational Routes (Using Controller placeholders) ---
 router.post('/auth/refresh', authController.refresh);
 router.post('/auth/verify-email', authController.verifyEmail);

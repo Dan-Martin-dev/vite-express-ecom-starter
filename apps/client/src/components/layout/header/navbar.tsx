@@ -1,16 +1,10 @@
-import { useEffect, useState } from "react";
-import { NavLink, useLocation } from "react-router-dom";
+import { useEffect } from "react";
+import { NavLink } from "react-router-dom";
 import useAuth from "@/context/AuthContext";
-import useLogout from "@/hooks/useLogout";
 import { Link } from '@tanstack/react-router';
-
+const { logout, isAuthenticated, user } = useAuth(); // Get auth state for layout
 const Navbar = () => {
-  const [cartVisible, setCartVisible] = useState(false);
-  const [menuVisible, setMenuVisible] = useState(false);
-  const [isProductosHovered, setIsProductosHovered] = useState(false);
-  const { isAuthenticated } = useAuth();
-  const location = useLocation();
-  const { handleLogout } = useLogout();
+  
 
   useEffect(() => {
     setIsProductosHovered(false);

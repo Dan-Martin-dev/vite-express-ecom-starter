@@ -12,28 +12,19 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as RouterImport } from './routes/router'
-import { Route as RegisterRouteImport } from './routes/register.route'
-import { Route as LoginRouteImport } from './routes/login.route'
 import { Route as IndexImport } from './routes/index'
 import { Route as ProductsidImport } from './routes/products/[id]'
+import { Route as AuthRequestPasswordResetRouteImport } from './routes/auth/requestPasswordReset.route'
+import { Route as AuthRegisterRouteImport } from './routes/auth/register.route'
+import { Route as AuthLoginRouteImport } from './routes/auth/login.route'
+import { Route as AuthDashboardRouteImport } from './routes/auth/dashboard.route'
+import { Route as AuthAuthRouteImport } from './routes/auth/auth.route'
 
 // Create/Update Routes
 
 const RouterRoute = RouterImport.update({
   id: '/router',
   path: '/router',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const RegisterRouteRoute = RegisterRouteImport.update({
-  id: '/register',
-  path: '/register',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const LoginRouteRoute = LoginRouteImport.update({
-  id: '/login',
-  path: '/login',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -49,6 +40,37 @@ const ProductsidRoute = ProductsidImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const AuthRequestPasswordResetRouteRoute =
+  AuthRequestPasswordResetRouteImport.update({
+    id: '/auth/requestPasswordReset',
+    path: '/auth/requestPasswordReset',
+    getParentRoute: () => rootRoute,
+  } as any)
+
+const AuthRegisterRouteRoute = AuthRegisterRouteImport.update({
+  id: '/auth/register',
+  path: '/auth/register',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AuthLoginRouteRoute = AuthLoginRouteImport.update({
+  id: '/auth/login',
+  path: '/auth/login',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AuthDashboardRouteRoute = AuthDashboardRouteImport.update({
+  id: '/auth/dashboard',
+  path: '/auth/dashboard',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AuthAuthRouteRoute = AuthAuthRouteImport.update({
+  id: '/auth/auth',
+  path: '/auth/auth',
+  getParentRoute: () => rootRoute,
+} as any)
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
@@ -60,25 +82,46 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
-    '/login': {
-      id: '/login'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof LoginRouteImport
-      parentRoute: typeof rootRoute
-    }
-    '/register': {
-      id: '/register'
-      path: '/register'
-      fullPath: '/register'
-      preLoaderRoute: typeof RegisterRouteImport
-      parentRoute: typeof rootRoute
-    }
     '/router': {
       id: '/router'
       path: '/router'
       fullPath: '/router'
       preLoaderRoute: typeof RouterImport
+      parentRoute: typeof rootRoute
+    }
+    '/auth/auth': {
+      id: '/auth/auth'
+      path: '/auth/auth'
+      fullPath: '/auth/auth'
+      preLoaderRoute: typeof AuthAuthRouteImport
+      parentRoute: typeof rootRoute
+    }
+    '/auth/dashboard': {
+      id: '/auth/dashboard'
+      path: '/auth/dashboard'
+      fullPath: '/auth/dashboard'
+      preLoaderRoute: typeof AuthDashboardRouteImport
+      parentRoute: typeof rootRoute
+    }
+    '/auth/login': {
+      id: '/auth/login'
+      path: '/auth/login'
+      fullPath: '/auth/login'
+      preLoaderRoute: typeof AuthLoginRouteImport
+      parentRoute: typeof rootRoute
+    }
+    '/auth/register': {
+      id: '/auth/register'
+      path: '/auth/register'
+      fullPath: '/auth/register'
+      preLoaderRoute: typeof AuthRegisterRouteImport
+      parentRoute: typeof rootRoute
+    }
+    '/auth/requestPasswordReset': {
+      id: '/auth/requestPasswordReset'
+      path: '/auth/requestPasswordReset'
+      fullPath: '/auth/requestPasswordReset'
+      preLoaderRoute: typeof AuthRequestPasswordResetRouteImport
       parentRoute: typeof rootRoute
     }
     '/products/[id]': {
@@ -95,51 +138,91 @@ declare module '@tanstack/react-router' {
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/login': typeof LoginRouteRoute
-  '/register': typeof RegisterRouteRoute
   '/router': typeof RouterRoute
+  '/auth/auth': typeof AuthAuthRouteRoute
+  '/auth/dashboard': typeof AuthDashboardRouteRoute
+  '/auth/login': typeof AuthLoginRouteRoute
+  '/auth/register': typeof AuthRegisterRouteRoute
+  '/auth/requestPasswordReset': typeof AuthRequestPasswordResetRouteRoute
   '/products/[id]': typeof ProductsidRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/login': typeof LoginRouteRoute
-  '/register': typeof RegisterRouteRoute
   '/router': typeof RouterRoute
+  '/auth/auth': typeof AuthAuthRouteRoute
+  '/auth/dashboard': typeof AuthDashboardRouteRoute
+  '/auth/login': typeof AuthLoginRouteRoute
+  '/auth/register': typeof AuthRegisterRouteRoute
+  '/auth/requestPasswordReset': typeof AuthRequestPasswordResetRouteRoute
   '/products/[id]': typeof ProductsidRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
-  '/login': typeof LoginRouteRoute
-  '/register': typeof RegisterRouteRoute
   '/router': typeof RouterRoute
+  '/auth/auth': typeof AuthAuthRouteRoute
+  '/auth/dashboard': typeof AuthDashboardRouteRoute
+  '/auth/login': typeof AuthLoginRouteRoute
+  '/auth/register': typeof AuthRegisterRouteRoute
+  '/auth/requestPasswordReset': typeof AuthRequestPasswordResetRouteRoute
   '/products/[id]': typeof ProductsidRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/login' | '/register' | '/router' | '/products/[id]'
+  fullPaths:
+    | '/'
+    | '/router'
+    | '/auth/auth'
+    | '/auth/dashboard'
+    | '/auth/login'
+    | '/auth/register'
+    | '/auth/requestPasswordReset'
+    | '/products/[id]'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/login' | '/register' | '/router' | '/products/[id]'
-  id: '__root__' | '/' | '/login' | '/register' | '/router' | '/products/[id]'
+  to:
+    | '/'
+    | '/router'
+    | '/auth/auth'
+    | '/auth/dashboard'
+    | '/auth/login'
+    | '/auth/register'
+    | '/auth/requestPasswordReset'
+    | '/products/[id]'
+  id:
+    | '__root__'
+    | '/'
+    | '/router'
+    | '/auth/auth'
+    | '/auth/dashboard'
+    | '/auth/login'
+    | '/auth/register'
+    | '/auth/requestPasswordReset'
+    | '/products/[id]'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  LoginRouteRoute: typeof LoginRouteRoute
-  RegisterRouteRoute: typeof RegisterRouteRoute
   RouterRoute: typeof RouterRoute
+  AuthAuthRouteRoute: typeof AuthAuthRouteRoute
+  AuthDashboardRouteRoute: typeof AuthDashboardRouteRoute
+  AuthLoginRouteRoute: typeof AuthLoginRouteRoute
+  AuthRegisterRouteRoute: typeof AuthRegisterRouteRoute
+  AuthRequestPasswordResetRouteRoute: typeof AuthRequestPasswordResetRouteRoute
   ProductsidRoute: typeof ProductsidRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  LoginRouteRoute: LoginRouteRoute,
-  RegisterRouteRoute: RegisterRouteRoute,
   RouterRoute: RouterRoute,
+  AuthAuthRouteRoute: AuthAuthRouteRoute,
+  AuthDashboardRouteRoute: AuthDashboardRouteRoute,
+  AuthLoginRouteRoute: AuthLoginRouteRoute,
+  AuthRegisterRouteRoute: AuthRegisterRouteRoute,
+  AuthRequestPasswordResetRouteRoute: AuthRequestPasswordResetRouteRoute,
   ProductsidRoute: ProductsidRoute,
 }
 
@@ -154,23 +237,35 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/login",
-        "/register",
         "/router",
+        "/auth/auth",
+        "/auth/dashboard",
+        "/auth/login",
+        "/auth/register",
+        "/auth/requestPasswordReset",
         "/products/[id]"
       ]
     },
     "/": {
       "filePath": "index.tsx"
     },
-    "/login": {
-      "filePath": "login.route.ts"
-    },
-    "/register": {
-      "filePath": "register.route.ts"
-    },
     "/router": {
       "filePath": "router.ts"
+    },
+    "/auth/auth": {
+      "filePath": "auth/auth.route.ts"
+    },
+    "/auth/dashboard": {
+      "filePath": "auth/dashboard.route.ts"
+    },
+    "/auth/login": {
+      "filePath": "auth/login.route.ts"
+    },
+    "/auth/register": {
+      "filePath": "auth/register.route.ts"
+    },
+    "/auth/requestPasswordReset": {
+      "filePath": "auth/requestPasswordReset.route.ts"
     },
     "/products/[id]": {
       "filePath": "products/[id].tsx"

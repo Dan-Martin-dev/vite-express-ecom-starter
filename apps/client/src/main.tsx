@@ -2,14 +2,13 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 import { App}  from "./App.tsx";
-import { BrowserRouter } from "react-router-dom";
 import { ToastContainer } from 'react-toastify';
-import { GlobalProvider } from "./providers/GlobalProvider.tsx";
+import { RouterProvider } from '@tanstack/react-router';
+import { router } from './routes/router'; // Adjust path if needed
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-        <GlobalProvider>
-          <BrowserRouter>
+    <RouterProvider router={router} />
             <App />
             <ToastContainer
                 position="top-right" // Or your preferred position
@@ -23,7 +22,5 @@ createRoot(document.getElementById("root")!).render(
                 pauseOnHover
                 theme="light" // Or "dark" or "colored"
             />
-          </BrowserRouter>
-        </GlobalProvider>
   </StrictMode>
 );

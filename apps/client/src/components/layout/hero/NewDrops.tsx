@@ -1,4 +1,4 @@
-import ProductItem from "@/components/features/products/ProductItem";
+/* import ProductItem from "@/components/features/products/ProductItem";
 import type { Product } from "@/types/types";
 import { useShop } from "@/context/ShopContext.tsx";
 import useFetchProducts from "@/hooks/useFetchProducts.tsx";
@@ -44,7 +44,7 @@ const NewDrops = () => {
   );
 };
 
-export default NewDrops;
+export default NewDrops; */
 /*
 import React, { useState } from "react";
 import ProductItem from "../Products/ProductItem.tsx";

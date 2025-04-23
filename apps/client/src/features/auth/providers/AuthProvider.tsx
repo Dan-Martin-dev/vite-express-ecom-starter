@@ -18,6 +18,12 @@ import {
 import * as authApi from "../api/authApi";
 import { apiClient } from "@/lib/axios"; // For updating headers
 import { toast } from "react-toastify";
+import axios from 'axios'; // Import axios and AxiosError
+
+interface BackendErrorData {
+  message?: string;
+  // Add other potential fields if needed
+}
 
 export const AuthContext = createContext<AuthContextType | undefined>(
   undefined
@@ -63,15 +69,49 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     setState((prev) => ({ ...prev, error: null }));
   }, []);
 
-  const handleError = useCallback((error: unknown, defaultMessage: string) => {
-    const message =
-      error.response?.data?.message || error.message || defaultMessage;
-    console.error("Auth Error:", message, error.response || error);
-    setState((prev) => ({ ...prev, isLoading: false, error: message }));
-    toast.error(message);
-    setState((prev) => ({ ...prev, isLoading: false, error: message }));
-    throw new Error(message); // Keep rethrowing to signal failure
-  }, []);
+  // --- Inside your AuthProvider ---
+  const handleError = useCallback(
+    (error: unknown, defaultMessage: string) => {
+      let message = defaultMessage; // Initialize with the default
+      let loggableError: unknown = error; // This will hold the most relevant error part for logging
+
+      // 1. Check if it's an AxiosError
+      // We use the type predicate `axios.isAxiosError` which also narrows the type
+      if (axios.isAxiosError<BackendErrorData>(error)) {
+        loggableError = error.response ?? error; // Log response if available, else the error itself
+        // Now TypeScript knows 'error' is an AxiosError inside this block
+        // Safely access response.data.message (if data and message exist)
+        if (error.response?.data?.message) {
+          message = error.response.data.message;
+        } else if (error.message) {
+          // Fallback to the main error message if data.message isn't there
+          message = error.message;
+        }
+      }
+      // 2. Check if it's a standard JavaScript Error instance
+      else if (error instanceof Error) {
+        // Now TypeScript knows 'error' is an Error inside this block
+        message = error.message; // Safely access the message property
+        loggableError = error;
+      }
+      // 3. (Optional) Handle cases where the error might be just a string
+      else if (typeof error === "string") {
+        message = error;
+        loggableError = error;
+      }
+
+      // Now 'message' holds the best available error message string
+      console.error("Auth Error:", message, loggableError); // Log the determined message and the relevant error object/data
+      setState((prev) => ({ ...prev, isLoading: false, error: message }));
+      toast.error(message);
+      // Remove the redundant setState call below:
+      // setState((prev) => ({ ...prev, isLoading: false, error: message }));
+      throw new Error(message); // Keep rethrowing to signal failure
+    },
+    [
+      /* dependencies like setState */
+    ]
+  ); // Add setState to dependency array if required by linting rules (though it's usually stable)
 
   const checkSession = useCallback(async () => {
     const storedToken = localStorage.getItem("authToken");

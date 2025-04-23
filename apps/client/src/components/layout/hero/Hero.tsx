@@ -1,6 +1,6 @@
 import { useState } from "react";
-import useImageSize from "@/hooks/useImageSize.tsx";
-import useCarousel from "@/hooks/useCarousel.tsx";
+import useImageSize from "@/hooks/useImageSize";
+import useCarousel from "@/hooks/useCarousel";
 import hero1 from "@/assets/frontend_assets/hero_1.webp"
 import hero2 from "@/assets/frontend_assets/hero_2.webp"
 import herosmart1 from "@/assets/frontend_assets/hero_smart_1.webp"

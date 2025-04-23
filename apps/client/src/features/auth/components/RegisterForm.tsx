@@ -4,7 +4,7 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { registerSchema } from '../validation/authSchemas';
 import { RegisterPayload } from '../types';
-import { useAuth } from '../hooks/useAuth';
+import { useAuth } from '@/hooks/useAuth';
 
 export const RegisterForm: React.FC = () => {
     const { register: registerUser, isLoading, error, clearError } = useAuth(); // Alias register to avoid conflict

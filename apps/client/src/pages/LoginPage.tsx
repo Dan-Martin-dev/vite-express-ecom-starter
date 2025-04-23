@@ -2,21 +2,12 @@
 import { Toaster } from "sonner";
 import '../index.css'
 import { Link } from "@tanstack/react-router";
-import React, { useEffect } from 'react';
-import { LoginForm } from "@/features/auth/components/LoginForm";
-import useAuth from "@/context/AuthContext";
-import { Route as loginRoute } from '@/routes/auth/login.route.ts'; // Import the specific route definition
+import React from 'react';
+/* import { LoginForm } from "@/features/auth/components/LoginForm"; 
+import { useAuth } from "@/hooks/useAuth";
+import { Route as loginRoute } from '@/routes/auth/login.route.ts'; */
 
 const Login: React.FC = () => { 
-  const { redirect, message } = loginRoute.useSearch();
-  const { login } = useAuth(); // Get the login function correctly
-
-  // Modify the login function used by the form to include the redirect URL
-  const handleLogin = async (data: /* LoginPayload */ any) => {
-    // The actual login logic (API call, state update) is in AuthProvider
-    // We pass the redirect URL obtained from search params here
-    await login(data, redirect); // Pass redirect URL to the login action
-  };
 
   return (  
     <div>

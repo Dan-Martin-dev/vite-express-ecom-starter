@@ -1,39 +1,43 @@
-import { useEffect } from "react";
-import { NavLink } from "react-router-dom";
-import useAuth from "@/context/AuthContext";
-import { Link } from '@tanstack/react-router';
-const { logout, isAuthenticated, user } = useAuth(); // Get auth state for layout
+import { useEffect, useState } from "react";
+import { useAuth } from "@/hooks/useAuth";
+import { Link, useLocation } from '@tanstack/react-router';
+
 const Navbar = () => {
-  
+
+  const { isAuthenticated, logout } = useAuth(); 
+  const [isProductosHovered, setIsProductosHovered] = useState(false);
+  const [menuVisible, setMenuVisible] = useState(false);
+  const [cartVisible, setCartVisible] = useState(false); 
+  const location = useLocation(); 
 
   useEffect(() => {
-    setIsProductosHovered(false);
     setMenuVisible(false);
+    setCartVisible(false); 
+    setIsProductosHovered(false);
   }, [location]);
 
-
   return (
-    <div className="bg-black">
+  <div className="bg-black">
 
-      {/* Header: logos y botones */}
-      <header className="bg-black text-white p-4 md:p-5 flex items-center justify-between">
+    {/* Header: logos y botones */}
+    <header className="bg-black text-white p-4 md:p-5 flex items-center justify-between"> 
 
-        {/* Search Button */}
-        <div className="hidden md:block flex-shrink-0 ">
-          <button className="">
-            <h1 className="text-white font-neue font-medium md:text-3xl md:ml-5">
-              BUSCAR
-            </h1>
-          </button>
-        </div>
+      {/* Search Button */}
+      <div className="hidden md:block flex-shrink-0 ">
+        <button className="">
+          <h1 className="text-white font-neue font-medium md:text-3xl md:ml-5">
+            BUSCAR
+          </h1>
+        </button>
+      </div>
 
-        {/* Menu Button */}
-        <div className="block md:hidden lg:hidden flex-shrink-0 ml-0 sm:ml-5">
-          <button className="" onClick={() => setMenuVisible(true)}>
-            <h1 className="text-lg xs:text-xl sm:text-3xl font-neue font-medium text-white">
-              MENU
-            </h1>
-          </button>
+      {/* Menu Button */}
+      <div className="block md:hidden lg:hidden flex-shrink-0 ml-0 sm:ml-5">
+        <button className="" onClick={() => setMenuVisible(true)}>
+          <h1 className="text-lg xs:text-xl sm:text-3xl font-neue font-medium text-white">
+            MENU
+          </h1>
+        </button>
         </div>
 
         {/* Sliding Menu for small screens */}
@@ -95,11 +99,11 @@ const Navbar = () => {
 
         {/* Center: Logo */}
         <div className="flex-grow flex justify-center ml-5 md:ml-16">
-          <NavLink to="/" className="text-black font-bold">
+          <Link to="/" className="text-black font-bold">
             <h1 className="font-neue text-3xl xs:text-4xl sm:text-5xl text-white">
               CULTIST CLUB
             </h1>
-          </NavLink>
+          </Link>
         </div>
 
         {/* Right: Login and Cart Buttons with toggle */}
@@ -107,7 +111,7 @@ const Navbar = () => {
           {/* Login button conditional */}
           {isAuthenticated ? (
             // Show Logout when authenticated
-            <button onClick={handleLogout} className="hidden md:block">
+            <button onClick={logout} className="hidden md:block">
               <div className="text-white font-neue font-medium md:text-3xl md:ml-6">
                 LOGOUT
               </div>
@@ -281,7 +285,7 @@ const Navbar = () => {
         </Link>
         <Link
           className="text-white font-neue font-normal text-xl"
-          to="/collection"
+          to="/"
         >
           NEW COLLECTION
         </Link>
@@ -314,7 +318,7 @@ const Navbar = () => {
               <div className="text-xl">
                 <ul>
                   <li className="text-white font-normal font-neue text-md  relative mb-3">
-                    <Link to="/collection">NEW COLLECTION</Link>
+                    <Link to="/">NEW COLLECTION</Link>
                   </li>
                 </ul>
               </div>
@@ -402,7 +406,7 @@ const Navbar = () => {
 
         <Link
           className="text-white font-neue font-normal text-xl"
-          to="/sale"
+          to="/"
         >
           SALE
         </Link>

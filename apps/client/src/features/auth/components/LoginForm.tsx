@@ -4,7 +4,7 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { loginSchema } from '../validation/authSchemas';
 import { LoginPayload } from '../types';
-import { useAuth } from '../hooks/useAuth';
+import { useAuth } from '@/hooks/useAuth';
 
 export const LoginForm: React.FC = () => {
   const { login, isLoading, error, clearError } = useAuth();

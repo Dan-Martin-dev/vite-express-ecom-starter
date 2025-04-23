@@ -12,7 +12,7 @@ import {
 } from '../types'; // Use '../types' or '@/features/auth/types' based on alias setup
 
 export const registerUser = async (payload: RegisterPayload): Promise<RegisterResponse> => {
-  // Don't send passwordConfirm to the backend if it doesn't expect it
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { passwordConfirm, ...dataToSend } = payload;
   const response = await apiClient.post<RegisterResponse>('/auth/register', dataToSend);
   return response.data;

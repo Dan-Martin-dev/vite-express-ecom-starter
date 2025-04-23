@@ -1,3 +1,104 @@
-node_modules
-**/.env
-**/.env.*
+      
+# --- Environment Variables ---
+# Ignore all .env files in any directory
+# Ensures sensitive credentials and configurations are not committed.
+**/.env*
+*.env
+
+# --- BUT ---
+# Do NOT ignore template/example files. These are meant to be committed.
+!**/.env.example
+!**/.env.template
+!**.env.schema
+
+# --- Dependencies ---
+# Ignore node_modules directories in any location (root, apps/client, apps/server)
+**/node_modules
+.pnp
+.pnp.js
+.yarn/install-state.gz
+
+# --- Build Output ---
+# Ignore build artifacts from client and server apps
+**/dist
+**/build
+**/out
+**/coverage
+.next/
+.nuxt/
+.svelte-kit/
+.vercel/
+
+# --- Logs ---
+# Ignore log files
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# --- Runtime Data ---
+# Ignore runtime data, caches, etc.
+.DS_Store
+Thumbs.db
+*.local
+
+# --- IDE/Editor specific ---
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.sublime-workspace
+*.sublime-project
+.idea/*
+!.idea/misc.xml
+!.idea/modules.xml
+!.idea/encodings.xml
+!.idea/vcs.xml
+!.idea/compiler.xml
+!.idea/libraries # Typically managed by build tools
+!.idea/jarRepositories.xml
+!.idea/workspace.xml # Some teams commit this, but it often causes merge conflicts
+
+# --- Terraform ---
+# Ignore Terraform state files and directories (highly sensitive)
+.terraform/
+*.tfstate
+*.tfstate.*.backup
+*.tfvars
+*.tfvars.json
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+.terraform.lock.hcl
+
+# --- Drizzle ORM ---
+# Typically migration files in 'drizzle/' SHOULD be committed.
+# Ignore specific drizzle temporary or generated files if any (adjust if needed)
+# .drizzle-kit # Example if you use drizzle-kit locally in a way that generates ignored files
+
+# --- Generated files ---
+# Example: Ignore generated route tree if it's always regenerated
+# apps/client/src/routeTree.gen.ts # Check if this SHOULD be committed or ignored
+
+# --- OS generated files ---
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs*.db
+
+# --- Archives ---
+*.zip
+*.tar.*
+*.rar
+
+# --- Temporary Files ---
+*.swp # Vim swap files
+*~ # Backup files
+
+    

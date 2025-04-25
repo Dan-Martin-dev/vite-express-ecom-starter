@@ -1,7 +1,7 @@
 // Import necessary libraries and styles
 import { Toaster } from "sonner";
 import "../index.css";
-import { Link } from "react-router-dom";
+import { Link } from "@tanstack/react-router";
 import useRegister from "@/hooks/useRegister";
 
 const Register: React.FC = () => {

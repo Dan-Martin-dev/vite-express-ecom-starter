@@ -1,7 +1,6 @@
 import { RouterProvider } from '@tanstack/react-router'
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
 import { StrictMode } from 'react'
-import '@/App.css'
 import { router } from '@/routes/router.ts' // Updated import
 
 export function App() {

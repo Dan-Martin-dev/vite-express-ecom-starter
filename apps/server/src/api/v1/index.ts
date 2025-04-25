@@ -3,6 +3,8 @@ import { Router } from 'express';
 import { db } from '../../db/index.js';
 import { users } from '@/db/schema/auth.schema.js';
 import { eq } from 'drizzle-orm';
+import cartRoutes from './cart/cart.routes.js';
+import authService from './auth/auth.routes.js';
 
 const router = Router();
 

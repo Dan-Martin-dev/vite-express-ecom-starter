@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link } from "@tanstack/react-router";
 import heroSecond2 from "@/assets/frontend_assets/heroSecond2.webp";
 import heroSecond1 from "@/assets/frontend_assets/heroSecond1.webp";
 

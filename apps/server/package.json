@@ -2,7 +2,7 @@
   "name": "backend",
   "version": "1.0.0",
   "description": "Express TypeScript API with Drizzle ORM and PostgreSQL",
-  "module": "NodeNext", 
+  "module": "NodeNext",
   "main": "dist/index.js",
   "type": "module",
   "exports": {
@@ -23,7 +23,9 @@
     "test:docker": "docker-compose -f tests/docker-compose.yml up -d && npm test"
   },
   "dependencies": {
+    "@types/cookie-parser": "^1.4.8",
     "@types/module-alias": "^2.0.4",
+    "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "drizzle-orm": "^0.41.0",
     "express": "^4.18.2",

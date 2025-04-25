@@ -2,7 +2,7 @@
 import useFetchProducts from "@/hooks/useFetchProducts";
 import { useEffect, useState } from "react";
 import { MdArrowRightAlt } from "react-icons/md";
-import { useParams } from "react-router-dom";
+import { useParams } from "@tanstack/react-router";
 import slugify from "slugify";
 
 const ProductDetail = () => {

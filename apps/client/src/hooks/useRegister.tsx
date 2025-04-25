@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import axios, { AxiosError } from "axios";
 import { toast } from "sonner";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@tanstack/react-router";
 import { UseRegisterReturn } from "../types/types.tsx";
 
 // Validation function reused from the backend

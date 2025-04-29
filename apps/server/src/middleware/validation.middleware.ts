@@ -32,7 +32,7 @@ export const validateRequestBody = (schema: z.Schema) => // Changed AnyZodObject
                 next(new HttpError(500, 'Internal Server Error during validation.'));
             }
         }
-    };
+};
 
 // Example usage in routes:
 // import { validateRequestBody } from './validation.middleware';

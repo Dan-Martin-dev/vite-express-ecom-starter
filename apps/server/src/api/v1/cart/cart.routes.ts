@@ -1,7 +1,7 @@
 // cart.routes.ts
 import { Router } from 'express';
 import { cartController } from './cart.controller.js';
-import { validateRequest } from '@/middleware/validation.middleware.js'; // Assuming your validation middleware
+import { validateRequestBody } from '@/middleware/validation.middleware.js'; // Assuming your validation middleware
 import { isAuthenticated } from '@/middleware/auth.middleware.js'; // Assuming your auth middleware
 import { requireSessionId } from '@/middleware/session.middleware.js'; // <-- You'll need to create this middleware
 
@@ -11,7 +11,7 @@ import {
   RemoveItemFromCartInputSchema,
   ApplyCouponInputSchema,
   UpdateCartDetailsInputSchema
-} from './cart.validator.js';
+} from './cart.validators.js';
 
 const router = Router();
 
@@ -29,7 +29,7 @@ router.get('/', cartController.getUserCart);
 // POST /api/v1/cart/items - Add item to the current cart
 router.post(
   '/items',
-  validateRequest({ body: AddItemToCartInputSchema }),
+  validateRequestBody(AddItemToCartInputSchema),
   cartController.addItemToCart
 );
 
@@ -39,7 +39,7 @@ router.post(
 // Identifying by product/variant in the body is common and arguably simpler for carts.
 router.put(
   '/items',
-  validateRequest({ body: UpdateCartItemInputSchema }),
+  validateRequestBody(UpdateCartItemInputSchema),
   cartController.updateCartItem
 );
 
@@ -50,7 +50,7 @@ router.put(
 // Identifying by product/variant in the body is common for DELETE on collections.
 router.delete(
     '/items',
-    validateRequest({ body: RemoveItemFromCartInputSchema }), // DELETE with body is unconventional but common for APIs needing identifying info
+    validateRequestBody(RemoveItemFromCartInputSchema), // DELETE with body is unconventional but common for APIs needing identifying info
     cartController.removeItemFromCart
 );
 
@@ -61,7 +61,7 @@ router.post('/clear', cartController.clearCart);
 // POST /api/v1/cart/coupon - Apply a coupon
 router.post(
     '/coupon',
-    validateRequest({ body: ApplyCouponInputSchema }),
+    validateRequestBody( ApplyCouponInputSchema),
     cartController.applyCoupon
 );
 
@@ -72,7 +72,7 @@ router.delete('/coupon', cartController.removeCoupon);
 // PUT /api/v1/cart/details - Update cart details (shipping method, notes)
 router.put(
     '/details',
-    validateRequest({ body: UpdateCartDetailsInputSchema }),
+    validateRequestBody(UpdateCartDetailsInputSchema ),
     cartController.updateCartDetails
 );
 

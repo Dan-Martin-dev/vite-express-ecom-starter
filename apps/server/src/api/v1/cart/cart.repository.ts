@@ -5,7 +5,7 @@ import { carts as cartsSchema } from '@/db/schema/carts.schema.js';
 import { NewCart, Cart } from './cart.types.js';
 import { db,schema} from '@/db/index.js'; // Assuming your Drizzle client is exported from here
 import { PostgresJsDatabase } from 'drizzle-orm/postgres-js'; // <-- Use PostgresJsDatabase
-
+    
 // Define a type for potential updates, allowing partial Cart fields
 type CartUpdate = Partial<NewCart>; // Use Partial utility type
 

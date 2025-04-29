@@ -2,18 +2,15 @@
 import { InferSelectModel, InferInsertModel } from 'drizzle-orm';
 import { carts as cartsSchema } from '@/db/schema/carts.schema.js'; // Assuming path is correct
 import { products as productsSchema, productVariants as productVariantsSchema } from '@/db/schema/products.schema.js'; // Need product types
-import { CartItem } from '@/types/index.js'; // <-- Import from your global types
+/* import { CartItem } from '@/types/index.js'; // <-- Import from your global types
+ */
 
 // --- Database Models ---
 export type Cart = InferSelectModel<typeof cartsSchema>;
 export type NewCart = InferInsertModel<typeof cartsSchema>;
 
-// Re-export CartItem so other files can import from here if preferred
-export type { CartItem }; // <-- Re-export the imported CartItem type
-
-// --- Cart Item Structure (from schema's JSONB type) ---
-// Note: This should ideally match the CartItem type you referenced in the schema,
-// but we define it here for clarity and type safety.
+/* export type { CartItem }; // <-- Re-export the imported CartItem type
+ */
 export interface CartItem {
   productId: string;
   variantId?: string; // Optional if adding a base product
@@ -32,7 +29,7 @@ export interface CartItem {
 
 // Input for adding an item
 export interface AddItemToCartInput {
-  productId: string;
+  productId: string;  
   variantId?: string;
   quantity: number;
 }
@@ -64,7 +61,6 @@ export interface UpdateCartDetailsInput {
   notes?: string;
 }
 
-// Output for fetching a cart (might include related product data)
 // Could extend Cart type or be a new type if denormalized data is returned
 export type CartWithDetails = Cart; // For now, simple type, can be expanded
 // Example: CartWithDetails = Omit<Cart, 'items'> & { items: DetailedCartItem[] };

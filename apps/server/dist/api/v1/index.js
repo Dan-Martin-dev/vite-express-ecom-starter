@@ -1,7 +1,7 @@
 // src/routes/index.ts
 import { Router } from 'express';
 import { db } from '../../db/index.js';
-import { users } from '../../db/schema/auth.schema.js';
+import { users } from '@/db/schema/auth.schema.js';
 import { eq } from 'drizzle-orm';
 const router = Router();
 // Users routes

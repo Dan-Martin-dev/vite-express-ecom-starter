@@ -1,4 +1,4 @@
-import { pb } from '../../../lib/pocketbase.js'; // Added .js extension
+import { pb } from '@/lib/pocketbase.js'; // Added .js extension
 import { ClientResponseError } from 'pocketbase';
 export class AuthRepository {
     usersCollection = 'users'; // Or your specific PocketBase collection name

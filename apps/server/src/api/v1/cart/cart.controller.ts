@@ -1,41 +1,35 @@
 // cart.controller.ts
 import { Request, Response, NextFunction } from 'express'; // Assuming Express or similar framework
-import { CartService } from './cart.service';
 import {
     AddItemToCartInput,
     UpdateCartItemInput,
     RemoveItemFromCartInput,
     ApplyCouponInput,
     UpdateCartDetailsInput
-} from './cart.types';
-import { AuthenticatedRequest } from '@/middleware/auth.middleware'; // Assuming your auth middleware adds user info
+} from './cart.types.js';
+/* import { Request } from '@/middleware/auth.middleware.js'; // Assuming your auth middleware adds user info */
+import { CartService } from './cart.service.js'; // Assuming your service is defined elsewhere
+import { CartRepository } from './cart.repository.js';
+import { db } from '@/db/index.js';
 
 export class CartController {
   constructor(private cartService: CartService) {}
 
-  /**
-   * Get the current user's or session's cart. Creates one if it doesn't exist.
-   */
-  async getUserCart(req: AuthenticatedRequest, res: Response, next: NextFunction): Promise<void> {
+  async getUserCart(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      // Assuming req.user is populated by auth middleware for logged-in users
       const userId = req.user?.id;
-      // Assuming req.sessionId is populated by session middleware for all requests
-      const sessionId = req.sessionId; // You'll need middleware to handle sessions
-
-      // Pass both userId and sessionId to the service, which handles the logic
+      const sessionId = req.sessionId;
+      if (!userId && !sessionId) {
+           console.error("Neither userId nor sessionId found for cart request.");
+      }
       const cart = await this.cartService.getOrCreateCartForUserOrSession(userId, sessionId);
-
       res.status(200).json(cart);
     } catch (error) {
       next(error); // Pass errors to your central error handler
     }
   }
 
-  /**
-   * Add an item to the cart.
-   */
-  async addItemToCart(req: AuthenticatedRequest, res: Response, next: NextFunction): Promise<void> {
+  async addItemToCart(req: Request, res: Response, next: NextFunction): Promise<void> {
       try {
         const itemInput: AddItemToCartInput = req.body; // Zod validation middleware already processed this
 
@@ -58,7 +52,7 @@ export class CartController {
   /**
    * Update an item's quantity in the cart.
    */
-  async updateCartItem(req: AuthenticatedRequest, res: Response, next: NextFunction): Promise<void> {
+  async updateCartItem(req: Request, res: Response, next: NextFunction): Promise<void> {
       try {
          // Need a way to identify the cart. Either from auth/session or path param.
          // Let's assume auth/session identifies the cart implicitly for the user/session.
@@ -83,11 +77,10 @@ export class CartController {
       }
   }
 
-
    /**
    * Remove an item from the cart.
    */
-  async removeItemFromCart(req: AuthenticatedRequest, res: Response, next: NextFunction): Promise<void> {
+  async removeItemFromCart(req: Request, res: Response, next: NextFunction): Promise<void> {
       try {
          const userId = req.user?.id;
          const sessionId = req.sessionId;
@@ -112,7 +105,7 @@ export class CartController {
   /**
    * Clear all items from the cart.
    */
-   async clearCart(req: AuthenticatedRequest, res: Response, next: NextFunction): Promise<void> {
+   async clearCart(req: Request, res: Response, next: NextFunction): Promise<void> {
        try {
          const userId = req.user?.id;
          const sessionId = req.sessionId;
@@ -131,11 +124,10 @@ export class CartController {
       }
    }
 
-
    /**
     * Apply a coupon code to the cart.
     */
-    async applyCoupon(req: AuthenticatedRequest, res: Response, next: NextFunction): Promise<void> {
+    async applyCoupon(req: Request, res: Response, next: NextFunction): Promise<void> {
        try {
          const userId = req.user?.id;
          const sessionId = req.sessionId;
@@ -159,7 +151,7 @@ export class CartController {
     /**
      * Remove the applied coupon from the cart.
      */
-    async removeCoupon(req: AuthenticatedRequest, res: Response, next: NextFunction): Promise<void> {
+    async removeCoupon(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
          const userId = req.user?.id;
          const sessionId = req.sessionId;
@@ -181,7 +173,7 @@ export class CartController {
      /**
      * Update cart details like shipping method or notes.
      */
-    async updateCartDetails(req: AuthenticatedRequest, res: Response, next: NextFunction): Promise<void> {
+    async updateCartDetails(req: Request, res: Response, next: NextFunction): Promise<void> {
          try {
              const userId = req.user?.id;
              const sessionId = req.sessionId;
@@ -205,8 +197,16 @@ export class CartController {
 
     // TODO: Add a route/controller method for transferring guest cart to user upon login,
     // though this might be triggered internally by the auth feature after login.
-    // async transferGuestCart(req: AuthenticatedRequest, res: Response, next: NextFunction): Promise<void> { ... }
+    // async transferGuestCart(req: Request, res: Response, next: NextFunction): Promise<void> { ... }
 }
 
-// Export an instance of the controller, injecting the service
-export const cartController = new CartController(cartService);
+// --- FINAL INSTANTIATION ---
+
+// Create an instance of the CartRepository, injecting the Drizzle DB client instance
+const cartRepositoryInstance = new CartRepository(db); // Pass your Drizzle 'db' instance here
+
+// Create an instance of the CartService, injecting the CartRepository instance
+const cartServiceInstance = new CartService(cartRepositoryInstance); // Pass the repository instance here
+
+// Export an instance of the controller, injecting the service instance
+export const cartController = new CartController(cartServiceInstance); // Pass the service instance here

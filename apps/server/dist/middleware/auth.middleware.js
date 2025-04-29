@@ -1,4 +1,4 @@
-import { pb } from '../lib/pocketbase.js';
+import { pb } from '@/lib/pocketbase.js';
 export const isAuthenticated = async (req, res, next) => {
     const authHeader = req.headers.authorization;
     const token = authHeader?.startsWith('Bearer ') ? authHeader.substring(7) : null;
@@ -6,7 +6,10 @@ export const isAuthenticated = async (req, res, next) => {
         // Maybe check for cookie if you store the token there instead
         // const authCookie = req.cookies['pb_auth']; // Requires cookie-parser middleware
         // if (authCookie) { try { pb.authStore.loadFromCookie(authCookie); } catch (_) {} }
-        return res.status(401).json({ message: 'Authentication token missing or invalid.' });
+        req.user = undefined; // Ensure req.user is explicitly undefined if no token
+        req.token = undefined;
+        /* return res.status(401).json({ message: 'Authentication token missing or invalid.' }); */
+        return next(); // Proceed to the next middleware/route handler
     }
     try {
         // Load token into authStore (doesn't verify validity yet)

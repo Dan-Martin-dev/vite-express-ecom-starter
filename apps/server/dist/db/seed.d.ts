@@ -662,22 +662,26 @@ export declare const seedDb: import("drizzle-orm/postgres-js").PostgresJsDatabas
                 generated: undefined;
             }, {}, {}>;
             status: import("drizzle-orm/pg-core").PgColumn<{
-                name: "status";
+                name: any;
                 tableName: "orders";
-                dataType: "string";
-                columnType: "PgEnumColumn";
-                data: "pending" | "processing" | "shipped" | "delivered" | "cancelled" | "refunded";
-                driverParam: string;
-                notNull: true;
-                hasDefault: true;
+                dataType: any;
+                columnType: any;
+                data: any;
+                driverParam: any;
+                notNull: false;
+                hasDefault: false;
                 isPrimaryKey: false;
                 isAutoincrement: false;
                 hasRuntimeDefault: false;
-                enumValues: ["pending", "processing", "shipped", "delivered", "cancelled", "refunded"];
+                enumValues: any;
                 baseColumn: never;
                 identity: undefined;
                 generated: undefined;
-            }, {}, {}>;
+            }, {}, {
+                [x: string]: any;
+                [x: number]: any;
+                [x: symbol]: any;
+            }>;
             shippingAddress: import("drizzle-orm/pg-core").PgColumn<{
                 name: "shipping_address";
                 tableName: "orders";
@@ -734,28 +738,32 @@ export declare const seedDb: import("drizzle-orm/postgres-js").PostgresJsDatabas
                 generated: undefined;
             }, {}, {}>;
             paymentStatus: import("drizzle-orm/pg-core").PgColumn<{
-                name: "payment_status";
+                name: any;
                 tableName: "orders";
-                dataType: "string";
-                columnType: "PgEnumColumn";
-                data: "pending" | "refunded" | "completed" | "failed" | "partially_refunded";
-                driverParam: string;
+                dataType: any;
+                columnType: any;
+                data: any;
+                driverParam: any;
                 notNull: false;
-                hasDefault: true;
+                hasDefault: false;
                 isPrimaryKey: false;
                 isAutoincrement: false;
                 hasRuntimeDefault: false;
-                enumValues: ["pending", "completed", "failed", "refunded", "partially_refunded"];
+                enumValues: any;
                 baseColumn: never;
                 identity: undefined;
                 generated: undefined;
-            }, {}, {}>;
+            }, {}, {
+                [x: string]: any;
+                [x: number]: any;
+                [x: symbol]: any;
+            }>;
             paymentResult: import("drizzle-orm/pg-core").PgColumn<{
                 name: "payment_result";
                 tableName: "orders";
                 dataType: "json";
                 columnType: "PgJsonb";
-                data: import("../types/index.js").PaymentResult;
+                data: PaymentResult;
                 driverParam: unknown;
                 notNull: false;
                 hasDefault: false;
@@ -767,7 +775,7 @@ export declare const seedDb: import("drizzle-orm/postgres-js").PostgresJsDatabas
                 identity: undefined;
                 generated: undefined;
             }, {}, {
-                $type: import("../types/index.js").PaymentResult;
+                $type: PaymentResult;
             }>;
             couponCode: import("drizzle-orm/pg-core").PgColumn<{
                 name: "coupon_code";
@@ -1464,22 +1472,26 @@ export declare const seedDb: import("drizzle-orm/postgres-js").PostgresJsDatabas
                 generated: undefined;
             }, {}, {}>;
             status: import("drizzle-orm/pg-core").PgColumn<{
-                name: "status";
+                name: any;
                 tableName: "order_history";
-                dataType: "string";
-                columnType: "PgEnumColumn";
-                data: "pending" | "processing" | "shipped" | "delivered" | "cancelled" | "refunded";
-                driverParam: string;
-                notNull: true;
+                dataType: any;
+                columnType: any;
+                data: any;
+                driverParam: any;
+                notNull: false;
                 hasDefault: false;
                 isPrimaryKey: false;
                 isAutoincrement: false;
                 hasRuntimeDefault: false;
-                enumValues: ["pending", "processing", "shipped", "delivered", "cancelled", "refunded"];
+                enumValues: any;
                 baseColumn: never;
                 identity: undefined;
                 generated: undefined;
-            }, {}, {}>;
+            }, {}, {
+                [x: string]: any;
+                [x: number]: any;
+                [x: symbol]: any;
+            }>;
             comment: import("drizzle-orm/pg-core").PgColumn<{
                 name: "comment";
                 tableName: "order_history";
@@ -3455,7 +3467,7 @@ export declare const seedDb: import("drizzle-orm/postgres-js").PostgresJsDatabas
                 tableName: "carts";
                 dataType: "json";
                 columnType: "PgJsonb";
-                data: import("../types/index.js").CartItem[];
+                data: CartItem[];
                 driverParam: unknown;
                 notNull: false;
                 hasDefault: true;
@@ -3467,7 +3479,7 @@ export declare const seedDb: import("drizzle-orm/postgres-js").PostgresJsDatabas
                 identity: undefined;
                 generated: undefined;
             }, {}, {
-                $type: import("../types/index.js").CartItem[];
+                $type: CartItem[];
             }>;
             couponCode: import("drizzle-orm/pg-core").PgColumn<{
                 name: "coupon_code";
@@ -3735,22 +3747,26 @@ export declare const seedDb: import("drizzle-orm/postgres-js").PostgresJsDatabas
                 generated: undefined;
             }, {}, {}>;
             role: import("drizzle-orm/pg-core").PgColumn<{
-                name: "role";
+                name: any;
                 tableName: "users";
-                dataType: "string";
-                columnType: "PgEnumColumn";
-                data: "admin" | "user" | "staff" | "vendor";
-                driverParam: string;
-                notNull: true;
-                hasDefault: true;
+                dataType: any;
+                columnType: any;
+                data: any;
+                driverParam: any;
+                notNull: false;
+                hasDefault: false;
                 isPrimaryKey: false;
                 isAutoincrement: false;
                 hasRuntimeDefault: false;
-                enumValues: ["admin", "user", "staff", "vendor"];
+                enumValues: any;
                 baseColumn: never;
                 identity: undefined;
                 generated: undefined;
-            }, {}, {}>;
+            }, {}, {
+                [x: string]: any;
+                [x: number]: any;
+                [x: symbol]: any;
+            }>;
             password: import("drizzle-orm/pg-core").PgColumn<{
                 name: "password";
                 tableName: "users";
@@ -4022,7 +4038,7 @@ export declare const seedDb: import("drizzle-orm/postgres-js").PostgresJsDatabas
                 tableName: "accounts";
                 dataType: "string";
                 columnType: "PgText";
-                data: import("../types/index.js").AdapterAccountType;
+                data: AdapterAccountType;
                 driverParam: string;
                 notNull: true;
                 hasDefault: false;
@@ -4034,7 +4050,7 @@ export declare const seedDb: import("drizzle-orm/postgres-js").PostgresJsDatabas
                 identity: undefined;
                 generated: undefined;
             }, {}, {
-                $type: import("../types/index.js").AdapterAccountType;
+                $type: AdapterAccountType;
             }>;
             provider: import("drizzle-orm/pg-core").PgColumn<{
                 name: "provider";

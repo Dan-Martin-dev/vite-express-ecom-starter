@@ -1,6 +1,16 @@
 import { pgEnum } from "drizzle-orm/pg-core";
+import { RecordModel } from "pocketbase";
 
 // Types
+declare global {
+  namespace Express {
+    interface Request {
+      user?: RecordModel; // The PocketBase user record added by your auth middleware
+      token?: string;    // The auth token added by your auth middleware
+      sessionId?: string; // The session ID added by your new session middleware
+    }
+  }
+}
 export type ShippingAddress = {
   id: string; // Added ID field
   fullName: string;
@@ -12,6 +22,8 @@ export type ShippingAddress = {
   phoneNumber?: string;
   isDefault?: boolean;
 };
+/* 
+
 
 export type PaymentResult = {
   id: string;
@@ -50,7 +62,7 @@ export const paymentStatusEnum = pgEnum('payment_status', [
   'partially_refunded'
 ]);
 export const userRoleEnum = pgEnum('user_role', ['admin', 'user', 'staff', 'vendor']);
-
+ */
 export class AppError extends Error {
   status: number;
   isOperational: boolean;
@@ -94,3 +106,5 @@ export class AppError extends Error {
     return new AppError(message, 500, false);
   }
 }
+
+export {};

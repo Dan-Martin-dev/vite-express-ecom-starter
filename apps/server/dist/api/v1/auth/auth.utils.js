@@ -1,6 +1,6 @@
 // src/api/v1/routes/auth.routes.ts
-import { db } from '@/db/index.js';
-import * as schema from '@/db/schema/auth.schema.js';
+import { db } from '../../../db/index.js';
+import * as schema from '../../../db/schema/auth.schema.js';
 import { eq } from 'drizzle-orm';
 export async function getUserAddresses(userId) {
     const user = await db.select({ addresses: schema.users.addresses })

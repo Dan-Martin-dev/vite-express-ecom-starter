@@ -1,44 +1,21 @@
-/*
-
-
-export type PaymentResult = {
-  id: string;
-  status: string;
-  update_time: string;
-  email_address: string;
-  provider: string;
-};
-
-export type CartItem = {
-  productId: string;
-  name: string;
-  slug: string;
-  image: string;
-  price: number;
-  qty: number;
-  attributes?: Record<string, string>;
-};
-
-export type AdapterAccountType = 'oauth' | 'email' | 'credentials';
-
+import { pgEnum } from "drizzle-orm/pg-core";
 // Enums
 export const orderStatusEnum = pgEnum('order_status', [
-  'pending',
-  'processing',
-  'shipped',
-  'delivered',
-  'cancelled',
-  'refunded'
+    'pending',
+    'processing',
+    'shipped',
+    'delivered',
+    'cancelled',
+    'refunded'
 ]);
 export const paymentStatusEnum = pgEnum('payment_status', [
-  'pending',
-  'completed',
-  'failed',
-  'refunded',
-  'partially_refunded'
+    'pending',
+    'completed',
+    'failed',
+    'refunded',
+    'partially_refunded'
 ]);
 export const userRoleEnum = pgEnum('user_role', ['admin', 'user', 'staff', 'vendor']);
- */
 export class AppError extends Error {
     status;
     isOperational;

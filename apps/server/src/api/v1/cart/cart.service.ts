@@ -1,5 +1,6 @@
 // cart.service.ts
-import { CartRepository } from "./cart.repository.js";
+      
+import { CartRepository, cartRepository } from "./cart.repository.js"; // <-- Add cartRepository here
 import {
   Cart,
   CartItem,
@@ -10,6 +11,7 @@ import {
   UpdateCartDetailsInput,
   CreateGuestCartInput,
   TransferCartInput,
+  CartUpdate, // <--- ADD THIS HERE
 } from "./cart.types.js";
 import {
   findCartItem,
@@ -21,6 +23,8 @@ import {
 import { AppError } from "@/lib/errors/AppError.js"; // Assuming your error handling
 import { NotFoundError } from "@/lib/errors/NotFoundError.js";
 import { ConflictError } from "@/lib/errors/ConflictError.js"; // For cases like insufficient stock
+import { AddItemToCartInputSchema } from './cart.validators.js'; // <--- Add this import
+import { z } from 'zod'; // <--- Add this import
 
 // Need to import or inject Product and Coupon services/repositories
 // Example imports (adjust paths):
@@ -111,12 +115,13 @@ export class CartService {
    * Adds an item to the cart or updates its quantity if already present.
    * Handles fetching product data, stock checks, and recalculating totals.
    * @param cartId The ID of the cart to modify.
-   * @param itemInput Details of the item to add.
+   * @param itemInput Details of the item to. add
    * @returns The updated cart object.
    */
+
   async addItemToCart(
     cartId: string,
-    itemInput: AddItemToCartInput
+    itemInput: z.infer<typeof AddItemToCartInputSchema> 
   ): Promise<Cart> {
     const cart = await this.cartRepository.findById(cartId);
     if (!cart) {

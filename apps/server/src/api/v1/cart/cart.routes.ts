@@ -23,7 +23,7 @@ router.use(requireSessionId);
 // router.use(authenticate); // Cart operations often work for guests
 
 // GET /api/v1/cart - Get the current user's or session's cart
-// This route can work for both authenticated users (using req.user) and guests (using req.sessionId)
+// This route can work for both authenticated users (usi  ng req.user) and guests (using req.sessionId)
 router.get('/', cartController.getUserCart);
 
 // POST /api/v1/cart/items - Add item to the current cart

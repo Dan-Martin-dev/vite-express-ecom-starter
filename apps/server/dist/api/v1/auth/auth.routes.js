@@ -1,16 +1,16 @@
 // src/api/v1/routes/auth.routes.ts
 import express from 'express';
-import { pb, ensurePbAdminAuth } from "@/lib/pocketbase.js";
-import { isAuthenticated } from '@/middleware/auth.middleware.js';
-import { validateRequestBody } from '@/middleware/validation.middleware.js'; // Import validation middleware
-import { authController } from '@/api/v1/auth/auth.controller.js'; // Import Auth Controller
-import { UserCreateSchema, UserLoginSchema } from '@/api/v1/auth/auth.types.js'; // Import Zod Schemas
-import { db } from '@/db/index.js';
-import * as schema from '@/db/schema/auth.schema.js';
+import { pb, ensurePbAdminAuth } from "../../../lib/pocketbase.js";
+import { isAuthenticated } from '../../../middleware/auth.middleware.js';
+import { validateRequestBody } from '../../../middleware/validation.middleware.js'; // Import validation middleware
+import { authController } from '../../../api/v1/auth/auth.controller.js'; // Import Auth Controller
+import { UserCreateSchema, UserLoginSchema } from '../../../api/v1/auth/auth.types.js'; // Import Zod Schemas
+import { db } from '../../../db/index.js';
+import * as schema from '../../../db/schema/auth.schema.js';
 import { eq } from 'drizzle-orm';
 import crypto from 'crypto'; // For generating address IDs if needed
-import { EmailSchema, addressSchema, updateProfileSchema } from '@/api/v1/auth/auth.validator.js';
-import { getUserAddresses } from '@/api/v1/auth/auth.utils.js';
+import { EmailSchema, addressSchema, updateProfileSchema } from '../../../api/v1/auth/auth.validator.js';
+import { getUserAddresses } from '../../../api/v1/auth/auth.utils.js';
 // Call this when setting up routes or server
 ensurePbAdminAuth(); // Attempt admin authentication on startup
 const router = express.Router();

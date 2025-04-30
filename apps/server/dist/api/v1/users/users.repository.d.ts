@@ -1,11 +1,11 @@
-import * as schema from '@/db/schema/auth.schema.js';
-import { ShippingAddress } from '@/types/index.js';
+import * as schema from '../../../db/schema/auth.schema.js';
+import { ShippingAddress } from '../../../types/index.js';
 export declare class UserRepository {
     findUserById(userId: string): Promise<{
         id: string;
         name: string;
         email: string;
-        role: any;
+        role: "admin" | "user" | "staff" | "vendor";
         password: string | null;
         emailVerified: Date | null;
         image: string | null;
@@ -24,7 +24,7 @@ export declare class UserRepository {
         id: string;
         name: string;
         email: string;
-        role: any;
+        role: "admin" | "user" | "staff" | "vendor";
         password: string | null;
         emailVerified: Date | null;
         image: string | null;

@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { isAuthenticated } from '@/middleware/auth.middleware.js';s
+import { isAuthenticated } from '@/middleware/auth.middleware.js';
 import { randomUUID } from 'crypto';
 
 /**
@@ -37,13 +37,3 @@ export const identifyCart = [
         next();
     }
 ];
-
-// Extend Request type globally or in a dedicated types file (e.g., @types/express/index.d.ts)
-declare global {
-  namespace Express {
-    interface Request {
-      user?: { id: string; /* other user fields */ }; // From auth middleware
-      sessionId?: string; // Added by identifyCart middleware
-    }
-  }
-}

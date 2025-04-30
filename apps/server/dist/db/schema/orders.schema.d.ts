@@ -1,4 +1,4 @@
-import { ShippingAddress } from '@/types/index.js';
+import { PaymentResult, ShippingAddress } from '../../types/index.js';
 export declare const orders: import("drizzle-orm/pg-core").PgTableWithColumns<{
     name: "orders";
     schema: undefined;
@@ -55,26 +55,22 @@ export declare const orders: import("drizzle-orm/pg-core").PgTableWithColumns<{
             generated: undefined;
         }, {}, {}>;
         status: import("drizzle-orm/pg-core").PgColumn<{
-            name: any;
+            name: "status";
             tableName: "orders";
-            dataType: any;
-            columnType: any;
-            data: any;
-            driverParam: any;
-            notNull: false;
-            hasDefault: false;
+            dataType: "string";
+            columnType: "PgEnumColumn";
+            data: "pending" | "processing" | "shipped" | "delivered" | "cancelled" | "refunded";
+            driverParam: string;
+            notNull: true;
+            hasDefault: true;
             isPrimaryKey: false;
             isAutoincrement: false;
             hasRuntimeDefault: false;
-            enumValues: any;
+            enumValues: ["pending", "processing", "shipped", "delivered", "cancelled", "refunded"];
             baseColumn: never;
             identity: undefined;
             generated: undefined;
-        }, {}, {
-            [x: string]: any;
-            [x: number]: any;
-            [x: symbol]: any;
-        }>;
+        }, {}, {}>;
         shippingAddress: import("drizzle-orm/pg-core").PgColumn<{
             name: "shipping_address";
             tableName: "orders";
@@ -131,26 +127,22 @@ export declare const orders: import("drizzle-orm/pg-core").PgTableWithColumns<{
             generated: undefined;
         }, {}, {}>;
         paymentStatus: import("drizzle-orm/pg-core").PgColumn<{
-            name: any;
+            name: "payment_status";
             tableName: "orders";
-            dataType: any;
-            columnType: any;
-            data: any;
-            driverParam: any;
+            dataType: "string";
+            columnType: "PgEnumColumn";
+            data: "pending" | "refunded" | "completed" | "failed" | "partially_refunded";
+            driverParam: string;
             notNull: false;
-            hasDefault: false;
+            hasDefault: true;
             isPrimaryKey: false;
             isAutoincrement: false;
             hasRuntimeDefault: false;
-            enumValues: any;
+            enumValues: ["pending", "completed", "failed", "refunded", "partially_refunded"];
             baseColumn: never;
             identity: undefined;
             generated: undefined;
-        }, {}, {
-            [x: string]: any;
-            [x: number]: any;
-            [x: symbol]: any;
-        }>;
+        }, {}, {}>;
         paymentResult: import("drizzle-orm/pg-core").PgColumn<{
             name: "payment_result";
             tableName: "orders";
@@ -865,26 +857,22 @@ export declare const orderHistory: import("drizzle-orm/pg-core").PgTableWithColu
             generated: undefined;
         }, {}, {}>;
         status: import("drizzle-orm/pg-core").PgColumn<{
-            name: any;
+            name: "status";
             tableName: "order_history";
-            dataType: any;
-            columnType: any;
-            data: any;
-            driverParam: any;
-            notNull: false;
+            dataType: "string";
+            columnType: "PgEnumColumn";
+            data: "pending" | "processing" | "shipped" | "delivered" | "cancelled" | "refunded";
+            driverParam: string;
+            notNull: true;
             hasDefault: false;
             isPrimaryKey: false;
             isAutoincrement: false;
             hasRuntimeDefault: false;
-            enumValues: any;
+            enumValues: ["pending", "processing", "shipped", "delivered", "cancelled", "refunded"];
             baseColumn: never;
             identity: undefined;
             generated: undefined;
-        }, {}, {
-            [x: string]: any;
-            [x: number]: any;
-            [x: symbol]: any;
-        }>;
+        }, {}, {}>;
         comment: import("drizzle-orm/pg-core").PgColumn<{
             name: "comment";
             tableName: "order_history";

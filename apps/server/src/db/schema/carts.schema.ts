@@ -9,8 +9,7 @@ import {
   uuid,
   index,
 } from 'drizzle-orm/pg-core';
-import { CartItem } from '@/types/index.js';
-
+import { CartItem } from '@/api/v1/cart/cart.types.js'; // <--- Change to this
 
 // CARTS
 export const carts = pgTable(

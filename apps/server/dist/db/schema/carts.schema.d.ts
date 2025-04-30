@@ -1,3 +1,4 @@
+import { CartItem } from '../../api/v1/cart/cart.types.js';
 export declare const carts: import("drizzle-orm/pg-core").PgTableWithColumns<{
     name: "carts";
     schema: undefined;

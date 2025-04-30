@@ -111,10 +111,10 @@ export declare const userCreateSchema: z.ZodObject<{
     marketingOptIn: z.ZodOptional<z.ZodBoolean>;
     image: z.ZodOptional<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
-    name: string;
     email: string;
+    name: string;
     password: string;
-    role?: "user" | "admin" | "staff" | "vendor" | undefined;
+    role?: "admin" | "user" | "staff" | "vendor" | undefined;
     image?: string | undefined;
     phoneNumber?: string | undefined;
     bio?: string | undefined;
@@ -132,10 +132,10 @@ export declare const userCreateSchema: z.ZodObject<{
     defaultPaymentMethod?: string | undefined;
     marketingOptIn?: boolean | undefined;
 }, {
-    name: string;
     email: string;
+    name: string;
     password: string;
-    role?: "user" | "admin" | "staff" | "vendor" | undefined;
+    role?: "admin" | "user" | "staff" | "vendor" | undefined;
     image?: string | undefined;
     phoneNumber?: string | undefined;
     bio?: string | undefined;
@@ -195,9 +195,9 @@ export declare const userUpdateSchema: z.ZodObject<z.objectUtil.extendShape<Omit
 }, "password">, {
     password: z.ZodOptional<z.ZodString>;
 }>, "strip", z.ZodTypeAny, {
-    name?: string | undefined;
     email?: string | undefined;
-    role?: "user" | "admin" | "staff" | "vendor" | undefined;
+    name?: string | undefined;
+    role?: "admin" | "user" | "staff" | "vendor" | undefined;
     password?: string | undefined;
     image?: string | undefined;
     phoneNumber?: string | undefined;
@@ -216,9 +216,9 @@ export declare const userUpdateSchema: z.ZodObject<z.objectUtil.extendShape<Omit
     defaultPaymentMethod?: string | undefined;
     marketingOptIn?: boolean | undefined;
 }, {
-    name?: string | undefined;
     email?: string | undefined;
-    role?: "user" | "admin" | "staff" | "vendor" | undefined;
+    name?: string | undefined;
+    role?: "admin" | "user" | "staff" | "vendor" | undefined;
     password?: string | undefined;
     image?: string | undefined;
     phoneNumber?: string | undefined;
@@ -251,7 +251,7 @@ export declare const accountSchema: z.ZodObject<{
     session_state: z.ZodOptional<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
     userId: string;
-    type: "email" | "oauth" | "credentials";
+    type: "oauth" | "email" | "credentials";
     provider: string;
     providerAccountId: string;
     expires_at?: number | undefined;
@@ -263,7 +263,7 @@ export declare const accountSchema: z.ZodObject<{
     session_state?: string | undefined;
 }, {
     userId: string;
-    type: "email" | "oauth" | "credentials";
+    type: "oauth" | "email" | "credentials";
     provider: string;
     providerAccountId: string;
     expires_at?: number | undefined;
@@ -1754,10 +1754,10 @@ export declare const orderHistoryCreateSchema: z.ZodObject<{
     createdBy?: string | undefined;
 }>;
 export declare const validateUser: (data: unknown) => {
-    name: string;
     email: string;
+    name: string;
     password: string;
-    role?: "user" | "admin" | "staff" | "vendor" | undefined;
+    role?: "admin" | "user" | "staff" | "vendor" | undefined;
     image?: string | undefined;
     phoneNumber?: string | undefined;
     bio?: string | undefined;
@@ -1776,9 +1776,9 @@ export declare const validateUser: (data: unknown) => {
     marketingOptIn?: boolean | undefined;
 };
 export declare const validateUserUpdate: (data: unknown) => {
-    name?: string | undefined;
     email?: string | undefined;
-    role?: "user" | "admin" | "staff" | "vendor" | undefined;
+    name?: string | undefined;
+    role?: "admin" | "user" | "staff" | "vendor" | undefined;
     password?: string | undefined;
     image?: string | undefined;
     phoneNumber?: string | undefined;
@@ -1995,23 +1995,23 @@ export declare const signupSchema: z.ZodEffects<z.ZodObject<{
     password: z.ZodString;
     confirmPassword: z.ZodString;
 }, "strip", z.ZodTypeAny, {
-    name: string;
     email: string;
+    name: string;
     password: string;
     confirmPassword: string;
 }, {
-    name: string;
     email: string;
+    name: string;
     password: string;
     confirmPassword: string;
 }>, {
-    name: string;
     email: string;
+    name: string;
     password: string;
     confirmPassword: string;
 }, {
-    name: string;
     email: string;
+    name: string;
     password: string;
     confirmPassword: string;
 }>;

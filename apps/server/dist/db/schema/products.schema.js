@@ -2,9 +2,9 @@ import { relations } from 'drizzle-orm';
 import { boolean, decimal, integer, jsonb, pgTable, text, timestamp, uniqueIndex, uuid, index, } from 'drizzle-orm/pg-core';
 import { primaryKey } from 'drizzle-orm/pg-core/primary-keys';
 // Import related schemas for relations
-import { reviews } from '@/db/schema/reviews.schema.js';
-import { orderItems } from '@/db/schema/orders.schema.js';
-import { wishlistItems } from '@/db/schema/wishlists.schema.js';
+import { reviews } from '../../db/schema/reviews.schema.js';
+import { orderItems } from '../../db/schema/orders.schema.js';
+import { wishlistItems } from '../../db/schema/wishlists.schema.js';
 // CATEGORIES
 export const categories = pgTable('categories', {
     id: uuid('id').defaultRandom().primaryKey().notNull(),

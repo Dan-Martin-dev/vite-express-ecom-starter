@@ -1,4 +1,4 @@
-import { ShippingAddress } from '@/types/index.js';
+import { AdapterAccountType, ShippingAddress } from '../../types/index.js';
 export declare const users: import("drizzle-orm/pg-core").PgTableWithColumns<{
     name: "users";
     schema: undefined;
@@ -55,26 +55,22 @@ export declare const users: import("drizzle-orm/pg-core").PgTableWithColumns<{
             generated: undefined;
         }, {}, {}>;
         role: import("drizzle-orm/pg-core").PgColumn<{
-            name: any;
+            name: "role";
             tableName: "users";
-            dataType: any;
-            columnType: any;
-            data: any;
-            driverParam: any;
-            notNull: false;
-            hasDefault: false;
+            dataType: "string";
+            columnType: "PgEnumColumn";
+            data: "admin" | "user" | "staff" | "vendor";
+            driverParam: string;
+            notNull: true;
+            hasDefault: true;
             isPrimaryKey: false;
             isAutoincrement: false;
             hasRuntimeDefault: false;
-            enumValues: any;
+            enumValues: ["admin", "user", "staff", "vendor"];
             baseColumn: never;
             identity: undefined;
             generated: undefined;
-        }, {}, {
-            [x: string]: any;
-            [x: number]: any;
-            [x: symbol]: any;
-        }>;
+        }, {}, {}>;
         password: import("drizzle-orm/pg-core").PgColumn<{
             name: "password";
             tableName: "users";

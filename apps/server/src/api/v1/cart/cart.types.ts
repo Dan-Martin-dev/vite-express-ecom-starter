@@ -1,16 +1,14 @@
 // types.ts based on carts.schema.ts and common cart operations
 import { InferSelectModel, InferInsertModel } from 'drizzle-orm';
 import { carts as cartsSchema } from '@/db/schema/carts.schema.js'; // Assuming path is correct
-import { products as productsSchema, productVariants as productVariantsSchema } from '@/db/schema/products.schema.js'; // Need product types
-/* import { CartItem } from '@/types/index.js'; // <-- Import from your global types
- */
 
 // --- Database Models ---
 export type Cart = InferSelectModel<typeof cartsSchema>;
 export type NewCart = InferInsertModel<typeof cartsSchema>;
 
-/* export type { CartItem }; // <-- Re-export the imported CartItem type
- */
+// Type for partial updates to a cart record
+export type CartUpdate = Partial<Cart>; // <--- ADD THIS LINE
+
 export interface CartItem {
   productId: string;
   variantId?: string; // Optional if adding a base product
@@ -29,9 +27,9 @@ export interface CartItem {
 
 // Input for adding an item
 export interface AddItemToCartInput {
-  productId: string;  
+  productId: string;
   variantId?: string;
-  quantity: number;
+  quantity?: number;
 }
 
 // Input for updating an item quantity/variant

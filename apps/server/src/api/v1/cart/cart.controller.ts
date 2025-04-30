@@ -11,6 +11,8 @@ import {
 import { CartService } from './cart.service.js'; // Assuming your service is defined elsewhere
 import { CartRepository } from './cart.repository.js';
 import { db } from '@/db/index.js';
+import { z } from 'zod'; 
+import { AddItemToCartInputSchema } from './cart.validators.js'; 
 
 export class CartController {
   constructor(private cartService: CartService) {}
@@ -31,8 +33,7 @@ export class CartController {
 
   async addItemToCart(req: Request, res: Response, next: NextFunction): Promise<void> {
       try {
-        const itemInput: AddItemToCartInput = req.body; // Zod validation middleware already processed this
-
+        const itemInput: z.infer<typeof AddItemToCartInputSchema> = req.body; 
         const userId = req.user?.id;
         const sessionId = req.sessionId;
 

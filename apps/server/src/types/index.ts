@@ -22,8 +22,6 @@ export type ShippingAddress = {
   phoneNumber?: string;
   isDefault?: boolean;
 };
-/* 
-
 
 export type PaymentResult = {
   id: string;
@@ -33,15 +31,6 @@ export type PaymentResult = {
   provider: string;
 };
 
-export type CartItem = {
-  productId: string;
-  name: string; 
-  slug: string;
-  image: string;
-  price: number;
-  qty: number;
-  attributes?: Record<string, string>;
-};
 
 export type AdapterAccountType = 'oauth' | 'email' | 'credentials';
 
@@ -62,7 +51,6 @@ export const paymentStatusEnum = pgEnum('payment_status', [
   'partially_refunded'
 ]);
 export const userRoleEnum = pgEnum('user_role', ['admin', 'user', 'staff', 'vendor']);
- */
 export class AppError extends Error {
   status: number;
   isOperational: boolean;

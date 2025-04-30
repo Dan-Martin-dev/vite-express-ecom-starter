@@ -27,7 +27,7 @@ export const carts = pgTable('carts', {
     // uniqueUserCart: uniqueIndex('unique_user_cart_idx').on(table.userId).where(sql`expires_at IS NULL OR expires_at > now()`),
 }));
 // Import related schemas for relations
-import { users } from '@/db/schema/auth.schema.js';
+import { users } from '../../db/schema/auth.schema.js';
 // RELATIONSHIPS
 export const cartsRelations = relations(carts, ({ one }) => ({
     user: one(users, { fields: [carts.userId], references: [users.id] }),

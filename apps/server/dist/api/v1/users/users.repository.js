@@ -1,5 +1,5 @@
-import { db } from '../../../db/index.js';
-import * as schema from '../../../db/schema/auth.schema.js'; // Adjust path if needed
+import { db } from '@/db/index.js';
+import * as schema from '@/db/schema/auth.schema.js'; // Adjust path if needed
 import { eq } from 'drizzle-orm';
 export class UserRepository {
     async findUserById(userId) {

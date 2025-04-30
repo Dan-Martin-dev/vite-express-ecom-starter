@@ -2211,18 +2211,18 @@ export declare const productSearchSchema: z.ZodObject<{
     brand?: string | undefined;
     query?: string | undefined;
     category?: string | undefined;
+    sortBy?: "rating" | "price_asc" | "price_desc" | "newest" | "popular" | undefined;
     minPrice?: number | undefined;
     maxPrice?: number | undefined;
-    sortBy?: "rating" | "price_asc" | "price_desc" | "newest" | "popular" | undefined;
     inStock?: boolean | undefined;
 }, {
     brand?: string | undefined;
     query?: string | undefined;
     category?: string | undefined;
     limit?: number | undefined;
+    sortBy?: "rating" | "price_asc" | "price_desc" | "newest" | "popular" | undefined;
     minPrice?: number | undefined;
     maxPrice?: number | undefined;
-    sortBy?: "rating" | "price_asc" | "price_desc" | "newest" | "popular" | undefined;
     page?: number | undefined;
     inStock?: boolean | undefined;
 }>;

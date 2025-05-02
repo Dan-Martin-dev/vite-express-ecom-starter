@@ -1,10 +1,11 @@
 // apps/server/src/api/v1/products/products.repository.ts
-import { eq, sql, asc, desc, ilike, and } from 'drizzle-orm';
-import { products as productsSchema, productVariants as productVariantsSchema, productCategories as productCategoriesSchema, // Need brands schema for join
+import { eq, sql, asc, desc, ilike, and, inArray } from 'drizzle-orm'; // Add inArray
+import { products as productsSchema, productVariants as productVariantsSchema, productCategories as productCategoriesSchema, // Need join table for categories
 attributes as attributesSchema, // Needed to process variant attributes
 attributeValues as attributeValuesSchema, // Needed to process variant attributes
- } from '@/db/schema/products.schema.js';
-import { db } from '@/db/index.js'; // Assuming your Drizzle client and schema are exported from here
+ } from "@/db/schema/products.schema.js";
+import { db } from "@/db/index.js"; // Assuming your Drizzle client and schema are exported from here
+import { NotFoundError } from "@/lib/errors/NotFoundError.js"; // Assuming you have an index exporting these
 export class ProductRepository {
     db;
     constructor(db) {
@@ -25,12 +26,12 @@ export class ProductRepository {
         const attributeValueIds = new Set();
         for (const variant of variants) {
             if (variant.attributes) {
-                Object.values(variant.attributes).forEach(valueId => attributeValueIds.add(valueId));
+                Object.values(variant.attributes).forEach((valueId) => attributeValueIds.add(valueId));
             }
         }
         if (attributeValueIds.size === 0) {
             // If no attributes found, return variants as is, casting to the detailed type (attributes will be empty processed)
-            return variants.map(v => ({ ...v, attributes: {} }));
+            return variants.map((v) => ({ ...v, attributes: {} }));
         }
         // Fetch all relevant attribute values and their corresponding attribute names
         // This is a simplified join; might need optimization for large numbers of variants/attributes
@@ -45,9 +46,9 @@ export class ProductRepository {
             .from(attributeValuesSchema)
             .innerJoin(attributesSchema, eq(attributeValuesSchema.attributeId, attributesSchema.id))
             .where(sql `${attributeValuesSchema.id} IN ${Array.from(attributeValueIds)}`); // Use SQL template for IN clause
-        const attributeDetailsMap = new Map(attributeDetails.map(detail => [detail.valueId, detail]));
+        const attributeDetailsMap = new Map(attributeDetails.map((detail) => [detail.valueId, detail]));
         // Process each variant's attributes
-        return variants.map(variant => {
+        return variants.map((variant) => {
             const processedAttributes = {}; // { attributeName: valueLabel }
             if (variant.attributes) {
                 for (const [attributeId, valueId] of Object.entries(variant.attributes)) {
@@ -59,7 +60,10 @@ export class ProductRepository {
                 }
             }
             // Cast to the detailed type, ensuring 'attributes' matches ProcessedVariantAttributes
-            return { ...variant, attributes: processedAttributes };
+            return {
+                ...variant,
+                attributes: processedAttributes,
+            };
         });
     }
     /**
@@ -80,11 +84,14 @@ export class ProductRepository {
                     },
                     with: {
                         category: {
+                            // Fetch the actual category details
                             columns: {
-                                id: true, name: true, slug: true
-                            }
-                        }
-                    }
+                                id: true,
+                                name: true,
+                                slug: true,
+                            },
+                        },
+                    },
                 },
                 variants: true, // Fetch raw variants first
             },
@@ -95,7 +102,7 @@ export class ProductRepository {
         // Process variant attributes { attributeId: valueId } to { attributeName: valueLabel }
         const variantsWithProcessedAttrs = await this.processVariantAttributes(result.variants);
         // Map categories from join table structure to a simpler array
-        const simplifiedCategories = result.categories.map(pc => pc.category);
+        const simplifiedCategories = result.categories.map((pc) => pc.category);
         // Combine result with processed variants and simplified categories
         // Need to manually construct the ProductWithDetails shape
         const productWithDetails = {
@@ -115,11 +122,11 @@ export class ProductRepository {
         return productWithDetails;
     }
     /**
-    * Finds a single product by its slug.
-    * Fetches related brand, categories, and variants.
-    * @param slug The product slug.
-    * @returns The product with details, or undefined.
-    */
+     * Finds a single product by its slug.
+     * Fetches related brand, categories, and variants.
+     * @param slug The product slug.
+     * @returns The product with details, or undefined.
+     */
     async findBySlug(slug) {
         const result = await this.db.query.products.findFirst({
             where: eq(productsSchema.slug, slug),
@@ -133,10 +140,12 @@ export class ProductRepository {
                     with: {
                         category: {
                             columns: {
-                                id: true, name: true, slug: true
-                            }
-                        }
-                    }
+                                id: true,
+                                name: true,
+                                slug: true,
+                            },
+                        },
+                    },
                 },
                 variants: true,
             },
@@ -147,7 +156,7 @@ export class ProductRepository {
         // Process variant attributes
         const variantsWithProcessedAttrs = await this.processVariantAttributes(result.variants);
         // Map categories from join table structure to a simpler array
-        const simplifiedCategories = result.categories.map(pc => pc.category);
+        const simplifiedCategories = result.categories.map((pc) => pc.category);
         // Combine result with processed variants and simplified categories
         const productWithDetails = {
             ...result,
@@ -170,92 +179,101 @@ export class ProductRepository {
      * @returns An array of products (possibly simplified) and the total count.
      */
     async findMany(input) {
-        const { limit = 10, offset = 0, sortBy = 'createdAt', sortOrder = 'desc', categoryId, brandId, minPrice, maxPrice, isActive, isFeatured, search } = input;
-        // Build dynamic WHERE clause
-        const where = and(isActive !== undefined ? eq(productsSchema.isActive, isActive) : undefined, isFeatured !== undefined ? eq(productsSchema.isFeatured, isFeatured) : undefined, brandId ? eq(productsSchema.brandId, brandId) : undefined, search ? ilike(productsSchema.name, `%${search}%`) : undefined, // Simple search on name
-        minPrice !== undefined ? sql `${productsSchema.basePrice} >= ${String(minPrice)}` : undefined, // Compare decimal strings
-        maxPrice !== undefined ? sql `${productsSchema.basePrice} <= ${String(maxPrice)}` : undefined, // Compare decimal strings
-        // Add range checks for salePrice if needed, considering nulls
-        // Add category filter by joining productCategories
+        const { limit = 10, offset = 0, sortBy = "createdAt", sortOrder = "desc", categoryId, brandId, minPrice, maxPrice, isActive, isFeatured, search, } = input;
+        // --- Build WHERE clause ---
+        // Combine base product filters and conditional category filter
+        const whereClause = and(isActive !== undefined ? eq(productsSchema.isActive, isActive) : undefined, isFeatured !== undefined ? eq(productsSchema.isFeatured, isFeatured) : undefined, brandId ? eq(productsSchema.brandId, brandId) : undefined, search ? ilike(productsSchema.name, `%${search}%`) : undefined, minPrice !== undefined ? sql `${productsSchema.basePrice} >= ${String(minPrice)}` : undefined, maxPrice !== undefined ? sql `${productsSchema.basePrice} <= ${String(maxPrice)}` : undefined, 
+        // Conditionally add category condition if categoryId is present
         categoryId ? eq(productCategoriesSchema.categoryId, categoryId) : undefined);
-        // Build dynamic ORDER BY clause
-        const orderBy = sortBy === 'createdAt' ? (sortOrder === 'asc' ? asc(productsSchema.createdAt) : desc(productsSchema.createdAt))
-            : sortBy === 'price' ? (sortOrder === 'asc' ? asc(productsSchema.basePrice) : desc(productsSchema.basePrice)) // Order by base price for simplicity
-                : sortBy === 'rating' ? (sortOrder === 'asc' ? asc(productsSchema.rating) : desc(productsSchema.rating))
-                    : desc(productsSchema.createdAt); // Default sort
-        // Fetch products with relations needed for the list view (could be less detailed than ProductWithDetails)
-        // For now, let's fetch enough to construct ProductWithDetails, but optimize if performance is an issue.
-        const results = await this.db.query.products.findMany({
-            // Join with productCategories if categoryId filter is applied
-            ...(categoryId ? {
-                where: and(where, eq(productCategoriesSchema.categoryId, categoryId)),
-                innerJoin: [productCategoriesSchema], // Use innerJoin for filtering
-                // Need to filter out duplicate products caused by the join
-                // This is tricky with Drizzle's findMany. A raw SQL query or
-                // fetching product IDs first might be better for filtering by categories.
-                // For now, assume findMany handles it or category filter is simple.
-                // Let's adjust to select distinct products based on the ID.
-                // This might require a different query structure or post-processing.
-                // Alternative: Fetch product IDs first, then fetch products by ID.
-                // Let's use a simpler approach assuming category filter works via where/join for now,
-                // but be aware of potential duplicates if one product is in multiple requested categories
-                // (though your schema doesn't imply filtering by *multiple* categories, just *a* categoryId).
-                // Reverting to simpler where clause with category join condition directly in 'where'
-                where: where, // Use the combined where clause
-            } : {
-                where: where, // Use the simple where clause if no category filter
-            }),
-            with: {
-                brand: true,
-                categories: {
-                    columns: { categoryId: true },
-                    with: { category: { columns: { id: true, name: true, slug: true } } }
+        // --- Build ORDER BY clause ---
+        const orderByColumn = sortBy === "createdAt" ? productsSchema.createdAt
+            : sortBy === "price" ? productsSchema.basePrice
+                : sortBy === "rating" ? productsSchema.rating
+                    : productsSchema.createdAt; // Default sort
+        const orderByDirection = sortOrder === "asc" ? asc(orderByColumn) : desc(orderByColumn);
+        // --- Step 1: Execute the ID Query ---
+        let productIds;
+        let total;
+        // Scope for ID query execution
+        {
+            let idQuery = this.db
+                .selectDistinct({
+                id: productsSchema.id,
+                // Include sorting columns for correct ordering
+                createdAt: productsSchema.createdAt,
+                basePrice: productsSchema.basePrice,
+                rating: productsSchema.rating,
+            })
+                .from(productsSchema);
+            // Conditionally add the innerJoin if filtering by category
+            if (categoryId) {
+                idQuery = idQuery.innerJoin(productCategoriesSchema, eq(productsSchema.id, productCategoriesSchema.productId));
+            }
+            // Execute the final ID query with filtering, sorting, and pagination
+            const limitedIdResults = await idQuery
+                .where(whereClause)
+                .orderBy(orderByDirection)
+                .limit(limit)
+                .offset(offset);
+            productIds = limitedIdResults.map(p => p.id);
+        } // End ID query scope
+        // --- Step 2: Execute the Count Query ---
+        // Scope for count query execution
+        {
+            let countQuery = this.db
+                .select({ count: sql `count(DISTINCT ${productsSchema.id})` }) // Count distinct IDs
+                .from(productsSchema);
+            // Conditionally add the same innerJoin as the ID query if filtering by category
+            if (categoryId) {
+                countQuery = countQuery.innerJoin(productCategoriesSchema, eq(productsSchema.id, productCategoriesSchema.productId));
+            }
+            // Execute the count query with the same WHERE clause
+            const countResult = await countQuery.where(whereClause);
+            total = parseInt(countResult[0]?.count || "0", 10);
+        } // End count query scope
+        // --- Step 3: Fetch Full Product Details using IDs ---
+        let productsWithRelations = []; // Initialize as ProductWithDetails array
+        if (productIds.length > 0) {
+            const fetchedProducts = await this.db.query.products.findMany({
+                where: inArray(productsSchema.id, productIds),
+                with: {
+                    brand: true,
+                    categories: {
+                        columns: { categoryId: true, isPrimary: true },
+                        with: { category: { columns: { id: true, name: true, slug: true } } }
+                    },
+                    variants: true,
                 },
-                variants: true, // Fetch variants for list view too (might be too much data!)
-                // Consider optimizing this for list view if performance suffers.
-            },
-            limit: limit,
-            offset: offset,
-            orderBy: [orderBy], // orderBy takes an array
-        });
-        // Count total products matching filters (without limit/offset)
-        // Need a separate query for the count, potentially joining if categoryId is used.
-        let countQueryBuilder = this.db
-            .select({ count: sql `count(*)` })
-            .from(productsSchema);
-        // Conditionally add the join if categoryId filter is present
-        if (categoryId) {
-            countQueryBuilder = countQueryBuilder.innerJoin(productCategoriesSchema, eq(productsSchema.id, productCategoriesSchema.productId));
-        }
-        // Apply the same where clause to the potentially updated builder
-        const countResult = await countQueryBuilder.where(where);
-        const total = parseInt(countResult[0]?.count || '0', 10);
-        // Process fetched results into the API output type
-        const productsWithDetails = [];
-        for (const result of results) {
-            const variantsWithProcessedAttrs = await this.processVariantAttributes(result.variants);
-            const simplifiedCategories = result.categories.map(pc => pc.category);
-            productsWithDetails.push({
-                ...result,
-                dimensions: result.dimensions,
-                brand: result.brand,
-                categories: simplifiedCategories,
-                variants: variantsWithProcessedAttrs,
-                images: result.images,
-                basePrice: result.basePrice,
-                salePrice: result.salePrice,
-                weight: result.weight,
-                rating: result.rating,
             });
+            // Sort the results based on the order of productIds from the initial query
+            const productMap = new Map(fetchedProducts.map(p => [p.id, p]));
+            const sortedFetchedProducts = productIds
+                .map(id => productMap.get(id))
+                .filter(p => p !== undefined);
+            // Process attributes and map to final ProductWithDetails structure
+            for (const result of sortedFetchedProducts) {
+                const variantsWithProcessedAttrs = await this.processVariantAttributes(result.variants ?? [] // Handle potentially undefined variants
+                );
+                const simplifiedCategories = (result.categories ?? []) // Handle potentially undefined categories
+                    .map((pc) => pc.category)
+                    .filter(c => c !== undefined); // Filter out undefined categories if relation was empty
+                productsWithRelations.push({
+                    ...result,
+                    dimensions: result.dimensions,
+                    brand: result.brand, // brand relation might be null if not found
+                    categories: simplifiedCategories,
+                    variants: variantsWithProcessedAttrs,
+                });
+            }
         }
-        return { products: productsWithDetails, total: total };
+        return { products: productsWithRelations, total: total };
     }
     /**
-    * Finds a specific product variant by its ID.
-    * Might fetch related product and attribute value data.
-    * @param id The product variant ID.
-    * @returns The product variant with details, or undefined.
-    */
+     * Finds a specific product variant by its ID.
+     * Might fetch related product and attribute value data.
+     * @param id The product variant ID.
+     * @returns The product variant with details, or undefined.
+     */
     async findVariantById(id) {
         const result = await this.db.query.productVariants.findFirst({
             where: eq(productVariantsSchema.id, id),
@@ -266,7 +284,9 @@ export class ProductRepository {
             return undefined;
         }
         // Process variant attributes
-        const variantsWithProcessedAttrs = await this.processVariantAttributes([result]);
+        const variantsWithProcessedAttrs = await this.processVariantAttributes([
+            result,
+        ]);
         return variantsWithProcessedAttrs[0]; // processVariantAttributes returns an array
     }
     /**
@@ -280,7 +300,8 @@ export class ProductRepository {
         const product = await this.db.query.products.findFirst({
             where: eq(productsSchema.id, productId),
         });
-        if (!product || !product.isActive) { // Also check if active
+        if (!product || !product.isActive) {
+            // Also check if active
             throw new NotFoundError(`Product with ID ${productId} not found or is inactive.`);
         }
         let variant = undefined;

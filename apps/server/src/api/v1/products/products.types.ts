@@ -7,7 +7,6 @@ import {
   productVariants as productVariantsSchema,
   categories as categoriesSchema,
   brands as brandsSchema,
-  reviews as reviewsSchema,
   attributes as attributesSchema,
   attributeValues as attributeValuesSchema,
 } from '@/db/schema/products.schema.js'; // Assuming product schemas are here
@@ -18,7 +17,6 @@ export type DBProduct = InferSelectModel<typeof productsSchema>;
 export type DBProductVariant = InferSelectModel<typeof productVariantsSchema>;
 export type DBCategory = InferSelectModel<typeof categoriesSchema>;
 export type DBBrand = InferSelectModel<typeof brandsSchema>;
-export type DBReview = InferSelectModel<typeof reviewsSchema>;
 export type DBAttribute = InferSelectModel<typeof attributesSchema>;
 export type DBAttributeValue = InferSelectModel<typeof attributeValuesSchema>;
 
@@ -53,7 +51,7 @@ export interface ProductVariantWithDetails extends DBProductVariant {
 // Product with related details (variants, brand, categories)
 export interface ProductWithDetails extends DBProduct {
     // Override jsonb dimensions with typed interface
-    dimensions?: ProductDimensions | null;
+    dimensions: ProductDimensions | null;
     // Add relationships (often fetched with Drizzle's `with`)
     brand?: DBBrand | null; // One brand
     // Simplified category list (could be DBCategory[] or a simpler structure)
@@ -61,11 +59,13 @@ export interface ProductWithDetails extends DBProduct {
     variants?: ProductVariantWithDetails[]; // Many variants with processed attributes
     // reviews?: DBReview[]; // Could include reviews if needed in this view
     // You might simplify the 'images' array type if needed, but string[] is fine.
-    images: string[]; // Ensure this matches schema inference
+
+        // REMOVE these explicit declarations, they are inherited from DBProduct:
+    /* images: string[]; // Ensure this matches schema inference
     basePrice: string; // Ensure this matches schema inference
     salePrice?: string | null; // Ensure this matches schema inference
     weight?: string | null; // Ensure this matches schema inference
-    rating?: string | null; // Ensure this matches schema inference
+    rating?: string | null; // Ensure this matches schema inference */
 }
 
 

@@ -1,8 +1,8 @@
-import { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
-import { schema } from '@/db/index.js';
+import { PostgresJsDatabase } from "drizzle-orm/postgres-js";
+import { schema } from "@/db/index.js";
 import { DBProduct, DBProductVariant, ProductWithDetails, // Use the type intended for API output
 GetProductsInput, // Use the input type for filtering/pagination
-ProductVariantWithDetails } from './products.types.js';
+ProductVariantWithDetails } from "./products.types.js";
 type DBSchema = typeof schema;
 type DBClient = PostgresJsDatabase<DBSchema>;
 export declare class ProductRepository {
@@ -24,11 +24,11 @@ export declare class ProductRepository {
      */
     findById(id: string): Promise<ProductWithDetails | undefined>;
     /**
-    * Finds a single product by its slug.
-    * Fetches related brand, categories, and variants.
-    * @param slug The product slug.
-    * @returns The product with details, or undefined.
-    */
+     * Finds a single product by its slug.
+     * Fetches related brand, categories, and variants.
+     * @param slug The product slug.
+     * @returns The product with details, or undefined.
+     */
     findBySlug(slug: string): Promise<ProductWithDetails | undefined>;
     /**
      * Finds multiple products based on filters, pagination, and sorting.
@@ -41,11 +41,11 @@ export declare class ProductRepository {
         total: number;
     }>;
     /**
-    * Finds a specific product variant by its ID.
-    * Might fetch related product and attribute value data.
-    * @param id The product variant ID.
-    * @returns The product variant with details, or undefined.
-    */
+     * Finds a specific product variant by its ID.
+     * Might fetch related product and attribute value data.
+     * @param id The product variant ID.
+     * @returns The product variant with details, or undefined.
+     */
     findVariantById(id: string): Promise<ProductVariantWithDetails | undefined>;
     /**
      * Finds product and variant details needed for cart item snapshots and stock checks.

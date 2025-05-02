@@ -8,7 +8,7 @@ import {
     GetProductBySlugInput, // Input type for slug handler
     GetProductByIdInput, // Input type for ID handler
 } from "./products.types.js";
-
+import { GetProductsInputSchema } from "./products.validators.js"; // <--- Import schema
 // We don't import Zod schemas here, the validation middleware handles that.
 // But we might import z.infer if we wanted explicit typing from schema output,
 // though often the types from products.types.ts (derived from z.infer) are sufficient.
@@ -31,7 +31,7 @@ export class ProductController {
             // If you use a validation middleware that places the *validated* body/query
             // onto a specific request property (e.g., req.validatedQuery), use that.
             // Assuming validateRequestBody middleware modifies req.query in place:
-            const queryInput = req.query as unknown as GetProductsInput;
+            const queryInput: z.infer<typeof GetProductsInputSchema> = req.query as unknown as z.infer<typeof GetProductsInputSchema>;
             // Alternatively, if using z.infer and a middleware that places the validated object somewhere:
             // const queryInput: z.infer<typeof GetProductsInputSchema> = req.validatedQuery;
 
@@ -107,6 +107,7 @@ export class ProductController {
 
 // Import the productServiceInstance
 import { productServiceInstance } from "./products.service.js";
+import { z } from 'zod';
 
 // Create an instance of the ProductController, injecting the ProductService instance
 export const productController = new ProductController(productServiceInstance);

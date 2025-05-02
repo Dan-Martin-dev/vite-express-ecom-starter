@@ -9,7 +9,8 @@ import {
     DBProduct, // Import DB types if needed internally
     DBProductVariant,
 } from "./products.types.js";
-import { NotFoundError, AppError } from "@/lib/errors/index.js"; // Assuming your error types are exported from an index file
+import { NotFoundError } from "@/lib/errors/NotFoundError.js";
+import { AppError } from "@/lib/errors/AppError.js";
 
 // Import Zod infer utility and schemas for input typing
 import { z } from 'zod';

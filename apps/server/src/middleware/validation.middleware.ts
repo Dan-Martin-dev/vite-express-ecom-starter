@@ -33,8 +33,34 @@ export const validateRequestBody = (schema: z.Schema) => // Changed AnyZodObject
             }
         }
 };
-
-// Example usage in routes:
-// import { validateRequestBody } from './validation.middleware';
-// import { UserCreateSchema } from '../features/auth/auth.types';
-// router.post('/register', validateRequestBody(UserCreateSchema), authController.register);
+/**
+ * Middleware factory to validate request query parameters against a Zod schema.
+ * Accepts any Zod schema (including objects, effects, etc.).
+ * Note: Query params are typically strings, Zod's z.coerce is useful here.
+ * @param schema The Zod schema to validate against (typically a ZodObject).
+ * @returns Express middleware function.
+ */
+      
+export const validateQueryParams = (schema: z.Schema) => // Accept any Zod schema
+    async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            // Parse and validate the request query
+            // Use schema.parseAsync to handle async refinements if any
+            // Pass req.query as is, Zod's z.coerce handles string to number/boolean
+            req.query = await schema.parseAsync(req.query);
+            next(); // Validation successful, proceed
+        } catch (error) {
+             if (error instanceof ZodError) {
+                const errors = error.errors.map(err => ({
+                    field: err.path.join('.'),
+                    message: err.message,
+                }));
+                res.status(400).json({
+                    message: 'Validation failed for query parameters',
+                    errors: errors,
+                });
+            } else {
+                next(new HttpError(500, 'Internal Server Error during query validation.'));
+            }
+        }
+};

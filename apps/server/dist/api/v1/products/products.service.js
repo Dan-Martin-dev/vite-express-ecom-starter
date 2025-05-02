@@ -1,6 +1,6 @@
 // apps/server/src/api/v1/products/products.service.ts
 import { ProductRepository } from "./products.repository.js";
-import { NotFoundError } from "@/lib/errors/index.js"; // Assuming your error types are exported from an index file
+import { NotFoundError } from "@/lib/errors/NotFoundError.js";
 // --- Services this module might depend on ---
 // import { StockService } from '@/features/stock/stock.service'; // For centralized stock management
 // import { ReviewService } from '@/features/reviews/review.service'; // If product service fetches reviews

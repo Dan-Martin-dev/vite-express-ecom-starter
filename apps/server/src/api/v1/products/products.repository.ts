@@ -411,6 +411,7 @@ export class ProductRepository {
    * @param id The product variant ID.
    * @returns The product variant with details, or undefined.
    */
+  
   async findVariantById(
     id: string
   ): Promise<ProductVariantWithDetails | undefined> {

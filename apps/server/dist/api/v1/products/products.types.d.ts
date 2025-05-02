@@ -1,5 +1,5 @@
 import { InferSelectModel } from 'drizzle-orm';
-import { products as productsSchema, productVariants as productVariantsSchema, categories as categoriesSchema, brands as brandsSchema, attributes as attributesSchema, attributeValues as attributeValuesSchema } from '@/db/schema/products.schema.js';
+import { products as productsSchema, productVariants as productVariantsSchema, categories as categoriesSchema, brands as brandsSchema, attributes as attributesSchema, attributeValues as attributeValuesSchema } from '../../../db/schema/products.schema.js';
 export type DBProduct = InferSelectModel<typeof productsSchema>;
 export type DBProductVariant = InferSelectModel<typeof productVariantsSchema>;
 export type DBCategory = InferSelectModel<typeof categoriesSchema>;

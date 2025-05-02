@@ -1,8 +1,8 @@
 import { relations } from 'drizzle-orm';
 import { boolean, pgTable, text, timestamp, uuid, index, } from 'drizzle-orm/pg-core';
 // Import related schemas for relations
-import { users } from '@/db/schema/auth.schema.js';
-import { products, productVariants } from '@/db/schema/products.schema.js';
+import { users } from '../../db/schema/auth.schema.js';
+import { products, productVariants } from '../../db/schema/products.schema.js';
 // WISHLIST
 export const wishlists = pgTable('wishlists', {
     id: uuid('id').defaultRandom().primaryKey().notNull(),

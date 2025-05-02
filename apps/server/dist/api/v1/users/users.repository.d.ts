@@ -1,5 +1,5 @@
-import * as schema from '@/db/schema/auth.schema.js';
-import { ShippingAddress } from '@/types/index.js';
+import * as schema from '../../../db/schema/auth.schema.js';
+import { ShippingAddress } from '../../../types/index.js';
 export declare class UserRepository {
     findUserById(userId: string): Promise<{
         id: string;

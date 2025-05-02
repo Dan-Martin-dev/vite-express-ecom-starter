@@ -1,5 +1,5 @@
 import { PostgresJsDatabase } from "drizzle-orm/postgres-js";
-import { schema } from "@/db/index.js";
+import { schema } from "../../../db/index.js";
 import { DBProduct, DBProductVariant, ProductWithDetails, // Use the type intended for API output
 GetProductsInput, // Use the input type for filtering/pagination
 ProductVariantWithDetails } from "./products.types.js";

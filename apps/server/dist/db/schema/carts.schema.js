@@ -1,3 +1,4 @@
+// apps/server/src/db/schema/carts.schema.ts
 import { relations } from 'drizzle-orm';
 import { boolean, decimal, jsonb, pgTable, text, timestamp, uuid, index, } from 'drizzle-orm/pg-core';
 // CARTS
@@ -26,8 +27,9 @@ export const carts = pgTable('carts', {
     // Unique constraint for active user cart (optional, depends on logic)
     // uniqueUserCart: uniqueIndex('unique_user_cart_idx').on(table.userId).where(sql`expires_at IS NULL OR expires_at > now()`),
 }));
+// 
 // Import related schemas for relations
-import { users } from '../../db/schema/auth.schema.js';
+import { users } from '@/db/schema/auth.schema.js';
 // RELATIONSHIPS
 export const cartsRelations = relations(carts, ({ one }) => ({
     user: one(users, { fields: [carts.userId], references: [users.id] }),

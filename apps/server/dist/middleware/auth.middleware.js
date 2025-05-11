@@ -1,4 +1,4 @@
-import { pb } from '../lib/pocketbase.js';
+import { pb } from '@/lib/pocketbase.js';
 export const isAuthenticated = async (req, res, next) => {
     const authHeader = req.headers.authorization;
     const token = authHeader?.startsWith('Bearer ') ? authHeader.substring(7) : null;

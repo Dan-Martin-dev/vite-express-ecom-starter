@@ -1,3 +1,4 @@
+// apps/server/src/db/schema/carts.schema.ts
 import { relations } from 'drizzle-orm';
 import {
   boolean,
@@ -41,7 +42,7 @@ export const carts = pgTable(
     // uniqueUserCart: uniqueIndex('unique_user_cart_idx').on(table.userId).where(sql`expires_at IS NULL OR expires_at > now()`),
   })
 );
-
+// 
 // Import related schemas for relations
 import { users } from '@/db/schema/auth.schema.js';
 

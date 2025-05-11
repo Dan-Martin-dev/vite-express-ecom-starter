@@ -1,3 +1,4 @@
+// src/types/index.ts
 import { pgEnum } from "drizzle-orm/pg-core";
 // Enums
 export const orderStatusEnum = pgEnum('order_status', [

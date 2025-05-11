@@ -1,5 +1,5 @@
 import { ZodError } from 'zod'; // Import z
-import { HttpError } from '../lib/errors/HttpError.js';
+import { HttpError } from '@/lib/errors/HttpError.js';
 /**
  * Middleware factory to validate request body against a Zod schema.
  * Accepts any Zod schema (including objects, effects, etc.).

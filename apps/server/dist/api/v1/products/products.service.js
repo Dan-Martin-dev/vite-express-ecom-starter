@@ -1,6 +1,6 @@
 // apps/server/src/api/v1/products/products.service.ts
 import { ProductRepository } from "./products.repository.js";
-import { NotFoundError } from "../../../lib/errors/NotFoundError.js";
+import { NotFoundError } from "@/lib/errors/NotFoundError.js";
 // --- Services this module might depend on ---
 // import { StockService } from '@/features/stock/stock.service'; // For centralized stock management
 // import { ReviewService } from '@/features/reviews/review.service'; // If product service fetches reviews
@@ -78,7 +78,7 @@ export class ProductService {
 }
 // --- FINAL INSTANTIATION ---
 // Import the Drizzle DB client instance
-import { db } from '../../../db/index.js'; // Adjust path if necessary
+import { db } from '@/db/index.js'; // Adjust path if necessary
 // Create an instance of the ProductRepository, injecting the DB client
 const productRepositoryInstance = new ProductRepository(db);
 // Create an instance of the ProductService, injecting the repository

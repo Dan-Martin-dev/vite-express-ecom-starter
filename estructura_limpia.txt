@@ -19,23 +19,22 @@
 │   │   │   ├── assets
 │   │   │   │   ├── admin_assets
 │   │   │   │   ├── frontend_assets
-│   │   │   │   ├── icons
+│   │   │   │   ├── icons   
 │   │   │   │   └── Stars of GreatStack.pdf
 │   │   │   ├── components
-│   │   │   │   ├── auth
+│   │   │   │   ├── auth    
 │   │   │   │   ├── common
 │   │   │   │   ├── features
 │   │   │   │   └── layout
 │   │   │   ├── context
-│   │   │   │   ├── AuthContext.tsx
-│   │   │   │   └── ShopContext.tsx
 │   │   │   ├── features
 │   │   │   │   ├── auth
 │   │   │   │   ├── cart
 │   │   │   │   ├── home
-│   │   │   │   ├── orders
+│   │   │   │   ├── orders  
 │   │   │   │   └── products
 │   │   │   ├── hooks
+│   │   │   │   ├── useAuth.ts
 │   │   │   │   ├── useCarousel.tsx
 │   │   │   │   ├── useFetchProducts.tsx
 │   │   │   │   ├── useFetchProduct.tsx
@@ -61,6 +60,8 @@
 │   │   │   │   ├── Product.tsx
 │   │   │   │   ├── RegisterPage.tsx
 │   │   │   │   └── Sale.tsx
+│   │   │   ├── providers
+│   │   │   │   └── GlobalProvider.tsx
 │   │   │   ├── routes
 │   │   │   │   ├── auth
 │   │   │   │   ├── index.tsx
@@ -134,6 +135,9 @@
 │       │   │   ├── auth.middleware.d.ts
 │       │   │   ├── auth.middleware.js
 │       │   │   ├── auth.middleware.js.map
+│       │   │   ├── cart.middleware.d.ts
+│       │   │   ├── cart.middleware.js
+│       │   │   ├── cart.middleware.js.map
 │       │   │   ├── error-handler.d.ts
 │       │   │   ├── error-handler.js
 │       │   │   ├── error-handler.js.map
@@ -149,6 +153,9 @@
 │       │   │   ├── ratelimit.middleware.d.ts
 │       │   │   ├── ratelimit.middleware.js
 │       │   │   ├── ratelimit.middleware.js.map
+│       │   │   ├── session.middleware.d.ts
+│       │   │   ├── session.middleware.js
+│       │   │   ├── session.middleware.js.map
 │       │   │   ├── validation.middleware.d.ts
 │       │   │   ├── validation.middleware.js
 │       │   │   └── validation.middleware.js.map
@@ -168,7 +175,9 @@
 │       │   ├── api
 │       │   │   └── v1
 │       │   ├── architecture
-│       │   └── deployment
+│       │   ├── deployment
+│       │   └── middleware
+│       │       └── session.middleware.md
 │       ├── drizzle
 │       ├── drizzle.config.ts
 │       ├── drizzle-kit.config.ts
@@ -200,17 +209,21 @@
 │       │   │   └── utils
 │       │   ├── middleware
 │       │   │   ├── auth.middleware.ts
+│       │   │   ├── cart.middleware.ts
 │       │   │   ├── error-handler.ts
 │       │   │   ├── error.middleware.ts
 │       │   │   ├── logger.middleware.ts
 │       │   │   ├── orders.middleware.ts
 │       │   │   ├── ratelimit.middleware.ts
+│       │   │   ├── session.middleware.ts
 │       │   │   └── validation.middleware.ts
 │       │   ├── server.ts
 │       │   ├── types
+│       │   │   ├── express.d.ts
 │       │   │   └── index.ts
 │       │   └── validations
 │       │       └── validations.ts
+│       ├── structure.txt
 │       ├── tests
 │       │   ├── controllers
 │       │   ├── db
@@ -227,6 +240,7 @@
 │       │   └── utils
 │       └── tsconfig.json
 ├── docker-compose.yml
+├── estructura_limpia.txt
 ├── github
 │   └── workflows
 │       ├── cd.yml
@@ -247,14 +261,14 @@
 │       ├── outputs.tf
 │       └── variables.tf
 ├── Makefile
+├── md.md
 ├── package.json
 ├── package-lock.json
-├── scripts
-│   ├── deploy.sh
-│   ├── healthcheck.sh
-│   ├── migrate.sh
-│   ├── push-images.sh
-│   └── seed-db.sh
-└── treee.txt
+└── scripts
+    ├── deploy.sh
+    ├── healthcheck.sh
+    ├── migrate.sh
+    ├── push-images.sh
+    └── seed-db.sh
 
-99 directories, 158 files
+101 directories, 170 files

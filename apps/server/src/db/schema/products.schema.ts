@@ -1,3 +1,4 @@
+// apps/server/src/db/schema/products.schema.ts
 import { relations } from 'drizzle-orm';
 import {
   boolean,
@@ -182,6 +183,7 @@ export const productVariants = pgTable(
   'product_variants',
   {
     id: uuid('id').defaultRandom().primaryKey().notNull(),
+    slug: text('slug'), 
     productId: uuid('product_id')
       .notNull()
       .references(() => products.id, { onDelete: 'cascade' }),

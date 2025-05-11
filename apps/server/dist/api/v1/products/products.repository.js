@@ -3,9 +3,9 @@ import { eq, sql, asc, desc, ilike, and, inArray, } from "drizzle-orm"; // Add i
 import { products as productsSchema, productVariants as productVariantsSchema, productCategories as productCategoriesSchema, // Need join table for categories
 attributes as attributesSchema, // Needed to process variant attributes
 attributeValues as attributeValuesSchema, // Needed to process variant attributes
- } from "../../../db/schema/products.schema.js";
-import { db } from "../../../db/index.js"; // Assuming your Drizzle client and schema are exported from here
-import { NotFoundError } from "../../../lib/errors/NotFoundError.js"; // Assuming you have an index exporting these
+ } from "@/db/schema/products.schema.js";
+import { db } from "@/db/index.js"; // Assuming your Drizzle client and schema are exported from here
+import { NotFoundError } from "@/lib/errors/NotFoundError.js"; // Assuming you have an index exporting these
 export class ProductRepository {
     db;
     constructor(db) {

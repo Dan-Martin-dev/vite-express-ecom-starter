@@ -1,3 +1,4 @@
+// apps/server/src/db/schema/orders.schema.ts
 import { relations } from 'drizzle-orm';
 import {
   boolean,
@@ -125,7 +126,7 @@ export const ordersRelations = relations(orders, ({ one, many }) => ({
   user: one(users, { fields: [orders.userId], references: [users.id] }),
   items: many(orderItems),
   history: many(orderHistory),
-  reviews: many(reviews), // Reviews associated with this order
+  reviews: many(reviews),
 }));
 
 export const orderItemsRelations = relations(orderItems, ({ one }) => ({

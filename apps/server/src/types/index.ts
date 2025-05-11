@@ -1,3 +1,4 @@
+// src/types/index.ts
 import { pgEnum } from "drizzle-orm/pg-core";
 import { RecordModel } from "pocketbase";
 

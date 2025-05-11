@@ -1,3 +1,4 @@
+// apps/server/src/db/schema/auth.schema.ts
 import { relations } from 'drizzle-orm';
 import {
   boolean,

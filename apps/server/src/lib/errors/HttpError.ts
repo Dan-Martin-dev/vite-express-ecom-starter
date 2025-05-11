@@ -1,20 +1,31 @@
 // src/lib/errors/HttpError.ts
-
-/**
- * Custom error class for HTTP errors.
- * Includes an HTTP status code along with the error message.
- */
 export class HttpError extends Error {
     public statusCode: number;
 
     constructor(statusCode: number, message: string) {
-        super(message); // Pass message to the base Error class
+        super(message);
         this.statusCode = statusCode;
-        this.name = 'HttpError'; // Set the error name
-
-        // Maintains proper stack trace for where our error was thrown (only available on V8)
+        this.name = 'HttpError';
         if (Error.captureStackTrace) {
             Error.captureStackTrace(this, HttpError);
         }
     }
+
+    // Static factory methods
+    static badRequest(message: string = "Bad Request"): HttpError {
+        return new HttpError(400, message);
+    }
+
+    static unauthorized(message: string = "Unauthorized"): HttpError {
+        return new HttpError(401, message);
+    }
+
+    static forbidden(message: string = "Forbidden"): HttpError {
+        return new HttpError(403, message);
+    }
+
+    static notFound(message: string = "Not Found"): HttpError {
+        return new HttpError(404, message);
+    }
+    // ... other common types
 }

@@ -1,10 +1,11 @@
+// apps/server/src/db/schema/products.schema.ts
 import { relations } from 'drizzle-orm';
 import { boolean, decimal, integer, jsonb, pgTable, text, timestamp, uniqueIndex, uuid, index, } from 'drizzle-orm/pg-core';
 import { primaryKey } from 'drizzle-orm/pg-core/primary-keys';
 // Import related schemas for relations
-import { reviews } from '../../db/schema/reviews.schema.js';
-import { orderItems } from '../../db/schema/orders.schema.js';
-import { wishlistItems } from '../../db/schema/wishlists.schema.js';
+import { reviews } from '@/db/schema/reviews.schema.js';
+import { orderItems } from '@/db/schema/orders.schema.js';
+import { wishlistItems } from '@/db/schema/wishlists.schema.js';
 // CATEGORIES
 export const categories = pgTable('categories', {
     id: uuid('id').defaultRandom().primaryKey().notNull(),
@@ -137,6 +138,7 @@ export const attributeValues = pgTable('attribute_values', {
 // PRODUCT VARIANTS
 export const productVariants = pgTable('product_variants', {
     id: uuid('id').defaultRandom().primaryKey().notNull(),
+    slug: text('slug'),
     productId: uuid('product_id')
         .notNull()
         .references(() => products.id, { onDelete: 'cascade' }),

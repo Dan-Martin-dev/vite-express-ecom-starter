@@ -3140,6 +3140,23 @@ export declare const seedDb: import("drizzle-orm/postgres-js").PostgresJsDatabas
                 identity: undefined;
                 generated: undefined;
             }, {}, {}>;
+            slug: import("drizzle-orm/pg-core").PgColumn<{
+                name: "slug";
+                tableName: "product_variants";
+                dataType: "string";
+                columnType: "PgText";
+                data: string;
+                driverParam: string;
+                notNull: false;
+                hasDefault: false;
+                isPrimaryKey: false;
+                isAutoincrement: false;
+                hasRuntimeDefault: false;
+                enumValues: [string, ...string[]];
+                baseColumn: never;
+                identity: undefined;
+                generated: undefined;
+            }, {}, {}>;
             productId: import("drizzle-orm/pg-core").PgColumn<{
                 name: "product_id";
                 tableName: "product_variants";

@@ -29,7 +29,7 @@ export const carts = pgTable('carts', {
 }));
 // 
 // Import related schemas for relations
-import { users } from '@/db/schema/auth.schema.js';
+import { users } from '../../db/schema/auth.schema.js';
 // RELATIONSHIPS
 export const cartsRelations = relations(carts, ({ one }) => ({
     user: one(users, { fields: [carts.userId], references: [users.id] }),

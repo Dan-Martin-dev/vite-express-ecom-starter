@@ -1,7 +1,7 @@
 import { OrderRepository } from "./orders.repository.js";
 import { OrderWithItems } from "./orders.types.js";
-import { CartService } from '@/api/v1/cart/cart.service.js';
-import { ProductService } from '@/api/v1/products/products.service.js';
+import { CartService } from '../../../api/v1/cart/cart.service.js';
+import { ProductService } from '../../../api/v1/products/products.service.js';
 import { z } from 'zod';
 import { CreateOrderInputSchema, GetUserOrdersInputSchema } from "./orders.validators.js";
 export declare class OrderService {

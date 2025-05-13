@@ -6,7 +6,7 @@ import { db } from '@/db/index.js'; // For transactions if needed in service (re
 import { AddItemInputSchema, RemoveItemInputSchema } from "./wishlists.validators.js"; // Import validators for input types
 import { WishlistRepository, wishlistRepositoryInstance } from "./wishlists.repository.js"; // Import repository
 import { ProductService, productServiceInstance } from '@/api/v1/products/products.service.js'; // Import ProductService
-import { AddItemInput, RemoveItemInput, WishlistWithItemsQueryResult } from './wishlists.types.js'; // Import types
+import { AddItemInput, NewWishlistItem, RemoveItemInput, WishlistWithItemsQueryResult } from './wishlists.types.js'; // Import types
 
 // Assuming NotFoundError exists, otherwise use new AppError('Not Found', 404)
 // If NotFoundError is not in lib/errors, you might need to create it
@@ -71,15 +71,23 @@ export class WishlistService {
         }
 
         // 2. Get or create the user's wishlist
-        let wishlist = await this.wishlistRepository.findWishlistByUserId(userId);
-        if (!wishlist) {
-             wishlist = await this.wishlistRepository.createWishlist(userId);
-             // We don't need the full wishlist with items here, just the ID
-        }
+        let wishlistId: string;
+        const existingWishlist = await this.wishlistRepository.findWishlistByUserId(userId);
+        
+        if (!existingWishlist) {
 
-        // Use the ID from the fetched or newly created wishlist
-        const wishlistId = wishlist.id;
-
+            const newWishlist = await this.wishlistRepository.createWishlist(userId);
+            if (!newWishlist) {
+                // Handle case where creation might fail unexpectedly, though unlikely if find failed
+                 throw new Error("Failed to create wishlist.");
+            }
+             // Assign the ID from the newly created basic wishlist object
+             wishlistId = newWishlist.id;
+        }  
+        else {
+            // Assign the ID from the existing full wishlist object
+           wishlistId = existingWishlist.id;
+       }
 
         // 3. Check if the item is already in the wishlist
         const existingItem = await this.wishlistRepository.findWishlistItemByProductAndVariant(
@@ -178,7 +186,6 @@ export class WishlistService {
 // --- FINAL INSTANTIATION ---
 // Import instances of dependencies
 // Import ProductService instance
-import { productServiceInstance } from '@/api/v1/products/products.service.js'; // Assuming named export
 
 // Create an instance of the WishlistService, injecting dependencies
 const wishlistServiceInstance = new WishlistService(

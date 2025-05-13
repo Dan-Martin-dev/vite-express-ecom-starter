@@ -1,7 +1,7 @@
 // apps/server/src/api/v1/orders/orders.controller.ts
 import { orderServiceInstance } from "./orders.service.js"; // Import instance
 import { GetOrderByIdInputSchema } from "./orders.validators.js";
-import { AppError } from '@/types/index.js';
+import { AppError } from '../../../types/index.js';
 export class OrderController {
     orderService;
     // Inject service instance

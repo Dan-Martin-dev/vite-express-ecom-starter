@@ -1,6 +1,6 @@
 import { authRepository } from './auth.repository.js';
 import { ClientResponseError } from 'pocketbase';
-import { HttpError } from '@/lib/errors/HttpError.js';
+import { HttpError } from '../../../lib/errors/HttpError.js';
 export class AuthService {
     repository;
     // Dependency injection can be used here for better testability

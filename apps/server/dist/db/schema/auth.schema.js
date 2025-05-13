@@ -2,12 +2,12 @@
 import { relations } from 'drizzle-orm';
 import { boolean, integer, jsonb, pgTable, text, timestamp, uniqueIndex, uuid, varchar, index, } from 'drizzle-orm/pg-core';
 import { primaryKey } from 'drizzle-orm/pg-core/primary-keys';
-import { userRoleEnum } from '@/types/index.js';
+import { userRoleEnum } from '../../types/index.js';
 // RELATIONSHIPS
 // Import related schemas for relations
-import { orders } from '@/db/schema/orders.schema.js';
-import { reviews } from '@/db/schema//reviews.schema.js';
-import { wishlists } from '@/db/schema//wishlists.schema.js';
+import { orders } from '../../db/schema/orders.schema.js';
+import { reviews } from '../../db/schema/reviews.schema.js';
+import { wishlists } from '../../db/schema/wishlists.schema.js';
 // USERS & AUTH
 export const users = pgTable('users', {
     id: uuid('id').defaultRandom().primaryKey().notNull(),

@@ -1,8 +1,8 @@
 // apps/server/src/api/v1/orders/orders.service.ts
 import { orderRepository } from "./orders.repository.js";
-import { AppError, NotFoundError } from "@/lib/errors/index.js"; // Import errors
-import { db } from '@/db/index.js'; // Import db for transaction
-import { cartService } from '@/api/v1/cart/cart.service.js';
+import { AppError, NotFoundError } from "../../../lib/errors/index.js"; // Import errors
+import { db } from '../../../db/index.js'; // Import db for transaction
+import { cartService } from '../../../api/v1/cart/cart.service.js';
 export class OrderService {
     orderRepository;
     cartService;
@@ -198,7 +198,7 @@ export class OrderService {
 }
 // --- FINAL INSTANTIATION ---
 // Import instances of dependencies
-import { productServiceInstance } from '@/api/v1/products/products.service.js'; // Assuming named export
+import { productServiceInstance } from '../../../api/v1/products/products.service.js'; // Assuming named export
 // Create an instance of the OrderService, injecting dependencies
 const orderServiceInstance = new OrderService(orderRepository, cartService, // Pass CartService instance
 productServiceInstance // Pass ProductService instance

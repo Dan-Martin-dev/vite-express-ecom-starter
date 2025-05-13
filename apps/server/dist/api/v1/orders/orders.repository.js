@@ -1,7 +1,7 @@
 // apps/server/src/api/v1/orders/orders.repository.ts
 import { eq, desc, asc, and, sql } from 'drizzle-orm';
-import { orders as ordersSchema, orderItems as orderItemsSchema } from '@/db/schema/orders.schema.js';
-import { db } from '@/db/index.js';
+import { orders as ordersSchema, orderItems as orderItemsSchema } from '../../../db/schema/orders.schema.js';
+import { db } from '../../../db/index.js';
 export class OrderRepository {
     db;
     constructor(db) {

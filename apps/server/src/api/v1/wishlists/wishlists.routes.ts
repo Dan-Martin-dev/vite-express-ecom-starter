@@ -5,13 +5,13 @@ import { wishlistControllerInstance } from './wishlists.controller.js'; // Impor
 import { validateRequestBody } from '@/middleware/validation.middleware.js'; // Import validation middleware
 import { AddItemInputSchema, RemoveItemInputSchema } from './wishlists.validators.js'; // Import validators
 // Assuming you have an auth middleware that adds req.user
-import { authMiddleware } from '@/middleware/auth.middleware.js'; // Example auth middleware import
+import { isAuthenticated } from '@/middleware/auth.middleware.js'; // Example auth middleware import
 
 const router = Router();
 
 // All wishlist routes require authentication
 // Apply middleware to all routes in this router
-router.use(authMiddleware);
+router.use(isAuthenticated);
 
 // GET user's wishlist
 router.get('/', wishlistControllerInstance.getWishlistHandler);

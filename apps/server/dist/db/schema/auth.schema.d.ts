@@ -1,4 +1,4 @@
-import { AdapterAccountType, ShippingAddress } from '@/types/index.js';
+import { AdapterAccountType, ShippingAddress } from '../../types/index.js';
 export declare const users: import("drizzle-orm/pg-core").PgTableWithColumns<{
     name: "users";
     schema: undefined;

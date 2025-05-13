@@ -1,5 +1,5 @@
 import { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
-import { schema } from '@/db/index.js';
+import { schema } from '../../../db/index.js';
 import { DBOrder, NewOrder, DBOrderItem, NewOrderItem, OrderWithItems, GetUserOrdersInput } from './orders.types.js';
 type DBSchema = typeof schema;
 type DBClient = PostgresJsDatabase<DBSchema>;

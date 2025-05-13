@@ -1,12 +1,12 @@
 // apps/server/src/db/schema/orders.schema.ts
 import { relations } from 'drizzle-orm';
 import { boolean, decimal, integer, jsonb, pgTable, text, timestamp, uniqueIndex, uuid, index, } from 'drizzle-orm/pg-core';
-import { orderStatusEnum, paymentStatusEnum } from '@/types/index.js';
+import { orderStatusEnum, paymentStatusEnum } from '../../types/index.js';
 // RELATIONSHIPS
 // Import related schemas for relations
-import { users } from '@/db/schema/auth.schema.js';
-import { products, productVariants } from '@/db/schema/products.schema.js';
-import { reviews } from '@/db/schema/reviews.schema.js'; // Needed for ordersRelations
+import { users } from '../../db/schema/auth.schema.js';
+import { products, productVariants } from '../../db/schema/products.schema.js';
+import { reviews } from '../../db/schema/reviews.schema.js'; // Needed for ordersRelations
 // ORDERS
 export const orders = pgTable('orders', {
     id: uuid('id').defaultRandom().primaryKey().notNull(),

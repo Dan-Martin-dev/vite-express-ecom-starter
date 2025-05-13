@@ -1,9 +1,9 @@
 import { relations } from 'drizzle-orm';
 import { boolean, integer, pgTable, text, timestamp, uuid, index, } from 'drizzle-orm/pg-core';
 // Import related schemas for relations
-import { users } from '@/db/schema/auth.schema.js';
-import { products } from '@/db/schema/products.schema.js';
-import { orders } from '@/db/schema/orders.schema.js';
+import { users } from '../../db/schema/auth.schema.js';
+import { products } from '../../db/schema/products.schema.js';
+import { orders } from '../../db/schema/orders.schema.js';
 // REVIEWS
 export const reviews = pgTable('reviews', {
     id: uuid('id').defaultRandom().primaryKey().notNull(),

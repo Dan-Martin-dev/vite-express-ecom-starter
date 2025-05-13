@@ -1,4 +1,4 @@
-import { PaymentResult, ShippingAddress } from '@/types/index.js';
+import { PaymentResult, ShippingAddress } from '../../types/index.js';
 export declare const orders: import("drizzle-orm/pg-core").PgTableWithColumns<{
     name: "orders";
     schema: undefined;

@@ -1,3 +1,4 @@
+//apps/server/src/server.ts
 import dotenv from 'dotenv';
 import { createApp } from './app.js';
 

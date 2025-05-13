@@ -1,0 +1,65 @@
+# Git
+.git
+.gitignore
+
+# Node modules
+node_modules
+apps/*/node_modules
+packages/*/node_modules
+
+# Build outputs (these will be built inside Docker)
+apps/*/dist
+apps/*/build
+apps/*/out
+.turbo
+
+# PNPM
+pnpm-lock.yaml # Usually copied explicitly if needed for root install, then ignored for app context
+pnpm-debug.log
+
+# OS-specific
+.DS_Store
+Thumbs.db
+
+# IDE / Editor
+.vscode
+.idea
+
+# Env files (should be managed via Docker Compose environments or secrets)
+*.env
+.env.*
+!/.env.example # Allow example env files
+
+# Test reports and coverage
+coverage
+apps/*/coverage
+
+# Docker specific files in subdirectories if not part of build context
+apps/*/Dockerfile
+apps/*/docker-compose*.yml
+tests/docker-compose.yml # From your server tests
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+tmp/
+
+# Infrastructure & CI/CD (unless specific parts are needed for a build)
+infrastructure/terraform
+.github/
+Makefile # If not used within Docker builds
+
+# Specific files from your structure that are likely not needed in image context
+folder_structure.txt
+structure.txt
+md.md
+scripts/deploy.sh
+scripts/healthcheck.sh
+# migrate.sh and seed-db.sh might be run against containers, not inside
+scripts/push-images.sh
+
+# Server specific source files if only dist is needed in final stage
+# apps/server/src # (Careful: migrations dir is under src, Drizzle config might be at root of server app)
+# apps/client/src # (Careful: vite needs src to build)

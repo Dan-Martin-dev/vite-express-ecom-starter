@@ -1,50 +1,92 @@
 version: '3.8'
 
 services:
-  frontend:
-    image: YOUR_DOCKER_USERNAME/vite-express-ecom-frontend:latest
-    restart: always
-    networks:
-      - ecom-net
-
-  backend:
-    image: YOUR_DOCKER_USERNAME/vite-express-ecom-backend:latest
-    restart: always
-    env_file: .env.prod
-    networks:
-      - ecom-net
-    depends_on:
-      - postgres
-      - redis
-
-  nginx:
-    image: nginx:alpine
+  client:
+    build:
+      context: ../../..  # Monorepo root relative to this compose file
+      dockerfile: apps/client/Dockerfile
+      args:
+        VITE_BASE_URL: /api # API will be proxied by Nginx
+    container_name: ecommerce_client_prod
     ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - ./nginx.conf:/etc/nginx/conf.d/default.conf
-    networks:
-      - ecom-net
+      - "80:80" # Standard HTTP port for client
     depends_on:
-      - frontend
+      - server
+    restart: unless-stopped
+    networks:
+      - ecommerce_network
 
-  postgres:
-    image: postgres:16
-    env_file: .env.prod
+  server:
+    build:
+      context: ../../.. # Monorepo root
+      dockerfile: apps/server/Dockerfile
+    container_name: ecommerce_server_prod
+    environment:
+      NODE_ENV: production
+      PORT: 4000
+      DATABASE_URL: postgresql://${DB_USER:-user}:${DB_PASSWORD:-password}@db:5432/${DB_NAME:-ecommerce_db}
+      POCKETBASE_URL: http://pocketbase:8090
+      # Add other necessary production environment variables here
+      # Example: JWT_SECRET, API_KEYS, etc.
+    ports:
+      - "4000:4000"
+    depends_on:
+      db:
+        condition: service_healthy # Wait for DB to be healthy
+      pocketbase:
+        condition: service_started # Or service_healthy if pocketbase image has healthcheck
+    restart: unless-stopped
+    networks:
+      - ecommerce_network
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--spider", "http://localhost:4000/health"] # Replace /health with your actual health check endpoint
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s # Give time for migrations
+
+  db:
+    image: postgres:15-alpine
+    container_name: ecommerce_db_prod
+    environment:
+      POSTGRES_USER: ${DB_USER:-user}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-password}
+      POSTGRES_DB: ${DB_NAME:-ecommerce_db}
     volumes:
-      - pg_data:/var/lib/postgresql/data
+      - pgdata_prod:/var/lib/postgresql/data
+    ports:
+      - "5432:5432" # Expose if you need to connect from host, otherwise keep internal
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-user} -d ${DB_NAME:-ecommerce_db}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
     networks:
-      - ecom-net
+      - ecommerce_network
 
-  redis:
-    image: redis:7
+  pocketbase:
+    image: ghcr.io/pocketbase/pocketbase:0.22.18 # Pin to a specific version
+    container_name: ecommerce_pocketbase_prod
+    command: serve --http="0.0.0.0:8090" --automigrate=false # Disable automigrate if you manage it elsewhere
+    ports:
+      - "8090:8090"
+    volumes:
+      - pb_data_prod:/pb_data
+      # - ./pb_migrations:/pb_migrations # If you have local PocketBase migrations
+    restart: unless-stopped
     networks:
-      - ecom-net
-
-networks:
-  ecom-net:
-    driver: bridge
+      - ecommerce_network
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--spider", "http://localhost:8090/api/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
 
 volumes:
-  pg_data:
+  pgdata_prod:
+  pb_data_prod:
+
+networks:
+  ecommerce_network:
+    driver: bridge

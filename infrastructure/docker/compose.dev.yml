@@ -1,0 +1,121 @@
+version: '3.8'
+
+services:
+  client:
+    build:
+      context: ../../.. # Monorepo root
+      dockerfile: apps/client/Dockerfile # Can use the same Dockerfile, or a dev-specific one
+      target: builder # Use the builder stage as a base if it has all dev tools
+      args:
+        # For dev, VITE_BASE_URL points directly to the server service
+        # This is set as an environment variable for the running container
+        # Vite will pick up VITE_BASE_URL from the environment if vite.config.js is set up for it
+        # or you can pass it as build arg if it's strictly build time.
+        # For Vite dev server, env var is easier.
+        # VITE_BASE_URL: http://server:4000 # Example if Vite uses this at build time
+        _: "" # Placeholder if no build args needed for dev target
+    container_name: ecommerce_client_dev
+    # For Vite dev server, command needs to start it and expose it
+    # The client's package.json has "dev": "vite"
+    # We need to ensure Vite listens on 0.0.0.0
+    command: pnpm --filter frontend run dev -- --host 0.0.0.0 --port 5173
+    ports:
+      - "5173:5173" # Vite default dev port
+    volumes:
+      # Mount source code for hot reloading
+      - ../../../apps/client:/app/apps/client
+      - ../../../packages:/app/packages # If you have shared packages
+      # Prevent node_modules from host overriding container's node_modules
+      - /app/apps/client/node_modules
+    environment:
+      NODE_ENV: development
+      VITE_BASE_URL: http://server:4000 # For client-side JS to know API location
+      # CHOKIDAR_USEPOLLING: "true" # May be needed for HMR in some Docker setups
+    depends_on:
+      - server
+    restart: unless-stopped
+    networks:
+      - ecommerce_network
+
+  server:
+    build:
+      context: ../../.. # Monorepo root
+      dockerfile: apps/server/Dockerfile # Can use the same, or a dev-specific one
+      target: builder # Use the builder stage as a base, it has devDependencies
+    container_name: ecommerce_server_dev
+    # Server dev script: "ts-node-dev --esm --respawn --transpile-only src/index.ts"
+    # Ensure paths are correct relative to /app (WORKDIR)
+    command: pnpm --filter backend run dev # This will run ts-node-dev from /app
+    ports:
+      - "4000:4000" # Server port
+      - "9229:9229" # Node.js debug port (optional)
+    volumes:
+      # Mount source code for hot reloading
+      - ../../../apps/server:/app/apps/server
+      - ../../../packages:/app/packages # If you have shared packages
+      # Prevent node_modules from host overriding container's node_modules
+      - /app/apps/server/node_modules
+    environment:
+      NODE_ENV: development
+      PORT: 4000
+      DATABASE_URL: postgresql://${DB_USER:-user}:${DB_PASSWORD:-password}@db:5432/${DB_NAME:-ecommerce_db_dev}
+      POCKETBASE_URL: http://pocketbase:8090
+      # Add other necessary development environment variables here
+      # For ts-node-dev, CHOKIDAR_USEPOLLING might be useful
+      # CHOKIDAR_USEPOLLING: "true"
+    depends_on:
+      db:
+        condition: service_healthy
+      pocketbase:
+        condition: service_started # Or service_healthy
+    restart: unless-stopped
+    networks:
+      - ecommerce_network
+
+  db:
+    image: postgres:15-alpine
+    container_name: ecommerce_db_dev
+    environment:
+      POSTGRES_USER: ${DB_USER:-user}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-password}
+      POSTGRES_DB: ${DB_NAME:-ecommerce_db_dev} # Use a different DB name for dev
+    volumes:
+      - pgdata_dev:/var/lib/postgresql/data
+    ports:
+      - "5433:5432" # Map to a different host port to avoid conflict with prod DB if run locally
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-user} -d ${DB_NAME:-ecommerce_db_dev}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    networks:
+      - ecommerce_network
+
+  pocketbase:
+    image: ghcr.io/pocketbase/pocketbase:0.22.18 # Pin to a specific version
+    container_name: ecommerce_pocketbase_dev
+    command: serve --http="0.0.0.0:8090" --dev # Use --dev flag for PocketBase dev mode
+    ports:
+      - "8091:8090" # Map to a different host port for dev
+    volumes:
+      - pb_data_dev:/pb_data
+      # - ./pb_migrations:/pb_migrations
+    restart: unless-stopped
+    networks:
+      - ecommerce_network
+    healthcheck: # Pocketbase dev mode might not have /api/health immediately, adjust if needed
+      test: ["CMD", "wget", "--no-verbose", "--spider", "http://localhost:8090/api/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 5s # PocketBase starts quickly in dev
+
+
+volumes:
+  pgdata_dev:
+  pb_data_dev:
+
+networks:
+  ecommerce_network:
+    driver: bridge

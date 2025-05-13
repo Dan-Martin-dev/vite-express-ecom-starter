@@ -1,5 +1,5 @@
-import Hero from "@/components/layout/hero/Hero"
-import HeroSecond from "@/components/layout/hero/HeroSecond"
+import Hero from "@/components/layout/Hero"
+import HeroSecond from "@/components/layout/HeroSecond"
 /* import NewDrops from "@/components/layout/hero/NewDrops" */
 
 const Home = () => {

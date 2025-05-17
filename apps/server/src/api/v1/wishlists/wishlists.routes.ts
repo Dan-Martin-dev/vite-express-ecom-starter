@@ -6,8 +6,8 @@ import { validateRequestBody } from '@/middleware/validation.middleware.js'; // 
 import { AddItemInputSchema, RemoveItemInputSchema } from './wishlists.validators.js'; // Import validators
 // Assuming you have an auth middleware that adds req.user
 import { isAuthenticated } from '@/middleware/auth.middleware.js'; // Example auth middleware import
-
-const router = Router();
+import express from 'express';
+const router: Router = express.Router(); // Or const v1Router: Router = ...;
 
 // All wishlist routes require authentication
 // Apply middleware to all routes in this router

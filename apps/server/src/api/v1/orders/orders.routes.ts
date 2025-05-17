@@ -4,6 +4,7 @@ import { Router } from 'express';
 import { orderController } from "./orders.controller.js";
 import { validateRequestBody, validateQueryParams } from '@/middleware/validation.middleware.js';
 import { isAuthenticated } from '@/middleware/auth.middleware.js'; // Your auth middleware
+import express from 'express';
 
 import {
     CreateOrderInputSchema,
@@ -11,8 +12,8 @@ import {
     // GetOrderByIdInputSchema // ID is validated in controller for params
 } from "./orders.validators.js";
 
+const router: Router = express.Router(); // Or const v1Router: Router = ...;
 
-const router = Router();
 
 // ALL order routes require authentication
 router.use(isAuthenticated);

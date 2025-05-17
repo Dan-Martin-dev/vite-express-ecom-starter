@@ -5,7 +5,7 @@ import {
   } from "react";
   import type { ShopContextProviderProps, ShopContextType } from "@/types/types";
   import { VITE_API_BASE_URL } from "@/utils/config";
-  import useFetchProducts from "@/hooks/useFetchProducts";
+  import useFetchProducts from "@/features/products/hooks/useFetchProducts";
   
   // Create the context with a default value
   export const CartContext = createContext<ShopContextType | undefined>(

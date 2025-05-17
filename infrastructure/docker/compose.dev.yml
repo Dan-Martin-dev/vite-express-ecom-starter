@@ -1,9 +1,7 @@
-version: '3.8'
-
 services:
   client:
     build:
-      context: ../../.. # Monorepo root
+      context: ../../ # Monorepo root
       dockerfile: apps/client/Dockerfile # Can use the same Dockerfile, or a dev-specific one
       target: builder # Use the builder stage as a base if it has all dev tools
       args:
@@ -39,7 +37,7 @@ services:
 
   server:
     build:
-      context: ../../.. # Monorepo root
+      context: ../../ # Monorepo root
       dockerfile: apps/server/Dockerfile # Can use the same, or a dev-specific one
       target: builder # Use the builder stage as a base, it has devDependencies
     container_name: ecommerce_server_dev
@@ -84,7 +82,11 @@ services:
     ports:
       - "5433:5432" # Map to a different host port to avoid conflict with prod DB if run locally
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-user} -d ${DB_NAME:-ecommerce_db_dev}"]
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U ${DB_USER:-user} -d ${DB_NAME:-ecommerce_db_dev}",
+        ]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -93,24 +95,34 @@ services:
       - ecommerce_network
 
   pocketbase:
-    image: ghcr.io/pocketbase/pocketbase:0.22.18 # Pin to a specific version
+    # image: ghcr.io/pocketbase/pocketbase:0.22.18 # Comment out or remove this line
+    build:
+      context: ./pocketbase-build # Path to the directory containing the Dockerfile and binary, relative to this compose file
+      dockerfile: Dockerfile # The name of the Dockerfile in that directory
     container_name: ecommerce_pocketbase_dev
-    command: serve --http="0.0.0.0:8090" --dev # Use --dev flag for PocketBase dev mode
+    # ... rest of the service definition remains exactly the same ...
+    command: serve --http="0.0.0.0:8090" --dev # Keep this command as it includes --dev
     ports:
       - "8091:8090" # Map to a different host port for dev
     volumes:
-      - pb_data_dev:/pb_data
-      # - ./pb_migrations:/pb_migrations
+      - pb_data_dev:/app/pb_data # Ensure this maps to /app/pb_data inside the container
+      # - ./pb_migrations:/app/pb_migrations # Map migrations if needed
     restart: unless-stopped
     networks:
       - ecommerce_network
-    healthcheck: # Pocketbase dev mode might not have /api/health immediately, adjust if needed
-      test: ["CMD", "wget", "--no-verbose", "--spider", "http://localhost:8090/api/health"]
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "wget",
+          "--no-verbose",
+          "--spider",
+          "http://localhost:8090/api/health",
+        ]
       interval: 10s
       timeout: 5s
       retries: 3
-      start_period: 5s # PocketBase starts quickly in dev
-
+      start_period: 5s
 
 volumes:
   pgdata_dev:

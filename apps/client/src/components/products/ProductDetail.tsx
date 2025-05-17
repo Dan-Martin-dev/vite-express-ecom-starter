@@ -1,4 +1,4 @@
-import useFetchProducts from "@/hooks/useFetchProducts";
+import useFetchProducts from "@/features/products/hooks/useFetchProducts";
 import { useEffect, useState } from "react";
 import { MdArrowRightAlt } from "react-icons/md";
 import { useParams, Link } from "@tanstack/react-router"; // <--- Import Link from tanstack
@@ -82,7 +82,7 @@ const ProductDetail = () => {
             -25% OFF
           </div>
           {/* image */}
-          <img alt={product.name} src={imageUrl} /> {/* Use product name for alt text */}
+          <img alt={product.name} /* src={imageUrl} */ /> {/* Use product name for alt text */}
         </div>
       </div>
 

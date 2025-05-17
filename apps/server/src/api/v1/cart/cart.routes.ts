@@ -4,6 +4,7 @@ import { cartController } from './cart.controller.js';
 import { validateRequestBody } from '@/middleware/validation.middleware.js'; // Assuming your validation middleware
 import { isAuthenticated } from '@/middleware/auth.middleware.js'; // Assuming your auth middleware
 import { requireSessionId } from '@/middleware/session.middleware.js'; // <-- You'll need to create this middleware
+import express from 'express';
 
 import {
   AddItemToCartInputSchema,
@@ -13,7 +14,7 @@ import {
   UpdateCartDetailsInputSchema
 } from './cart.validators.js';
 
-const router = Router();
+const router: Router = express.Router(); // Or const v1Router: Router = ...;
 
 // Apply session middleware to all cart routes
 // This middleware should attach a unique sessionId (e.g., UUID) to req.sessionId

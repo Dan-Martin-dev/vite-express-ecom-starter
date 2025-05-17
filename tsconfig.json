@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "compilerOptions": {
+    // Base Options
+    "target": "es2020",
+    "lib": ["es2020", "dom", "dom.iterable"],
+    "module": "esnext",
+    "allowJs": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileName": true,
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true, // Root tsconfig often doesn't emit files itself
+    "jsx": "react-jsx",
+    "sourceMap": true,
+    "baseUrl": "./", // Important for resolving paths
+    "paths": {
+       // Define monorepo paths if you use them (e.g., import from @/...)
+       # Example if you have shared packages:
+       # "@shared/*": ["packages/shared/*"]
+    },
+
+    // Monorepo specific settings
+    "composite": true, // Enables project references
+    "declaration": true,
+    "declarationMap": true,
+  },
+  "exclude": [
+    "node_modules",
+    "**/node_modules",
+    "dist",
+    "**/*.js" // Exclude compiled JS files
+  ],
+  "references": [
+    // List your projects here. These paths are relative to the root tsconfig.json
+    { "path": "apps/client" },
+    { "path": "apps/server" }
+    // Add any paths to 'packages/*' here if they exist
+  ]
+}

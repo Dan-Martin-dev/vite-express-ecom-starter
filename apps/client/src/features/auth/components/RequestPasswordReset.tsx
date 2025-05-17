@@ -4,7 +4,7 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { requestPasswordResetSchema } from '../validation/authSchemas';
 import { RequestPasswordResetPayload } from '../types';
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth } from '@/features/auth/hooks/useAuth';
 
 export const RequestPasswordResetForm: React.FC = () => {
     const { requestPasswordReset, isLoading, error, clearError } = useAuth();

@@ -1,12 +1,15 @@
+//apps/server/src/app.ts
   import express from 'express';
   import cors from 'cors';
   import helmet from 'helmet';
   import routes from './api/v1/index.js';
   import { errorHandler } from './middleware/error-handler.js';
   import cookieParser from 'cookie-parser';
-  
+  import { Application } from 'express';
+
+    
   export const createApp = () => {
-    const app = express();
+    const app: Application = createApp(); // Or maybe Express, check your function's return type
 
     // Core middleware
     app.use(cors());

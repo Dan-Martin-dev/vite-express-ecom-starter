@@ -1,5 +1,5 @@
 import { createRoute } from '@tanstack/react-router'
-import { rootRoute } from '../__root'
+import { Route as rootRoute } from '../__root'
 import ProductDetail from '../../components/products/ProductDetail'
 
 export const Route = createRoute({

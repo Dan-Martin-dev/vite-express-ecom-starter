@@ -1,4 +1,5 @@
 // src/api/v1/routes/auth.routes.ts
+import { Router } from 'express';
 import express, { Request, Response, NextFunction } from 'express';
 import { pb, ensurePbAdminAuth } from "@/lib/pocketbase.js";
 import { isAuthenticated } from '@/middleware/auth.middleware.js';
@@ -12,11 +13,11 @@ import crypto from 'crypto'; // For generating address IDs if needed
 import { ShippingAddress } from '@/types/index.js';
 import { EmailSchema, addressSchema, updateProfileSchema } from '@/api/v1/auth/auth.validator.js';
 import { getUserAddresses } from '@/api/v1/auth/auth.utils.js';
+
 // Call this when setting up routes or server
 ensurePbAdminAuth(); // Attempt admin authentication on startup
 
-const router = express.Router();
-
+const router: Router = express.Router(); // <-- Add the explicit ': Router' annotation
 
 // --- Schemas for validation ---
 // Schema for routes needing only email

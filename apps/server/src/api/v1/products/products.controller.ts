@@ -3,8 +3,8 @@
 import { Request, Response, NextFunction } from 'express';
 import { ProductService } from "./products.service.js";
 import {
-    ProductWithDetails, // Type for the response data
-    GetProductsInput, // Input type for the list handler (used for clarity)
+/*     ProductWithDetails,
+    GetProductsInput,  */
     GetProductBySlugInput, // Input type for slug handler
     GetProductByIdInput, // Input type for ID handler
 } from "./products.types.js";

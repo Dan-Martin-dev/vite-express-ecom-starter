@@ -1,12 +1,9 @@
 // apps/server/src/api/v1/wishlists/wishlists.types.ts
 
-import { z } from 'zod';
+/* import { z } from 'zod'; */
 import { InferSelectModel, InferInsertModel } from 'drizzle-orm';
-
-// Import schema tables for type inference
 import { wishlists, wishlistItems } from '@/db/schema/wishlists.schema.js';
 import { products, productVariants } from '@/db/schema/products.schema.js';
-// FIX: Import db directly, not aliased to DBClient as a value here for type definitions
 import { db } from '@/db/index.js'; 
 
 // --- Drizzle Schema Types ---

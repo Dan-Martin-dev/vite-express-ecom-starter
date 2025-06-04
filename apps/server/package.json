@@ -15,7 +15,7 @@
   "scripts": {
     "build": "tsc && tsc-alias",
     "start": "node dist/index.js",
-    "dev": "ts-node-dev --esm --respawn --transpile-only src/index.ts",
+    "dev": "node --loader ts-node/esm --no-warnings --inspect=0.0.0.0:9229 node_modules/ts-node-dev/lib/bin.js --respawn --transpile-only src/index.ts",
     "premigrate": "node --loader ts-node/esm src/db/scripts/pre-migrate.ts",
     "migrate": "drizzle-kit migrate",
     "generate": "node -r module-alias/register -r tsconfig-paths/register ./node_modules/.bin/drizzle-kit generate",

@@ -1,34 +1,13 @@
 services:
   client:
     build:
-      context: ../../ # Monorepo root
-      dockerfile: apps/client/Dockerfile # Can use the same Dockerfile, or a dev-specific one
-      target: builder # Use the builder stage as a base if it has all dev tools
+      context: ../..  # Monorepo root relative to this compose file
+      dockerfile: apps/client/Dockerfile
       args:
-        # For dev, VITE_BASE_URL points directly to the server service
-        # This is set as an environment variable for the running container
-        # Vite will pick up VITE_BASE_URL from the environment if vite.config.js is set up for it
-        # or you can pass it as build arg if it's strictly build time.
-        # For Vite dev server, env var is easier.
-        # VITE_BASE_URL: http://server:4000 # Example if Vite uses this at build time
-        _: "" # Placeholder if no build args needed for dev target
-    container_name: ecommerce_client_dev
-    # For Vite dev server, command needs to start it and expose it
-    # The client's package.json has "dev": "vite"
-    # We need to ensure Vite listens on 0.0.0.0
-    command: pnpm --filter frontend run dev -- --host 0.0.0.0 --port 5173
+        VITE_BASE_URL: /api # API will be proxied by Nginx
+    container_name: ecommerce_client
     ports:
-      - "5173:5173" # Vite default dev port
-    volumes:
-      # Mount source code for hot reloading
-      - ../../../apps/client:/app/apps/client
-      - ../../../packages:/app/packages # If you have shared packages
-      # Prevent node_modules from host overriding container's node_modules
-      - /app/apps/client/node_modules
-    environment:
-      NODE_ENV: development
-      VITE_BASE_URL: http://server:4000 # For client-side JS to know API location
-      # CHOKIDAR_USEPOLLING: "true" # May be needed for HMR in some Docker setups
+      - "80:80" # Standard HTTP port for client
     depends_on:
       - server
     restart: unless-stopped
@@ -37,56 +16,44 @@ services:
 
   server:
     build:
-      context: ../../ # Monorepo root
-      dockerfile: apps/server/Dockerfile # Can use the same, or a dev-specific one
-      target: builder # Use the builder stage as a base, it has devDependencies
-    container_name: ecommerce_server_dev
-    # Server dev script: "ts-node-dev --esm --respawn --transpile-only src/index.ts"
-    # Ensure paths are correct relative to /app (WORKDIR)
-    command: pnpm --filter backend run dev # This will run ts-node-dev from /app
-    ports:
-      - "4000:4000" # Server port
-      - "9229:9229" # Node.js debug port (optional)
-    volumes:
-      # Mount source code for hot reloading
-      - ../../../apps/server:/app/apps/server
-      - ../../../packages:/app/packages # If you have shared packages
-      # Prevent node_modules from host overriding container's node_modules
-      - /app/apps/server/node_modules
+      context: ../.. # Monorepo root
+      dockerfile: apps/server/Dockerfile
+    container_name: ecommerce_server
     environment:
-      NODE_ENV: development
+      NODE_ENV: production
       PORT: 4000
-      DATABASE_URL: postgresql://${DB_USER:-user}:${DB_PASSWORD:-password}@db:5432/${DB_NAME:-ecommerce_db_dev}
+      DATABASE_URL: postgresql://${DB_USER:-postgres}:${DB_PASSWORD:-postgres}@postgres:5432/${DB_NAME:-ecommercedb}
       POCKETBASE_URL: http://pocketbase:8090
-      # Add other necessary development environment variables here
-      # For ts-node-dev, CHOKIDAR_USEPOLLING might be useful
-      # CHOKIDAR_USEPOLLING: "true"
+    ports:
+      - "4000:4000" # Optional: Only needed if accessing server directly
     depends_on:
-      db:
+      postgres:
         condition: service_healthy
       pocketbase:
-        condition: service_started # Or service_healthy
+        condition: service_healthy
     restart: unless-stopped
     networks:
       - ecommerce_network
-
-  db:
-    image: postgres:15-alpine
-    container_name: ecommerce_db_dev
-    environment:
-      POSTGRES_USER: ${DB_USER:-user}
-      POSTGRES_PASSWORD: ${DB_PASSWORD:-password}
-      POSTGRES_DB: ${DB_NAME:-ecommerce_db_dev} # Use a different DB name for dev
-    volumes:
-      - pgdata_dev:/var/lib/postgresql/data
-    ports:
-      - "5433:5432" # Map to a different host port to avoid conflict with prod DB if run locally
     healthcheck:
-      test:
-        [
-          "CMD-SHELL",
-          "pg_isready -U ${DB_USER:-user} -d ${DB_NAME:-ecommerce_db_dev}",
-        ]
+      test: ["CMD", "wget", "--no-verbose", "--spider", "http://localhost:4000/api/v1/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: ecommerce_postgres
+    environment:
+      POSTGRES_USER: ${DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
+      POSTGRES_DB: ${DB_NAME:-ecommercedb}
+      PGDATA: /var/lib/postgresql/data
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432" # Expose if you need to connect from host
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-postgres} -d ${DB_NAME:-ecommercedb}"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -95,38 +62,25 @@ services:
       - ecommerce_network
 
   pocketbase:
-    # image: ghcr.io/pocketbase/pocketbase:0.22.18 # Comment out or remove this line
-    build:
-      context: ./pocketbase-build # Path to the directory containing the Dockerfile and binary, relative to this compose file
-      dockerfile: Dockerfile # The name of the Dockerfile in that directory
-    container_name: ecommerce_pocketbase_dev
-    # ... rest of the service definition remains exactly the same ...
-    command: serve --http="0.0.0.0:8090" --dev # Keep this command as it includes --dev
+    image: spectado/pocketbase:latest
+    container_name: ecommerce_pocketbase
+    command: serve --http="0.0.0.0:8090"
     ports:
-      - "8091:8090" # Map to a different host port for dev
+      - "8090:8090"
     volumes:
-      - pb_data_dev:/app/pb_data # Ensure this maps to /app/pb_data inside the container
-      # - ./pb_migrations:/app/pb_migrations # Map migrations if needed
+      - pb_data:/pb_data
     restart: unless-stopped
     networks:
       - ecommerce_network
     healthcheck:
-      test:
-        [
-          "CMD",
-          "wget",
-          "--no-verbose",
-          "--spider",
-          "http://localhost:8090/api/health",
-        ]
+      test: ["CMD", "wget", "--no-verbose", "--spider", "http://localhost:8090/api/health"]
       interval: 10s
       timeout: 5s
       retries: 3
-      start_period: 5s
 
 volumes:
-  pgdata_dev:
-  pb_data_dev:
+  pgdata:
+  pb_data:
 
 networks:
   ecommerce_network:

@@ -2,12 +2,12 @@
 
 import { Request, Response, NextFunction } from 'express';
 import { OrderService, orderServiceInstance } from "./orders.service.js"; // Import instance
-import {
+/* import {
     OrderWithItems,
     CreateOrderInput,
     GetUserOrdersInput,
     GetOrderByIdInput
-} from "./orders.types.js";
+} from "./orders.types.js"; */
 
 // Import Zod infer utility and schemas if needed for strong typing of validated data
 import { z } from 'zod';

@@ -1,0 +1,1 @@
+{"version":3,"file":"zustand.d.ts","sourceRoot":"","sources":["../../__mocks__/zustand.ts"],"names":[],"mappings":"AAEA,OAAO,KAAK,OAAO,MAAM,SAAS,CAAC;AAMnC,eAAO,MAAM,aAAa,YAAiB,IAAI,CAAG,CAAC;AAYnD,eAAO,MAAM,MAAM,EAKb,OAAO,OAAO,CAAC,MAAM,CAAC;AAY5B,eAAO,MAAM,WAAW,EAKlB,OAAO,OAAO,CAAC,WAAW,CAAC"}

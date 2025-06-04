@@ -1,3 +1,4 @@
+//apps/server/src/index.ts
 import { startServer } from './server.js';
 // Future-proof for:
 // - Cluster mode (Node.js worker_threads)

@@ -1,25 +1,17 @@
-import { StrictMode } from "react";
-import { createRoot } from "react-dom/client";
-import "./index.css";
-import { ToastContainer } from 'react-toastify';
-import { RouterProvider } from '@tanstack/react-router';
-import { router } from './routes/router'; // Adjust path if needed
-import '@/App.css'
+import * as React from 'react';
+import { createRoot } from 'react-dom/client';
 
-createRoot(document.getElementById("root")!).render(
-  <StrictMode>
-    <RouterProvider router={router} />
-            <ToastContainer
-                position="top-right" // Or your preferred position
-                autoClose={5000}
-                hideProgressBar={false}
-                newestOnTop={false}
-                closeOnClick
-                rtl={false}
-                pauseOnFocusLoss
-                draggable
-                pauseOnHover
-                theme="light" // Or "dark" or "colored"
-            />
-  </StrictMode>
-);
+import './index.css';
+import { App } from './app';
+import { enableMocking } from './testing/mocks';
+
+const root = document.getElementById('root');
+if (!root) throw new Error('No root element found');
+
+enableMocking().then(() => {
+  createRoot(root).render(
+    <React.StrictMode>
+      <App />
+    </React.StrictMode>,
+  );
+});

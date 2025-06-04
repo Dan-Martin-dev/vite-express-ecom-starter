@@ -153,7 +153,7 @@ export declare const userCreateSchema: z.ZodObject<{
     defaultPaymentMethod?: string | undefined;
     marketingOptIn?: boolean | undefined;
 }>;
-export declare const userUpdateSchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
+export declare const userUpdateSchema: z.ZodObject<Omit<{
     name: z.ZodOptional<z.ZodString>;
     email: z.ZodOptional<z.ZodString>;
     role: z.ZodOptional<z.ZodOptional<z.ZodEnum<["admin", "user", "staff", "vendor"]>>>;
@@ -192,9 +192,9 @@ export declare const userUpdateSchema: z.ZodObject<z.objectUtil.extendShape<Omit
     defaultPaymentMethod: z.ZodOptional<z.ZodOptional<z.ZodString>>;
     marketingOptIn: z.ZodOptional<z.ZodOptional<z.ZodBoolean>>;
     image: z.ZodOptional<z.ZodOptional<z.ZodString>>;
-}, "password">, {
+}, "password"> & {
     password: z.ZodOptional<z.ZodString>;
-}>, "strip", z.ZodTypeAny, {
+}, "strip", z.ZodTypeAny, {
     email?: string | undefined;
     name?: string | undefined;
     role?: "admin" | "user" | "staff" | "vendor" | undefined;

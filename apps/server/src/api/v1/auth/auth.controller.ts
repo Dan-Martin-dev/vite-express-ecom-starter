@@ -1,10 +1,9 @@
-// request handling
 // src/features/auth/auth.controller.ts
 import { Request, Response, NextFunction } from 'express';
-import { authService } from './auth.service.js'; // Added .js extension
+import { authService } from './auth.service.js';
 
 export const authController = {
-    async register(req: Request, res: Response, next: NextFunction) {
+    async register(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
         try {
             // Input validation should be done by middleware before this point
             const { email, password, passwordConfirm } = req.body;
@@ -17,17 +16,18 @@ export const authController = {
 
             const result = await authService.registerUser(req.body);
             // Send response based on service result
-            res.status(201).json(result); // Includes user object and message
+            return res.status(201).json(result); // FIX: Added return
 
         } catch (error: any) {
              // Pass error to global error handler
              // Log the specific controller context if desired
              console.error("Auth Controller Register Error:", error.message);
              next(error);
+             // This path will implicitly lead to Promise<void>
         }
     },
 
-    async login(req: Request, res: Response, next: NextFunction) {
+    async login(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
         try {
             const { email, password } = req.body;
             if (!email || !password) {
@@ -35,64 +35,65 @@ export const authController = {
             }
 
             const result = await authService.loginUser({ email, password });
-            res.status(200).json(result); // Includes token and user object
+            return res.status(200).json(result); // FIX: Added return
         } catch (error: any) {
              console.error("Auth Controller Login Error:", error.message);
              next(error);
+             // This path will implicitly lead to Promise<void>
         }
     },
 
-    logout(req: Request, res: Response, next: NextFunction) {
+    logout(_req: Request, res: Response, next: NextFunction): Response | void {
         try {
             // Primarily a client-side action, but clear server store if needed.
             authService.clearServerAuthStore();
             // If using httpOnly cookies for auth, clear them here:
             // res.clearCookie('pb_auth'); // Requires cookie-parser middleware
-            res.status(200).json({ message: 'Logged out successfully.' });
+            return res.status(200).json({ message: 'Logged out successfully.' }); // FIX: Added return
         } catch (error) {
              next(error);
+             // This path will implicitly lead to void return
         }
     },
 
-    getSession(req: Request, res: Response, next: NextFunction) {
+    getSession(req: Request, res: Response, _next: NextFunction): Response | void { // FIX: _next for unused param
         // isAuthenticated middleware already validated and attached user/token
         if (!req.user) {
             // This shouldn't happen if isAuthenticated middleware is working correctly
             return res.status(401).json({ message: 'Authentication required.' });
         }
-         res.status(200).json({ user: req.user, token: req.token });
+         return res.status(200).json({ user: req.user, token: req.token }); // FIX: Added return
     },
 
-    async requestPasswordReset(req: Request, res: Response, next: NextFunction) {
+    async requestPasswordReset(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
          try {
             const { email } = req.body;
             if (!email) {
                 return res.status(400).json({ message: 'Email is required.' });
             }
             const result = await authService.requestPasswordReset(email);
-            res.status(200).json(result); // Send generic success message from service
+            return res.status(200).json(result); // FIX: Added return // Send generic success message from service
         } catch (error: any) {
              console.error("Auth Controller Password Reset Request Error:", error.message);
-             // Even if service throws (e.g., internal error), maybe still send generic success to user? Or handle differently.
-             // Let's pass to global handler for now.
              next(error);
+             // This path will implicitly lead to Promise<void>
         }
     },
 
      // --- Placeholder endpoints mentioned in original code ---
 
      // Token refresh is handled by PocketBase SDK / isAuthenticated middleware usually
-     refresh(req: Request, res: Response) {
-        res.status(501).json({ message: 'Token refresh is typically handled automatically. This endpoint is usually not required.' });
+     refresh(_req: Request, res: Response): Response { // FIX: _req if not used, added return
+        return res.status(501).json({ message: 'Token refresh is typically handled automatically. This endpoint is usually not required.' });
      },
 
       // Email verification link click is handled by PB/Frontend
-     verifyEmail(req: Request, res: Response) {
-        res.status(501).json({ message: 'Email verification link is handled by PocketBase or your frontend.' });
+     verifyEmail(_req: Request, res: Response): Response { // FIX: _req if not used, added return
+        return res.status(501).json({ message: 'Email verification link is handled by PocketBase or your frontend.' });
      },
 
       // Password reset confirmation is handled by PB/Frontend via link token
-     resetPassword(req: Request, res: Response) {
-        res.status(501).json({ message: 'Password reset confirmation is handled by PocketBase or your frontend using the token from the email link.' });
+     resetPassword(_req: Request, res: Response): Response { // FIX: _req if not used, added return
+        return res.status(501).json({ message: 'Password reset confirmation is handled by PocketBase or your frontend using the token from the email link.' });
      }
 };

@@ -1,6 +1,6 @@
 // cart.repository.ts
-import { eq, sql, InferSelectModel, InferInsertModel } from 'drizzle-orm';
-import { NodePgDatabase } from 'drizzle-orm/node-postgres'; // Adjust if using a different DB client
+import { eq/* , sql, InferSelectModel, InferInsertModel */ } from 'drizzle-orm';
+/* import { NodePgDatabase } from 'drizzle-orm/node-postgres'; */
 import { carts as cartsSchema } from '@/db/schema/carts.schema.js';
 import { NewCart, Cart } from './cart.types.js';
 import { db,schema} from '@/db/index.js'; // Assuming your Drizzle client is exported from here

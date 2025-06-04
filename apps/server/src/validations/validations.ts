@@ -1,15 +1,15 @@
 import { z } from 'zod';
-import { orderStatusEnum, paymentStatusEnum, userRoleEnum } from '../types/index.js';
-
+/* import { orderStatusEnum, paymentStatusEnum, userRoleEnum } from '../types/index.js';
+ */
 // Basic reusable schemas
 const uuidSchema = z.string().uuid();
 const slugSchema = z.string().min(1).regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/);
 const priceSchema = z.number().nonnegative().multipleOf(0.01);
-const timestampSchema = z.string().datetime();
-const positiveIntSchema = z.number().int().nonnegative();
+/* const timestampSchema = z.string().datetime();
+const positiveIntSchema = z.number().int().nonnegative(); */  
 
 // Address validation
-export const shippingAddressSchema = z.object({
+export const shippingAddressSchema = z.object({   
   fullName: z.string().min(2).max(100),
   address: z.string().min(5).max(200),
   city: z.string().min(2).max(100),

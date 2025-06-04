@@ -1,0 +1,163 @@
+.
+├── db
+│   └── migrations
+│       └── meta
+│           └── _journal.json
+├── Dockerfile
+├── docs
+│   ├── api
+│   │   └── v1
+│   │       ├── auth
+│   │       │   ├── auth.md
+│   │       │   └── auth.routes.md
+│   │       ├── cart
+│   │       ├── files.md
+│   │       ├── request-lifecycle.md
+│   │       └── users
+│   │           └── users.routes.md
+│   ├── architecture
+│   ├── deployment
+│   └── middleware
+│       └── session.middleware.md
+├── drizzle
+├── drizzle.config.ts
+├── drizzle-kit.config.ts
+├── entrypoint.sh
+├── package.json
+├── package-lock.json
+├── pnpm-lock.yaml
+├── pocketbase_instance
+│   ├── CHANGELOG.md
+│   ├── LICENSE.md
+│   ├── pocketbase
+│   └── pocketbase_0.28.2_linux_amd64.zip
+├── project_structure.txt
+├── src
+│   ├── api
+│   │   ├── v1
+│   │   │   ├── auth
+│   │   │   │   ├── auth.controller.ts
+│   │   │   │   ├── auth.repository.ts
+│   │   │   │   ├── auth.routes.ts
+│   │   │   │   ├── auth.service.ts
+│   │   │   │   ├── auth.test.ts
+│   │   │   │   ├── auth.types.ts
+│   │   │   │   ├── auth.utils.ts
+│   │   │   │   └── auth.validator.ts
+│   │   │   ├── cart
+│   │   │   │   ├── cart.controller.ts
+│   │   │   │   ├── cart.repository.ts
+│   │   │   │   ├── cart.routes.ts
+│   │   │   │   ├── cart.service.ts
+│   │   │   │   ├── cart.types.ts
+│   │   │   │   ├── cart.utils.ts
+│   │   │   │   └── cart.validators.ts
+│   │   │   ├── index.ts
+│   │   │   ├── orders
+│   │   │   │   ├── orders.controller.ts
+│   │   │   │   ├── orders.repository.ts
+│   │   │   │   ├── orders.routes.ts
+│   │   │   │   ├── orders.service.ts
+│   │   │   │   ├── orders.test.ts
+│   │   │   │   ├── orders.types.ts
+│   │   │   │   └── orders.validators.ts
+│   │   │   ├── products
+│   │   │   │   ├── products.controller.ts
+│   │   │   │   ├── products.repository.ts
+│   │   │   │   ├── products.routes.ts
+│   │   │   │   ├── products.service.ts
+│   │   │   │   ├── products.test.ts
+│   │   │   │   ├── products.types.ts
+│   │   │   │   ├── products.utils.ts
+│   │   │   │   └── products.validators.ts
+│   │   │   ├── users
+│   │   │   │   ├── users.controller.ts
+│   │   │   │   ├── users.repository.ts
+│   │   │   │   ├── users.service.ts
+│   │   │   │   ├── users.test.ts
+│   │   │   │   ├── users.types.ts
+│   │   │   │   └── users.validators.ts
+│   │   │   └── wishlists
+│   │   │       ├── wishlists.controller.ts
+│   │   │       ├── wishlists.repository.ts
+│   │   │       ├── wishlists.routes.ts
+│   │   │       ├── wishlists.service.ts
+│   │   │       ├── wishlists.test.ts
+│   │   │       ├── wishlists.types.ts
+│   │   │       └── wishlists.validators.ts
+│   │   └── v2
+│   ├── app.ts
+│   ├── config
+│   │   ├── env.ts
+│   │   └── index.ts
+│   ├── db
+│   │   ├── client.ts
+│   │   ├── index.ts
+│   │   ├── migrations
+│   │   │   ├── 0000_milky_malice.sql
+│   │   │   ├── 0001_brave_lorna_dane.sql
+│   │   │   └── meta
+│   │   │       ├── 0000_snapshot.json
+│   │   │       ├── 0001_snapshot.json
+│   │   │       └── _journal.json
+│   │   ├── schema
+│   │   │   ├── auth.schema.ts
+│   │   │   ├── carts.schema.ts
+│   │   │   ├── coupons.schema.ts
+│   │   │   ├── orders.schema.ts
+│   │   │   ├── products.schema.ts
+│   │   │   ├── reviews.schema.ts
+│   │   │   └── wishlists.schema.ts
+│   │   ├── scripts
+│   │   │   └── pre-migrate.ts
+│   │   └── seed.ts
+│   ├── index.ts
+│   ├── lib
+│   │   ├── analytics
+│   │   │   └── events.ts
+│   │   ├── cache
+│   │   ├── errors
+│   │   │   ├── AppError.ts
+│   │   │   ├── ConflictError.ts
+│   │   │   ├── HttpError.ts
+│   │   │   ├── index.ts
+│   │   │   └── NotFoundError.ts
+│   │   ├── payment
+│   │   │   ├── crypto.ts
+│   │   │   └── providers.ts
+│   │   ├── pocketbase.ts
+│   │   └── utils
+│   ├── middleware
+│   │   ├── auth.middleware.ts
+│   │   ├── cart.middleware.ts
+│   │   ├── error-handler.ts
+│   │   ├── error.middleware.ts
+│   │   ├── logger.middleware.ts
+│   │   ├── orders.middleware.ts
+│   │   ├── ratelimit.middleware.ts
+│   │   ├── session.middleware.ts
+│   │   └── validation.middleware.ts
+│   ├── server.ts
+│   ├── types
+│   │   ├── express.d.ts
+│   │   └── index.ts
+│   └── validations
+│       └── validations.ts
+├── structure.txt
+├── tests
+│   ├── controllers
+│   ├── db
+│   │   └── schema.test.ts
+│   ├── docker.compose.yml
+│   ├── e2e
+│   ├── fixtures
+│   ├── integration
+│   ├── jest.config.ts
+│   ├── load
+│   ├── routes
+│   ├── services
+│   ├── unit
+│   └── utils
+└── tsconfig.json
+
+50 directories, 110 files

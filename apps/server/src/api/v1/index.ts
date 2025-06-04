@@ -1,8 +1,8 @@
 // src/api/v1/index.ts
 import { Router } from 'express';
-import { db } from '../../db/index.js';
+/* import { db } from '../../db/index.js';
 import { users } from '@/db/schema/auth.schema.js';
-import { eq } from 'drizzle-orm';
+import { eq } from 'drizzle-orm'; */
 import cartRoutes from './cart/cart.routes.js';
 import authRoutes from './auth/auth.routes.js';
 import productRoutes from './products/products.routes.js';

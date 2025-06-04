@@ -1,7 +1,7 @@
       
 // apps/server/src/api/v1/products/products.types.ts
 
-import { InferSelectModel, InferInsertModel } from 'drizzle-orm';
+import { InferSelectModel/* , InferInsertModel */ } from 'drizzle-orm';
 import {
   products as productsSchema,
   productVariants as productVariantsSchema,

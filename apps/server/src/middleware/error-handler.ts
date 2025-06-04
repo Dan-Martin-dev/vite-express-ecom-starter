@@ -4,9 +4,9 @@ import { AppError } from '../types/index.js';
 
 export const errorHandler = (
   err: Error | AppError,
-  req: Request,
+  _req: Request,
   res: Response,
-  next: NextFunction
+  _next: NextFunction
 ) => {
   const status = 'status' in err ? err.status : 500;
   const message = err.message || 'Something went wrong';

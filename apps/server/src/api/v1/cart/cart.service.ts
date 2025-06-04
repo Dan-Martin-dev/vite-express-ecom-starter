@@ -4,12 +4,12 @@ import { CartRepository, cartRepository } from "./cart.repository.js"; // <-- Ad
 import {
   Cart,
   CartItem,
-  AddItemToCartInput,
+/*   CreateGuestCartInput,
+  ApplyCouponInput,
+  AddItemToCartInput, */
   UpdateCartItemInput,
   RemoveItemFromCartInput,
-  ApplyCouponInput,
   UpdateCartDetailsInput,
-  CreateGuestCartInput,
   TransferCartInput,
   CartUpdate, // <--- ADD THIS HERE
 } from "./cart.types.js";
@@ -18,11 +18,11 @@ import {
   addOrUpdateCartItem,
   removeCartItem,
   updateCartItemQuantity,
-  calculateCartTotals,
+/*   calculateCartTotals, */
 } from "./cart.utils.js";
 import { AppError } from "@/lib/errors/AppError.js"; // Assuming your error handling
 import { NotFoundError } from "@/lib/errors/NotFoundError.js";
-import { ConflictError } from "@/lib/errors/ConflictError.js"; // For cases like insufficient stock
+/* import { ConflictError } from "@/lib/errors/ConflictError.js";  */
 import { AddItemToCartInputSchema } from './cart.validators.js'; // <--- Add this import
 import { z } from 'zod'; // <--- Add this import
 

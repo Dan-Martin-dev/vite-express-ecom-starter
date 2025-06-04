@@ -1,12 +1,13 @@
 // apps/server/src/api/v1/wishlists/wishlists.service.ts
 
-import { z } from 'zod';
-import { AppError, NotFoundError } from "@/lib/errors/index.js"; // Assuming NotFoundError is here or extend AppError
-import { db } from '@/db/index.js'; // For transactions if needed in service (repository pattern pushes this down)
-import { AddItemInputSchema, RemoveItemInputSchema } from "./wishlists.validators.js"; // Import validators for input types
-import { WishlistRepository, wishlistRepositoryInstance } from "./wishlists.repository.js"; // Import repository
-import { ProductService, productServiceInstance } from '@/api/v1/products/products.service.js'; // Import ProductService
-import { AddItemInput, NewWishlistItem, RemoveItemInput, WishlistWithItemsQueryResult } from './wishlists.types.js'; // Import types
+/* import { z } from 'zod'; 
+import { db } from '@/db/index.js'; 
+import { AddItemInputSchema, RemoveItemInputSchema } from "./wishlists.validators.js"; 
+*/
+import { AppError, NotFoundError } from "@/lib/errors/index.js";
+import { WishlistRepository, wishlistRepositoryInstance } from "./wishlists.repository.js";
+import { ProductService, productServiceInstance } from '@/api/v1/products/products.service.js'; 
+import { AddItemInput, NewWishlistItem, RemoveItemInput, WishlistWithItemsQueryResult } from './wishlists.types.js'; 
 
 // Assuming NotFoundError exists, otherwise use new AppError('Not Found', 404)
 // If NotFoundError is not in lib/errors, you might need to create it
@@ -27,16 +28,10 @@ export class WishlistService {
     async getWishlist(userId: string): Promise<WishlistWithItemsQueryResult> {
         let wishlist = await this.wishlistRepository.findWishlistByUserId(userId);
 
-        // If no wishlist exists for the user, create one
         if (!wishlist) {
-            // Create the wishlist in a transaction in case the user somehow triggers multiple creations simultaneously
-            // Or just rely on findWishlistByUserId in the repository to handle potential race conditions
-            // Simple approach: create directly, find again.
-             const newWishlist = await this.wishlistRepository.createWishlist(userId);
-             // Fetch it again to get relations (items array)
+            /*  const newWishlist = await this.wishlistRepository.createWishlist(userId); */
              wishlist = await this.wishlistRepository.findWishlistByUserId(userId);
              if (!wishlist) {
-                 // This should ideally not happen if createWishlist succeeded
                  throw new AppError("Failed to retrieve newly created wishlist.", 500);
              }
         }

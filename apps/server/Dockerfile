@@ -1,63 +1,55 @@
-# Stage 1: Build the application and prepare for migrations
-FROM node:20-alpine AS builder
+FROM node:20.11-alpine3.19 AS builder
+ARG PNPM_VERSION=9.1.4
+RUN npm install -g pnpm@${PNPM_VERSION}
+
 WORKDIR /app
 
-# Copy root package manager files and server's package.json
+# Copy package files
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY tsconfig.json ./ 
 COPY apps/server/package.json ./apps/server/
+COPY packages ./packages/
 
-# Install all dependencies for the server workspace, including devDependencies
-# (needed for typescript, tsc-alias, drizzle-kit)
-RUN corepack enable && corepack prepare pnpm@9.1.2 --activate
-RUN pnpm install --filter backend --frozen-lockfile --prod=false
+# Install dependencies
+RUN pnpm install --filter=./apps/server --frozen-lockfile
 
-# Copy the rest of the source code
-# .dockerignore should prevent copying unnecessary files like node_modules from host
-COPY . .
-# Or more specific:
-# COPY tsconfig.json ./
-# COPY apps/server ./apps/server/
+# Copy server source code
+COPY apps/server ./apps/server
 
-# Build the server application (tsc && tsc-alias)
-RUN pnpm --filter backend run build
-# TypeScript compiles to apps/server/dist
+# Build the application
+WORKDIR /app/apps/server
+RUN pnpm run build
 
-# Prune devDependencies for the final stage (optional, could also do a clean install in prod stage)
-# RUN pnpm --filter backend prune --prod
+# Production stage
+FROM node:20.11-alpine3.19 AS production
 
-
-# Stage 2: Production Image
-FROM node:20-alpine AS production
 WORKDIR /app
-ENV NODE_ENV=production
 
-# Copy root package manager files and server's package.json
+# Install pnpm globally
+RUN npm install -g pnpm
+
+# Copy package files for production
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY tsconfig.json ./   
 COPY apps/server/package.json ./apps/server/
+COPY packages ./packages/
 
-# Install ONLY production dependencies for server
-# AND drizzle-kit + pg for migrations. pg is peer dep for drizzle-kit with postgres.
-RUN corepack enable && corepack prepare pnpm@9.1.2 --activate
-RUN pnpm install --filter backend --prod --frozen-lockfile
-RUN pnpm --filter backend add drizzle-kit pg # Add drizzle-kit and pg for migrations
+# Install only production dependencies
+RUN pnpm install --filter=./apps/server --prod --frozen-lockfile --ignore-scripts
 
-# Copy built application from builder stage
+# Copy built files from builder stage
 COPY --from=builder /app/apps/server/dist ./apps/server/dist
+COPY apps/server/drizzle ./apps/server/drizzle
 
-# Copy migration files and Drizzle configuration from builder stage
-# (or directly from context if .dockerignore is set up correctly)
-COPY --from=builder /app/apps/server/src/db/migrations ./apps/server/src/db/migrations
-COPY --from=builder /app/apps/server/drizzle.config.ts ./apps/server/drizzle.config.ts
-# If you have a drizzle-kit.config.ts and it's used, copy it too.
-# COPY --from=builder /app/apps/server/drizzle-kit.config.ts ./apps/server/drizzle-kit.config.ts
+# Add entrypoint script to run migrations before starting the server
+COPY infrastructure/docker/server-entrypoint.sh .
+RUN chmod +x server-entrypoint.sh
 
-# Copy entrypoint script
-COPY apps/server/entrypoint.sh /usr/local/bin/entrypoint.sh
-RUN chmod +x /usr/local/bin/entrypoint.sh
-
-# Expose the port the server listens on (defined by PORT env var, defaults to 4000)
+# Expose API port
 EXPOSE 4000
 
-# Run the entrypoint script
-ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
-CMD ["node", "apps/server/dist/index.js"] # Default command if entrypoint doesn't exec
+# Set environment variables
+ENV NODE_ENV=production
+
+# Run entrypoint script
+ENTRYPOINT ["./server-entrypoint.sh"]

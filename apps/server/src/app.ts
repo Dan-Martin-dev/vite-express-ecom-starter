@@ -5,23 +5,18 @@
   import routes from './api/v1/index.js';
   import { errorHandler } from './middleware/error-handler.js';
   import cookieParser from 'cookie-parser';
-  import { Application } from 'express';
-
     
   export const createApp = () => {
-    const app: Application = createApp(); // Or maybe Express, check your function's return type
+    const app = express(); 
 
-    // Core middleware
     app.use(cors());
     app.use(helmet());
     app.use(express.json());
     app.use(express.urlencoded({ extended: true }));
     app.use(cookieParser());
 
-    // API routes
     app.use('/api', routes);
 
-    // Error handling (must be last!)
     app.use(errorHandler);
 
     return app;

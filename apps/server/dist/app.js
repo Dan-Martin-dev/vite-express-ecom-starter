@@ -1,3 +1,4 @@
+//apps/server/src/app.ts
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';

@@ -1,250 +1,207 @@
 .
-├── config
-│   └── env.ts
 ├── Dockerfile
-├── eslint.config.js
+├── e2e
+│   └── tests
+│       ├── auth.setup.ts
+│       ├── profile.spec.ts
+│       └── smoke.spec.ts
 ├── folder_structure.txt
+├── generators
+│   └── component
+│       ├── component.stories.tsx.hbs
+│       ├── component.tsx.hbs
+│       ├── index.cjs
+│       └── index.ts.hbs
 ├── index.html
-├── nginx.conf
+├── __mocks__
+│   ├── vitest-env.d.ts
+│   └── zustand.ts
+├── mock-server.ts
 ├── package.json
-├── package-lock.json
-├── pnpm-lock.yaml
+├── playwright.config.ts
+├── plopfile.cjs
+├── postcss.config.cjs
 ├── public
-│   └── vite.svg
+│   ├── favicon.ico
+│   ├── logo192.png
+│   ├── logo512.png
+│   ├── mockServiceWorker.js
+│   ├── _redirects
+│   └── robots.txt
 ├── README.md
-├── scripts
 ├── src
-│   ├── App.css
-│   ├── App.tsx
+│   ├── app
+│   │   ├── index.tsx
+│   │   ├── provider.tsx
+│   │   ├── router.tsx
+│   │   └── routes
+│   │       ├── app
+│   │       │   ├── dashboard.tsx
+│   │       │   ├── discussions
+│   │       │   ├── profile.tsx
+│   │       │   ├── root.tsx
+│   │       │   └── users.tsx
+│   │       ├── auth
+│   │       │   ├── login.tsx
+│   │       │   └── register.tsx
+│   │       ├── landing.tsx
+│   │       └── not-found.tsx
 │   ├── assets
-│   │   ├── admin_assets
-│   │   │   ├── add_icon.png
-│   │   │   ├── assets.js
-│   │   │   ├── logo.png
-│   │   │   ├── order_icon.png
-│   │   │   ├── parcel_icon.svg
-│   │   │   └── upload_area.png
-│   │   ├── frontend_assets
-│   │   │   ├── about_img.png
-│   │   │   ├── assets.ts
-│   │   │   ├── bin_icon.png
-│   │   │   ├── cart_icon.png
-│   │   │   ├── contact_img.png
-│   │   │   ├── cross_icon.png
-│   │   │   ├── dropdown_icon.png
-│   │   │   ├── exchange_icon.png
-│   │   │   ├── hero_1.webp
-│   │   │   ├── hero_2.webp
-│   │   │   ├── hero_img.png
-│   │   │   ├── heroSecond1.webp
-│   │   │   ├── heroSecond2.webp
-│   │   │   ├── hero_smart_1.webp
-│   │   │   ├── logo.webp
-│   │   │   ├── menu_icon.png
-│   │   │   ├── p_img10.png
-│   │   │   ├── p_img11.png
-│   │   │   ├── p_img12.png
-│   │   │   ├── p_img13.png
-│   │   │   ├── p_img14.png
-│   │   │   ├── p_img15.png
-│   │   │   ├── p_img16.png
-│   │   │   ├── p_img17.png
-│   │   │   ├── p_img18.png
-│   │   │   ├── p_img19.png
-│   │   │   ├── p_img1.png
-│   │   │   ├── p_img20.png
-│   │   │   ├── p_img2_1.png
-│   │   │   ├── p_img21.png
-│   │   │   ├── p_img2_2.png
-│   │   │   ├── p_img22.png
-│   │   │   ├── p_img2_3.png
-│   │   │   ├── p_img23.png
-│   │   │   ├── p_img2_4.png
-│   │   │   ├── p_img24.png
-│   │   │   ├── p_img25.png
-│   │   │   ├── p_img26.png
-│   │   │   ├── p_img27.png
-│   │   │   ├── p_img28.png
-│   │   │   ├── p_img29.png
-│   │   │   ├── p_img2.png
-│   │   │   ├── p_img30.png
-│   │   │   ├── p_img31.png
-│   │   │   ├── p_img32.png
-│   │   │   ├── p_img33.png
-│   │   │   ├── p_img34.png
-│   │   │   ├── p_img35.png
-│   │   │   ├── p_img36.png
-│   │   │   ├── p_img37.png
-│   │   │   ├── p_img38.png
-│   │   │   ├── p_img39.png
-│   │   │   ├── p_img3.png
-│   │   │   ├── p_img40.png
-│   │   │   ├── p_img41.png
-│   │   │   ├── p_img42.png
-│   │   │   ├── p_img43.png
-│   │   │   ├── p_img44.png
-│   │   │   ├── p_img45.png
-│   │   │   ├── p_img46.png
-│   │   │   ├── p_img47.png
-│   │   │   ├── p_img48.png
-│   │   │   ├── p_img49.png
-│   │   │   ├── p_img4.png
-│   │   │   ├── p_img50.png
-│   │   │   ├── p_img51.png
-│   │   │   ├── p_img52.png
-│   │   │   ├── p_img5.png
-│   │   │   ├── p_img6.png
-│   │   │   ├── p_img7.png
-│   │   │   ├── p_img8.png
-│   │   │   ├── p_img9.png
-│   │   │   ├── profile_icon.png
-│   │   │   ├── quality_icon.png
-│   │   │   ├── razorpay_logo.png
-│   │   │   ├── search_icon.png
-│   │   │   ├── star_dull_icon.png
-│   │   │   ├── star_icon.png
-│   │   │   ├── stripe_logo.png
-│   │   │   └── support_img.png
-│   │   ├── icons
-│   │   │   └── detail.svg
-│   │   └── Stars of GreatStack.pdf
+│   │   └── logo.svg
 │   ├── components
-│   │   ├── auth
-│   │   ├── common
-│   │   │   ├── ErrorComponent.tsx
-│   │   │   └── LoadingSkeleton.tsx
-│   │   ├── layout
-│   │   │   ├── footer.tsx
-│   │   │   ├── header.tsx
-│   │   │   ├── HeroSecond.tsx
-│   │   │   ├── Hero.tsx
-│   │   │   ├── movingbar.tsx
-│   │   │   ├── navbar.tsx
-│   │   │   └── NewDrops.tsx
-│   │   ├── products
-│   │   │   ├── ProductDetail3.tsx
-│   │   │   ├── ProductDetail.tsx
-│   │   │   └── ProductItem.tsx
+│   │   ├── errors
+│   │   │   └── main.tsx
+│   │   ├── layouts
+│   │   │   ├── auth-layout.tsx
+│   │   │   ├── content-layout.tsx
+│   │   │   ├── dashboard-layout.tsx
+│   │   │   └── index.ts
+│   │   ├── seo
+│   │   │   ├── head.tsx
+│   │   │   ├── index.ts
+│   │   │   └── __tests__
+│   │   │       └── head.test.tsx
 │   │   └── ui
+│   │       ├── button
+│   │       │   ├── button.stories.tsx
+│   │       │   ├── button.tsx
+│   │       │   └── index.ts
+│   │       ├── dialog
+│   │       │   ├── confirmation-dialog
+│   │       │   ├── dialog.stories.tsx
+│   │       │   ├── dialog.tsx
+│   │       │   ├── index.ts
+│   │       │   └── __tests__
+│   │       ├── drawer
+│   │       │   ├── drawer.stories.tsx
+│   │       │   ├── drawer.tsx
+│   │       │   ├── index.ts
+│   │       │   └── __tests__
+│   │       ├── dropdown
+│   │       │   ├── dropdown.stories.tsx
+│   │       │   ├── dropdown.tsx
+│   │       │   └── index.ts
+│   │       ├── form
+│   │       │   ├── error.tsx
+│   │       │   ├── field-wrapper.tsx
+│   │       │   ├── form-drawer.tsx
+│   │       │   ├── form.stories.tsx
+│   │       │   ├── form.tsx
+│   │       │   ├── index.ts
+│   │       │   ├── input.tsx
+│   │       │   ├── label.tsx
+│   │       │   ├── select.tsx
+│   │       │   ├── switch.tsx
+│   │       │   ├── __tests__
+│   │       │   └── textarea.tsx
+│   │       ├── link
+│   │       │   ├── index.ts
+│   │       │   ├── link.stories.tsx
+│   │       │   └── link.tsx
+│   │       ├── md-preview
+│   │       │   ├── index.ts
+│   │       │   ├── md-preview.stories.tsx
+│   │       │   └── md-preview.tsx
+│   │       ├── notifications
+│   │       │   ├── index.ts
+│   │       │   ├── notifications-store.ts
+│   │       │   ├── notification.stories.tsx
+│   │       │   ├── notifications.tsx
+│   │       │   ├── notification.tsx
+│   │       │   └── __tests__
+│   │       ├── spinner
+│   │       │   ├── index.ts
+│   │       │   ├── spinner.stories.tsx
+│   │       │   └── spinner.tsx
+│   │       └── table
+│   │           ├── index.ts
+│   │           ├── pagination.tsx
+│   │           ├── table.stories.tsx
+│   │           └── table.tsx
 │   ├── config
-│   ├── context
+│   │   ├── env.ts
+│   │   └── paths.ts
 │   ├── features
 │   │   ├── auth
+│   │   │   └── components
+│   │   │       ├── login-form.tsx
+│   │   │       ├── register-form.tsx
+│   │   │       └── __tests__
+│   │   ├── comments
 │   │   │   ├── api
-│   │   │   │   ├── authApi.ts
-│   │   │   │   ├── login.ts
-│   │   │   │   ├── register.ts
-│   │   │   │   └── useAuthUser.ts
-│   │   │   ├── components
-│   │   │   │   ├── LoginForm.tsx
-│   │   │   │   ├── RegisterForm.tsx
-│   │   │   │   ├── RequestPasswordResetForm.tsx
-│   │   │   │   └── RequestPasswordReset.tsx
-│   │   │   ├── hooks
-│   │   │   │   └── useAuth.ts
-│   │   │   ├── index.ts
-│   │   │   ├── providers
-│   │   │   │   └── AuthProvider.tsx
-│   │   │   ├── routes
-│   │   │   │   ├── LoginPage.tsx
-│   │   │   │   └── RegisterPage.tsx
-│   │   │   ├── store
-│   │   │   │   └── authStore.ts
-│   │   │   ├── types
-│   │   │   │   └── index.ts
-│   │   │   ├── utils
-│   │   │   └── validation
-│   │   │       └── authSchemas.ts
-│   │   ├── cart
+│   │   │   │   ├── create-comment.ts
+│   │   │   │   ├── delete-comment.ts
+│   │   │   │   └── get-comments.ts
+│   │   │   └── components
+│   │   │       ├── comments-list.tsx
+│   │   │       ├── comments.tsx
+│   │   │       ├── create-comment.tsx
+│   │   │       └── delete-comment.tsx
+│   │   ├── discussions
 │   │   │   ├── api
-│   │   │   ├── components
-│   │   │   │   ├── CartSidebar.tsx
-│   │   │   │   ├── DesktopCategoryMenu.tsx
-│   │   │   │   └── MobileMenu.tsx
-│   │   │   ├── hooks
-│   │   │   ├── pages
-│   │   │   └── providers
-│   │   │       └── CartProvider.tsx
-│   │   ├── home
-│   │   │   ├── api
-│   │   │   ├── hooks
-│   │   │   └── pages
-│   │   ├── orders
-│   │   │   ├── api
-│   │   │   ├── hooks
-│   │   │   └── pages
-│   │   └── products
+│   │   │   │   ├── create-discussion.ts
+│   │   │   │   ├── delete-discussion.ts
+│   │   │   │   ├── get-discussions.ts
+│   │   │   │   ├── get-discussion.ts
+│   │   │   │   └── update-discussion.ts
+│   │   │   └── components
+│   │   │       ├── create-discussion.tsx
+│   │   │       ├── delete-discussion.tsx
+│   │   │       ├── discussions-list.tsx
+│   │   │       ├── discussion-view.tsx
+│   │   │       └── update-discussion.tsx
+│   │   ├── teams
+│   │   │   └── api
+│   │   │       └── get-teams.ts
+│   │   └── users
 │   │       ├── api
-│   │       │   ├── useProducts.ts
-│   │       │   └── useProduct.ts
-│   │       ├── components
-│   │       │   ├── CartItem.ts
-│   │       │   └── CartSummary.ts
-│   │       ├── hooks
-│   │       │   └── useCart.ts
-│   │       ├── pages
-│   │       ├── routes
-│   │       │   └── CartPage.ts
-│   │       ├── store
-│   │       │   └── cartStore.ts
-│   │       └── types
-│   │           └── index.ts
+│   │       │   ├── delete-user.ts
+│   │       │   ├── get-users.ts
+│   │       │   └── update-profile.ts
+│   │       └── components
+│   │           ├── delete-user.tsx
+│   │           ├── update-profile.tsx
+│   │           └── users-list.tsx
 │   ├── hooks
-│   │   ├── useAuth.ts
-│   │   ├── useCarousel.tsx
-│   │   ├── useFetchProducts.tsx
-│   │   ├── useFetchProduct.tsx
-│   │   ├── useImageSize.tsx
-│   │   ├── useLogin.tsx
-│   │   ├── useLogout.tsx
-│   │   └── useRegister.tsx
+│   │   ├── __tests__
+│   │   │   └── use-disclosure.test.ts
+│   │   └── use-disclosure.ts
 │   ├── index.css
 │   ├── lib
-│   │   ├── api.ts
-│   │   ├── auth.ts
-│   │   ├── axios.ts
-│   │   └── utils.ts
+│   │   ├── api-client.ts
+│   │   ├── authorization.tsx
+│   │   ├── auth.tsx
+│   │   ├── react-query.ts
+│   │   └── __tests__
+│   │       └── authorization.test.tsx
 │   ├── main.tsx
-│   ├── pages
-│   │   ├── About.tsx
-│   │   ├── Cart.tsx
-│   │   ├── Collection.tsx
-│   │   ├── Home.tsx
-│   │   ├── LoginPage.tsx
-│   │   ├── Orders.tsx
-│   │   ├── PlaceOrder.tsx
-│   │   ├── Product.tsx
-│   │   ├── RegisterPage.tsx
-│   │   └── Sale.tsx
-│   ├── providers
-│   │   └── GlobalProvider.tsx
-│   ├── routes
-│   │   ├── auth
-│   │   │   ├── auth.route.ts
-│   │   │   ├── dashboard.route.ts
-│   │   │   ├── login.route.ts
-│   │   │   ├── register.route.ts
-│   │   │   └── requestPasswordReset.route.ts
-│   │   ├── index.tsx
-│   │   ├── products
-│   │   │   └── [id].tsx
-│   │   ├── __root.tsx
-│   │   └── router.ts
-│   ├── routeTree.gen.ts
-│   ├── styles
-│   │   └── MovingBar.css
+│   ├── testing
+│   │   ├── data-generators.ts
+│   │   ├── mocks
+│   │   │   ├── browser.ts
+│   │   │   ├── db.ts
+│   │   │   ├── handlers
+│   │   │   │   ├── auth.ts
+│   │   │   │   ├── comments.ts
+│   │   │   │   ├── discussions.ts
+│   │   │   │   ├── index.ts
+│   │   │   │   ├── teams.ts
+│   │   │   │   └── users.ts
+│   │   │   ├── index.ts
+│   │   │   ├── server.ts
+│   │   │   └── utils.ts
+│   │   ├── setup-tests.ts
+│   │   └── test-utils.tsx
 │   ├── types
-│   │   ├── tanstack-router.d.ts
-│   │   └── types.tsx
+│   │   └── api.ts
 │   ├── utils
-│   │   ├── config.ts
-│   │   └── slugify.ts
+│   │   ├── cn.ts
+│   │   └── format.ts
 │   └── vite-env.d.ts
-├── tailwind.config.js
-├── tests
-├── tsconfig.app.json
+├── tailwind.config.cjs
 ├── tsconfig.json
-├── tsconfig.node.json
-└── vite.config.ts
+├── vite.config.ts
+├── vite-env.d.ts
+└── yarn.lock
 
-60 directories, 187 files
+59 directories, 145 files

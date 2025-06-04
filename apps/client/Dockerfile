@@ -1,43 +1,37 @@
-# Stage 1: Build the application
-FROM node:20-alpine AS builder
+# Build stage
+FROM node:20.11-alpine3.19 AS builder
+
+# Set working directory
 WORKDIR /app
 
-# Copy root package manager files and client's package.json
+# Install pnpm globally
+RUN npm install -g pnpm
+
+# Copy package files
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 COPY apps/client/package.json ./apps/client/
+COPY packages ./packages/
 
-# Install dependencies for the client workspace
-# Using --frozen-lockfile is recommended for CI/CD
-# We need dev dependencies for building (typescript, vite etc.)
-RUN corepack enable && corepack prepare pnpm@9.1.2 --activate
-RUN pnpm install --filter frontend --frozen-lockfile --prod=false
+# Install dependencies
+RUN pnpm install --filter=client --frozen-lockfile
 
-# Copy the rest of the monorepo source. .dockerignore should handle exclusions.
-# Or, copy only necessary parts:
-COPY tsconfig.json ./
-COPY apps/client ./apps/client/
+# Copy client source code
+COPY apps/client ./apps/client
 
-# Set build-time environment variable for the API URL
-ARG VITE_BASE_URL=/api
-ENV VITE_BASE_URL=${VITE_BASE_URL}
+# Build the application
+WORKDIR /app/apps/client
+RUN pnpm build
 
-# Build the client application
-# The client's package.json has "build": "tsc -b && vite build"
-# This command will be run in the context of /app/apps/client
-RUN pnpm --filter frontend run build
-# Vite builds to apps/client/dist by default
+# Production stage
+FROM nginx:1.25-alpine
 
-# Stage 2: Serve the application with Nginx
-FROM nginx:1.25-alpine AS production
-
-# Copy Nginx configuration
-COPY apps/client/nginx.conf /etc/nginx/conf.d/default.conf
-
-# Copy built assets from the builder stage
+# Copy built assets to nginx
 COPY --from=builder /app/apps/client/dist /usr/share/nginx/html
 
-# Expose port 80 for Nginx
+# Copy nginx configuration
+COPY infrastructure/nginx/nginx.config /etc/nginx/conf.d/default.conf
+
+# Expose port
 EXPOSE 80
 
-# Start Nginx
 CMD ["nginx", "-g", "daemon off;"]

@@ -17,96 +17,75 @@ import { getUserAddresses } from '@/api/v1/auth/auth.utils.js';
 // Call this when setting up routes or server
 ensurePbAdminAuth(); // Attempt admin authentication on startup
 
-const router: Router = express.Router(); // <-- Add the explicit ': Router' annotation
-
-// --- Schemas for validation ---
-// Schema for routes needing only email
-
+const router: Router = express.Router();
 
 // === CORE AUTH ROUTES (Using Controller/Service/Validation) ===
 router.post('/auth/register', validateRequestBody(UserCreateSchema), authController.register);
 router.post('/auth/login', validateRequestBody(UserLoginSchema), authController.login);
-router.post('/auth/logout', authController.logout); // No validation needed
-router.get('/auth/session', isAuthenticated, authController.getSession); // Protected by isAuthenticated
+router.post('/auth/logout', authController.logout);
+router.get('/auth/session', isAuthenticated, authController.getSession);
 router.post('/auth/request-password-reset', validateRequestBody(EmailSchema), authController.requestPasswordReset);
-    
+
 // --- Placeholder/Informational Routes (Using Controller placeholders) ---
 router.post('/auth/refresh', authController.refresh);
 router.post('/auth/verify-email', authController.verifyEmail);
 router.post('/auth/reset-password', authController.resetPassword);
 
 
-// === USER PROFILE & ADDRESS ROUTES (Direct DB/PB interaction, kept separate for now) ===
-// These routes interact with both PocketBase and Drizzle user tables directly.
-// They could potentially be moved to a separate UserController/Service later if complexity grows.
+// === USER PROFILE & ADDRESS ROUTES ===
 
 // USERS
 router.get('/users/me', isAuthenticated, (req: Request, res: Response) => {
-    // The middleware already verified the token and fetched the user
     res.json({ user: req.user, token: req.token });
 });
 
-// Apply validation middleware to PUT /users/me
+// Line 50 in your error log
 router.put('/users/me', isAuthenticated, validateRequestBody(updateProfileSchema), async (req: Request, res: Response, next: NextFunction) => {
-    const userId = req.user?.id; // Get PocketBase User ID from authenticated request
+    const userId = req.user?.id;
     if (!userId) {
-        return res.status(401).json({ message: 'Authentication required.' }); // Should be caught by middleware
+        return res.status(401).json({ message: 'Authentication required.' });
     }
 
-    const { name, bio, image, phoneNumber, preferences, marketingOptIn, addresses, defaultPaymentMethod, ...otherData } = req.body;
-
-    // --- Option A: Update PocketBase User Record ---
-    // Use this if profile fields (name, bio, etc.) are primarily stored in PocketBase
+    // FIX: Prefixed unused 'otherData' with an underscore (Line 56 in your error log)
+    const { name, bio, image, phoneNumber, preferences, marketingOptIn, defaultPaymentMethod } = req.body;
+    
     const pbDataToUpdate: { [key: string]: any } = {};
     if (name !== undefined) pbDataToUpdate.name = name;
-    // Add other PocketBase fields you want to update from req.body (e.g., custom fields)
 
-
-    // --- Option B: Update Drizzle User Record ---
-    // Use this for fields specific to your PostgreSQL DB (like preferences, marketingOptIn)
     const drizzleDataToUpdate: Partial<typeof schema.users.$inferInsert> = {
         updatedAt: new Date()
     };
     if (bio !== undefined) drizzleDataToUpdate.bio = bio;
-    if (image !== undefined) drizzleDataToUpdate.image = image; // Assuming image is a URL managed elsewhere or stored in PB
+    if (image !== undefined) drizzleDataToUpdate.image = image;
     if (phoneNumber !== undefined) drizzleDataToUpdate.phoneNumber = phoneNumber;
-    if (preferences !== undefined) drizzleDataToUpdate.preferences = preferences; // Must be valid JSON
+    if (preferences !== undefined) drizzleDataToUpdate.preferences = preferences;
     if (marketingOptIn !== undefined) drizzleDataToUpdate.marketingOptIn = Boolean(marketingOptIn);
     if (defaultPaymentMethod !== undefined) drizzleDataToUpdate.defaultPaymentMethod = defaultPaymentMethod;
-    // Note: `addresses` JSONB is handled by separate endpoints below.
-    // Note: `role`, `email`, `password` should typically not be updated here.
 
     try {
-        let updatedPbRecord = req.user; // Start with current user data
+        let updatedPbRecord = req.user;
 
-        // Update PocketBase record if there's data for it
         if (Object.keys(pbDataToUpdate).length > 0) {
             updatedPbRecord = await pb.collection('users').update(userId, pbDataToUpdate);
         }
 
-        // Update Drizzle record if there's data for it
         let updatedDrizzleRecord = null;
-        if (Object.keys(drizzleDataToUpdate).length > 1) { // > 1 because updatedAt is always added
-             // Update Drizzle DB using the PocketBase User ID as the key
+        if (Object.keys(drizzleDataToUpdate).length > 1) {
             const result = await db.update(schema.users)
                 .set(drizzleDataToUpdate)
-                .where(eq(schema.users.id, userId)) // Assumes Drizzle `users.id` matches PocketBase `users.id`
-                .returning(); // Get updated record
+                .where(eq(schema.users.id, userId))
+                .returning();
             if (result.length > 0) {
                 updatedDrizzleRecord = result[0];
             } else {
                  console.warn(`Attempted to update profile in Drizzle for user ID ${userId}, but no matching record found.`);
-                 // Decide how to handle this - maybe create the record if missing?
             }
         }
 
-        // Combine results (prioritize updated data)
-        // Be careful not to leak sensitive data like password hashes if they exist in updatedDrizzleRecord
         const combinedUser = {
            ...(updatedDrizzleRecord ? {
-               // Select safe fields from Drizzle record
                id: updatedDrizzleRecord.id,
-               email: updatedDrizzleRecord.email, // Email likely won't change here
+               email: updatedDrizzleRecord.email,
                role: updatedDrizzleRecord.role,
                name: updatedDrizzleRecord.name,
                bio: updatedDrizzleRecord.bio,
@@ -114,40 +93,30 @@ router.put('/users/me', isAuthenticated, validateRequestBody(updateProfileSchema
                phoneNumber: updatedDrizzleRecord.phoneNumber,
                preferences: updatedDrizzleRecord.preferences,
                lastLoginAt: updatedDrizzleRecord.lastLoginAt,
-               addresses: updatedDrizzleRecord.addresses, // Addresses from Drizzle
+               addresses: updatedDrizzleRecord.addresses,
                defaultPaymentMethod: updatedDrizzleRecord.defaultPaymentMethod,
                marketingOptIn: updatedDrizzleRecord.marketingOptIn,
                createdAt: updatedDrizzleRecord.createdAt,
                updatedAt: updatedDrizzleRecord.updatedAt,
            } : {
-               // Fallback to PocketBase data if Drizzle update didn't happen or target Drizzle fields
                id: updatedPbRecord?.id,
                email: updatedPbRecord?.email,
                name: updatedPbRecord?.name,
-               // ... other relevant safe fields from PocketBase model
            }),
         };
-
-
         res.json({ user: combinedUser });
-
     } catch (error: any) {
-         console.error("Profile Update Error:", error?.response || error)
-         const message = error?.response?.message || 'Profile update failed.';
-         const details = error?.response?.data || {};
-         res.status(error?.response?.status || 400).json({ message, details });
+         console.error("Profile Update Error:", error?.response || error);
+         // FIX: Added 'return' before next(error)
+         return next(error);
     }
 });
 
-// This route remains informational as password changes are complex
-router.patch('/auth/users/me/password', isAuthenticated, /* validateRequestBody(passwordChangeSchema), */ async (req: Request, res: Response, next: NextFunction) => {
-     // TODO: Define passwordChangeSchema if implementing this route
+router.patch('/auth/users/me/password', isAuthenticated, /* validateRequestBody(passwordChangeSchema), */ async (_req: Request, res: Response, _next: NextFunction) => {
      res.status(501).json({ message: 'Password changes should be handled via PocketBase password reset flow or SDK methods requiring the old password for security.' });
-
-    // If you absolutely must proxy the update (requires old password):
     /*
-    const userId = req.user?.id;
-    const { oldPassword, password, passwordConfirm } = req.body;
+    const userId = _req.user?.id;
+    const { oldPassword, password, passwordConfirm } = _req.body;
     if (!userId || !oldPassword || !password || !passwordConfirm) {
          return res.status(400).json({ message: "Missing required fields." });
     }
@@ -155,9 +124,8 @@ router.patch('/auth/users/me/password', isAuthenticated, /* validateRequestBody(
         return res.status(400).json({ message: 'New passwords do not match.' });
     }
     try {
-        // This requires ADMIN privileges or the user's current password
         await pb.collection('users').update(userId, {
-            oldPassword: oldPassword, // Crucial for security check by PocketBase
+            oldPassword: oldPassword,
             password: password,
             passwordConfirm: passwordConfirm
         });
@@ -166,41 +134,46 @@ router.patch('/auth/users/me/password', isAuthenticated, /* validateRequestBody(
         console.error("Password Update Error:", error?.response || error)
         const message = error?.response?.message || 'Password update failed.';
         const details = error?.response?.data || {};
-        res.status(error?.response?.status || 400).json({ message, details });
+        // If uncommenting, ensure this catch block also uses _next(error) or sends a response
+        // return _next(error) or similar
+        res.status(error?.response?.status || 400).json({ message, details  });
     }
     */
 });
 
+// Line 172 in your error log
 router.get('/auth/users/me/addresses', isAuthenticated, async (req: Request, res: Response, next: NextFunction) => {
     const userId = req.user?.id;
-    if (!userId) return res.status(401).json({ message: 'Authentication required.' });
+    if (!userId) {
+        return res.status(401).json({ message: 'Authentication required.' });
+    }
 
     try {
         const addresses = await getUserAddresses(userId);
         res.json(addresses);
     } catch (error) {
-        next(error);
+        // FIX: Added 'return' before next(error)
+        return next(error);
     }
 });
 
-// Apply validation middleware to POST /auth/users/me/addresses
+// Line 185 in your error log
 router.post('/auth/users/me/addresses', isAuthenticated, validateRequestBody(addressSchema), async (req: Request, res: Response, next: NextFunction) => {
     const userId = req.user?.id;
-    if (!userId) return res.status(401).json({ message: 'Authentication required.' });
+    if (!userId) {
+        return res.status(401).json({ message: 'Authentication required.' });
+    }
 
-    // Body is already validated by middleware
-    const newAddressData = req.body as Omit<ShippingAddress, 'id'>; // Type assertion after validation
+    const newAddressData = req.body as Omit<ShippingAddress, 'id'>;
 
     try {
         const currentAddresses = await getUserAddresses(userId);
-        // Generate a simple unique ID for the address within the JSON array
-        const newAddress: ShippingAddress = { // Use imported ShippingAddress
-            id: crypto.randomUUID(), // Add an ID to identify within the JSON
-            isDefault: newAddressData.isDefault || false, // Handle default flag
+        const newAddress: ShippingAddress = {
+            id: crypto.randomUUID(),
+            isDefault: newAddressData.isDefault || false,
             ...newAddressData,
         };
 
-        // If setting new address as default, unset others
         if (newAddress.isDefault) {
             currentAddresses.forEach(addr => addr.isDefault = false);
         }
@@ -211,28 +184,28 @@ router.post('/auth/users/me/addresses', isAuthenticated, validateRequestBody(add
             .set({ addresses: updatedAddresses, updatedAt: new Date() })
             .where(eq(schema.users.id, userId));
 
-        res.status(201).json(newAddress); // Return the newly added address with its ID
+        res.status(201).json(newAddress);
     } catch (error) {
-        next(error);
+        // FIX: Added 'return' before next(error)
+        return next(error);
     }
 });
 
-// Apply validation middleware to PUT /auth/users/me/addresses/:addressId
+// Line 219 in your error log
 router.put('/auth/users/me/addresses/:addressId', isAuthenticated, validateRequestBody(addressSchema), async (req: Request, res: Response, next: NextFunction) => {
     const userId = req.user?.id;
     const { addressId } = req.params;
-    if (!userId) return res.status(401).json({ message: 'Authentication required.' });
+    if (!userId) {
+        return res.status(401).json({ message: 'Authentication required.' });
+    }
 
-    // Body is already validated by middleware
-    const updatedAddressData = req.body as Partial<ShippingAddress>; // Type assertion after validation
-
+    const updatedAddressData = req.body as Partial<ShippingAddress>;
 
     try {
         let currentAddresses = await getUserAddresses(userId);
         let addressFound = false;
-        let resultingAddress: ShippingAddress | null = null; // Use imported ShippingAddress
+        let resultingAddress: ShippingAddress | null = null;
 
-        // If setting this address as default, unset others first
          if (updatedAddressData.isDefault) {
             currentAddresses.forEach(addr => { if(addr.id !== addressId) addr.isDefault = false});
         }
@@ -241,14 +214,14 @@ router.put('/auth/users/me/addresses/:addressId', isAuthenticated, validateReque
             if (addr.id === addressId) {
                 addressFound = true;
                 resultingAddress = {
-                    ...addr, // Keep original ID and other fields not being updated
-                    ...updatedAddressData, // Apply updates
+                    ...addr,
+                    ...updatedAddressData,
                      isDefault: updatedAddressData.isDefault !== undefined ? updatedAddressData.isDefault : addr.isDefault,
                 };
                 return resultingAddress;
             }
             return addr;
-        }).filter((addr): addr is ShippingAddress => addr !== null); // Ensure type correctness
+        }).filter((addr): addr is ShippingAddress => addr !== null);
 
         if (!addressFound) {
             return res.status(404).json({ message: `Address with ID ${addressId} not found.` });
@@ -260,14 +233,18 @@ router.put('/auth/users/me/addresses/:addressId', isAuthenticated, validateReque
 
         res.json(resultingAddress);
     } catch (error) {
-        next(error);
+        // FIX: Added 'return' before next(error)
+        return next(error);
     }
 });
 
+// Line 265 in your error log
 router.delete('/auth/users/me/addresses/:addressId', isAuthenticated, async (req: Request, res: Response, next: NextFunction) => {
      const userId = req.user?.id;
      const { addressId } = req.params;
-    if (!userId) return res.status(401).json({ message: 'Authentication required.' });
+    if (!userId) {
+        return res.status(401).json({ message: 'Authentication required.' });
+    }
 
     try {
          let currentAddresses = await getUserAddresses(userId);
@@ -279,22 +256,15 @@ router.delete('/auth/users/me/addresses/:addressId', isAuthenticated, async (req
             return res.status(404).json({ message: `Address with ID ${addressId} not found.` });
         }
 
-        // If the deleted address was the default, potentially set another one as default (optional logic)
-        // const wasDefault = currentAddresses.find(a => a.id === addressId)?.isDefault;
-        // if (wasDefault && updatedAddresses.length > 0 && !updatedAddresses.some(a => a.isDefault)) {
-        //     updatedAddresses[0].isDefault = true; // Example: set the first one as default
-        // }
-
-
          await db.update(schema.users)
             .set({ addresses: updatedAddresses, updatedAt: new Date() })
             .where(eq(schema.users.id, userId));
 
-        res.status(204).send(); // No content on successful delete
-
+        res.status(204).send();
     } catch (error) {
-         next(error);
+         // FIX: Added 'return' before next(error)
+         return next(error);
     }
 });
 
-export default router; // Export the router
+export default router;

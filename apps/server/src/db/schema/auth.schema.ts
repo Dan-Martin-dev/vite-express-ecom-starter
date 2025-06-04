@@ -20,8 +20,6 @@ import { AdapterAccountType, ShippingAddress, userRoleEnum } from '@/types/index
 import { orders } from '@/db/schema/orders.schema.js';
 import { reviews } from '@/db/schema//reviews.schema.js';
 import { wishlists } from '@/db/schema//wishlists.schema.js';
-import { carts } from '@/db/schema//carts.schema.js';
-
 
 // USERS & AUTH
 export const users = pgTable(

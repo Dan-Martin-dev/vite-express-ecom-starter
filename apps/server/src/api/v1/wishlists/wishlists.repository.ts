@@ -1,12 +1,12 @@
 // apps/server/src/api/v1/wishlists/wishlists.repository.ts
 
 import { db, schema } from "@/db/index.js"; // Import db instance and schema
-import { eq, and, isNull, or } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import {
-  NewWishlist,
-  NewWishlistItem,
-  WishlistWithItems,
+/*   WishlistWithItems,
   WishlistItemWithDetails,
+  NewWishlist, */
+  NewWishlistItem,
   WishlistWithItemsQueryResult,
   DBWishlist,
   DBWishlistItem,
@@ -20,19 +20,18 @@ import {
   or as drizzleOr,
 } from "drizzle-orm";
 
-// Select all fields from wishlist and join items with product and variant details
-const wishlistWithItemsQuery = db.query.wishlists.findFirst({
-  where: (wishlists, { eq }) => eq(wishlists.userId, "__USER_ID__"), // Placeholder
+/* const wishlistWithItemsQuery = db.query.wishlists.findFirst({
+  where: (wishlists, { eq }) => eq(wishlists.userId, "__USER_ID__"), 
   with: {
     items: {
       with: {
-        product: true, // Assuming relation is defined in product schema
-        variant: true, // Assuming relation is defined in product schema
+        product: true, 
+        variant: true,
       },
     },
   },
 });
-
+ */
 // Infer the return type of the query
 
 export class WishlistRepository {
@@ -234,7 +233,7 @@ export class WishlistRepository {
 
     // Find the item first using the user's wishlist ID implicitly via join
     const itemToRemove = await client.query.wishlistItems.findFirst({
-      where: (wishlistItems, { eq, and, or, isNull }) =>
+      where: (wishlistItems, { eq, and, isNull }) =>
         and(
           eq(wishlistItems.productId, productId),
           variantId === null

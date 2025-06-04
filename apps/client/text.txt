@@ -1,0 +1,344 @@
+.
+├── dist-tsc
+│   ├── e2e
+│   │   └── tests
+│   │       ├── auth.setup.d.ts
+│   │       ├── auth.setup.d.ts.map
+│   │       ├── profile.spec.d.ts
+│   │       ├── profile.spec.d.ts.map
+│   │       ├── smoke.spec.d.ts
+│   │       └── smoke.spec.d.ts.map
+│   ├── __mocks__
+│   │   ├── zustand.d.ts
+│   │   └── zustand.d.ts.map
+│   ├── mock-server.d.ts
+│   ├── mock-server.d.ts.map
+│   ├── playwright.config.d.ts
+│   ├── playwright.config.d.ts.map
+│   ├── plopfile.d.cts
+│   ├── plopfile.d.cts.map
+│   ├── postcss.config.d.cts
+│   ├── postcss.config.d.cts.map
+│   ├── src
+│   │   ├── app
+│   │   │   ├── index.d.ts
+│   │   │   ├── index.d.ts.map
+│   │   │   ├── provider.d.ts
+│   │   │   ├── provider.d.ts.map
+│   │   │   ├── router.d.ts
+│   │   │   ├── router.d.ts.map
+│   │   │   └── routes
+│   │   │       ├── app
+│   │   │       ├── auth
+│   │   │       ├── landing.d.ts
+│   │   │       ├── landing.d.ts.map
+│   │   │       ├── not-found.d.ts
+│   │   │       └── not-found.d.ts.map
+│   │   ├── components
+│   │   │   ├── errors
+│   │   │   │   ├── main.d.ts
+│   │   │   │   └── main.d.ts.map
+│   │   │   ├── layouts
+│   │   │   │   ├── auth-layout.d.ts
+│   │   │   │   ├── auth-layout.d.ts.map
+│   │   │   │   ├── content-layout.d.ts
+│   │   │   │   ├── content-layout.d.ts.map
+│   │   │   │   ├── dashboard-layout.d.ts
+│   │   │   │   ├── dashboard-layout.d.ts.map
+│   │   │   │   ├── index.d.ts
+│   │   │   │   └── index.d.ts.map
+│   │   │   ├── seo
+│   │   │   │   ├── head.d.ts
+│   │   │   │   ├── head.d.ts.map
+│   │   │   │   ├── index.d.ts
+│   │   │   │   ├── index.d.ts.map
+│   │   │   │   └── __tests__
+│   │   │   └── ui
+│   │   │       ├── button
+│   │   │       ├── dialog
+│   │   │       ├── drawer
+│   │   │       ├── dropdown
+│   │   │       ├── form
+│   │   │       ├── link
+│   │   │       ├── md-preview
+│   │   │       ├── notifications
+│   │   │       ├── spinner
+│   │   │       └── table
+│   │   ├── config
+│   │   │   ├── env.d.ts
+│   │   │   ├── env.d.ts.map
+│   │   │   ├── paths.d.ts
+│   │   │   └── paths.d.ts.map
+│   │   ├── features
+│   │   │   ├── auth
+│   │   │   │   └── components
+│   │   │   ├── comments
+│   │   │   │   ├── api
+│   │   │   │   └── components
+│   │   │   ├── discussions
+│   │   │   │   ├── api
+│   │   │   │   └── components
+│   │   │   ├── teams
+│   │   │   │   └── api
+│   │   │   └── users
+│   │   │       ├── api
+│   │   │       └── components
+│   │   ├── hooks
+│   │   │   ├── __tests__
+│   │   │   │   ├── use-disclosure.test.d.ts
+│   │   │   │   └── use-disclosure.test.d.ts.map
+│   │   │   ├── use-disclosure.d.ts
+│   │   │   └── use-disclosure.d.ts.map
+│   │   ├── lib
+│   │   │   ├── api-client.d.ts
+│   │   │   ├── api-client.d.ts.map
+│   │   │   ├── auth.d.ts
+│   │   │   ├── auth.d.ts.map
+│   │   │   ├── authorization.d.ts
+│   │   │   ├── authorization.d.ts.map
+│   │   │   ├── react-query.d.ts
+│   │   │   ├── react-query.d.ts.map
+│   │   │   └── __tests__
+│   │   │       ├── authorization.test.d.ts
+│   │   │       └── authorization.test.d.ts.map
+│   │   ├── main.d.ts
+│   │   ├── main.d.ts.map
+│   │   ├── testing
+│   │   │   ├── data-generators.d.ts
+│   │   │   ├── data-generators.d.ts.map
+│   │   │   ├── mocks
+│   │   │   │   ├── browser.d.ts
+│   │   │   │   ├── browser.d.ts.map
+│   │   │   │   ├── db.d.ts
+│   │   │   │   ├── db.d.ts.map
+│   │   │   │   ├── handlers
+│   │   │   │   ├── index.d.ts
+│   │   │   │   ├── index.d.ts.map
+│   │   │   │   ├── server.d.ts
+│   │   │   │   ├── server.d.ts.map
+│   │   │   │   ├── utils.d.ts
+│   │   │   │   └── utils.d.ts.map
+│   │   │   ├── setup-tests.d.ts
+│   │   │   ├── setup-tests.d.ts.map
+│   │   │   ├── test-utils.d.ts
+│   │   │   └── test-utils.d.ts.map
+│   │   ├── types
+│   │   │   ├── api.d.ts
+│   │   │   └── api.d.ts.map
+│   │   └── utils
+│   │       ├── cn.d.ts
+│   │       ├── cn.d.ts.map
+│   │       ├── format.d.ts
+│   │       └── format.d.ts.map
+│   ├── tailwind.config.d.cts
+│   ├── tailwind.config.d.cts.map
+│   ├── tsconfig.tsbuildinfo
+│   ├── vite.config.d.ts
+│   └── vite.config.d.ts.map
+├── Dockerfile
+├── e2e
+│   └── tests
+│       ├── auth.setup.ts
+│       ├── profile.spec.ts
+│       └── smoke.spec.ts
+├── folder_structure.txt
+├── generators
+│   └── component
+│       ├── component.stories.tsx.hbs
+│       ├── component.tsx.hbs
+│       ├── index.cjs
+│       └── index.ts.hbs
+├── index.html
+├── __mocks__
+│   ├── vitest-env.d.ts
+│   └── zustand.ts
+├── mock-server.ts
+├── package.json
+├── playwright.config.ts
+├── plopfile.cjs
+├── postcss.config.cjs
+├── project_structure.txt
+├── public
+│   ├── favicon.ico
+│   ├── logo192.png
+│   ├── logo512.png
+│   ├── mockServiceWorker.js
+│   ├── _redirects
+│   └── robots.txt
+├── README.md
+├── src
+│   ├── app
+│   │   ├── index.tsx
+│   │   ├── provider.tsx
+│   │   ├── router.tsx
+│   │   └── routes
+│   │       ├── app
+│   │       │   ├── dashboard.tsx
+│   │       │   ├── discussions
+│   │       │   ├── profile.tsx
+│   │       │   ├── root.tsx
+│   │       │   └── users.tsx
+│   │       ├── auth
+│   │       │   ├── login.tsx
+│   │       │   └── register.tsx
+│   │       ├── landing.tsx
+│   │       └── not-found.tsx
+│   ├── assets
+│   │   └── logo.svg
+│   ├── components
+│   │   ├── errors
+│   │   │   └── main.tsx
+│   │   ├── layouts
+│   │   │   ├── auth-layout.tsx
+│   │   │   ├── content-layout.tsx
+│   │   │   ├── dashboard-layout.tsx
+│   │   │   └── index.ts
+│   │   ├── seo
+│   │   │   ├── head.tsx
+│   │   │   ├── index.ts
+│   │   │   └── __tests__
+│   │   │       └── head.test.tsx
+│   │   └── ui
+│   │       ├── button
+│   │       │   ├── button.stories.tsx
+│   │       │   ├── button.tsx
+│   │       │   └── index.ts
+│   │       ├── dialog
+│   │       │   ├── confirmation-dialog
+│   │       │   ├── dialog.stories.tsx
+│   │       │   ├── dialog.tsx
+│   │       │   ├── index.ts
+│   │       │   └── __tests__
+│   │       ├── drawer
+│   │       │   ├── drawer.stories.tsx
+│   │       │   ├── drawer.tsx
+│   │       │   ├── index.ts
+│   │       │   └── __tests__
+│   │       ├── dropdown
+│   │       │   ├── dropdown.stories.tsx
+│   │       │   ├── dropdown.tsx
+│   │       │   └── index.ts
+│   │       ├── form
+│   │       │   ├── error.tsx
+│   │       │   ├── field-wrapper.tsx
+│   │       │   ├── form-drawer.tsx
+│   │       │   ├── form.stories.tsx
+│   │       │   ├── form.tsx
+│   │       │   ├── index.ts
+│   │       │   ├── input.tsx
+│   │       │   ├── label.tsx
+│   │       │   ├── select.tsx
+│   │       │   ├── switch.tsx
+│   │       │   ├── __tests__
+│   │       │   └── textarea.tsx
+│   │       ├── link
+│   │       │   ├── index.ts
+│   │       │   ├── link.stories.tsx
+│   │       │   └── link.tsx
+│   │       ├── md-preview
+│   │       │   ├── index.ts
+│   │       │   ├── md-preview.stories.tsx
+│   │       │   └── md-preview.tsx
+│   │       ├── notifications
+│   │       │   ├── index.ts
+│   │       │   ├── notifications-store.ts
+│   │       │   ├── notification.stories.tsx
+│   │       │   ├── notifications.tsx
+│   │       │   ├── notification.tsx
+│   │       │   └── __tests__
+│   │       ├── spinner
+│   │       │   ├── index.ts
+│   │       │   ├── spinner.stories.tsx
+│   │       │   └── spinner.tsx
+│   │       └── table
+│   │           ├── index.ts
+│   │           ├── pagination.tsx
+│   │           ├── table.stories.tsx
+│   │           └── table.tsx
+│   ├── config
+│   │   ├── env.ts
+│   │   └── paths.ts
+│   ├── features
+│   │   ├── auth
+│   │   │   └── components
+│   │   │       ├── login-form.tsx
+│   │   │       ├── register-form.tsx
+│   │   │       └── __tests__
+│   │   ├── comments
+│   │   │   ├── api
+│   │   │   │   ├── create-comment.ts
+│   │   │   │   ├── delete-comment.ts
+│   │   │   │   └── get-comments.ts
+│   │   │   └── components
+│   │   │       ├── comments-list.tsx
+│   │   │       ├── comments.tsx
+│   │   │       ├── create-comment.tsx
+│   │   │       └── delete-comment.tsx
+│   │   ├── discussions
+│   │   │   ├── api
+│   │   │   │   ├── create-discussion.ts
+│   │   │   │   ├── delete-discussion.ts
+│   │   │   │   ├── get-discussions.ts
+│   │   │   │   ├── get-discussion.ts
+│   │   │   │   └── update-discussion.ts
+│   │   │   └── components
+│   │   │       ├── create-discussion.tsx
+│   │   │       ├── delete-discussion.tsx
+│   │   │       ├── discussions-list.tsx
+│   │   │       ├── discussion-view.tsx
+│   │   │       └── update-discussion.tsx
+│   │   ├── teams
+│   │   │   └── api
+│   │   │       └── get-teams.ts
+│   │   └── users
+│   │       ├── api
+│   │       │   ├── delete-user.ts
+│   │       │   ├── get-users.ts
+│   │       │   └── update-profile.ts
+│   │       └── components
+│   │           ├── delete-user.tsx
+│   │           ├── update-profile.tsx
+│   │           └── users-list.tsx
+│   ├── hooks
+│   │   ├── __tests__
+│   │   │   └── use-disclosure.test.ts
+│   │   └── use-disclosure.ts
+│   ├── index.css
+│   ├── lib
+│   │   ├── api-client.ts
+│   │   ├── authorization.tsx
+│   │   ├── auth.tsx
+│   │   ├── react-query.ts
+│   │   └── __tests__
+│   │       └── authorization.test.tsx
+│   ├── main.tsx
+│   ├── testing
+│   │   ├── data-generators.ts
+│   │   ├── mocks
+│   │   │   ├── browser.ts
+│   │   │   ├── db.ts
+│   │   │   ├── handlers
+│   │   │   │   ├── auth.ts
+│   │   │   │   ├── comments.ts
+│   │   │   │   ├── discussions.ts
+│   │   │   │   ├── index.ts
+│   │   │   │   ├── teams.ts
+│   │   │   │   └── users.ts
+│   │   │   ├── index.ts
+│   │   │   ├── server.ts
+│   │   │   └── utils.ts
+│   │   ├── setup-tests.ts
+│   │   └── test-utils.tsx
+│   ├── types
+│   │   └── api.ts
+│   ├── utils
+│   │   ├── cn.ts
+│   │   └── format.ts
+│   └── vite-env.d.ts
+├── tailwind.config.cjs
+├── text.txt
+├── tsconfig.json
+├── vite.config.ts
+└── vite-env.d.ts
+
+108 directories, 233 files

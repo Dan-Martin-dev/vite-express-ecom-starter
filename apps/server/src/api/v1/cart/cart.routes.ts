@@ -2,7 +2,7 @@
 import { Router } from 'express';
 import { cartController } from './cart.controller.js';
 import { validateRequestBody } from '@/middleware/validation.middleware.js'; // Assuming your validation middleware
-import { isAuthenticated } from '@/middleware/auth.middleware.js'; // Assuming your auth middleware
+/* import { isAuthenticated } from '@/middleware/auth.middleware.js';  */
 import { requireSessionId } from '@/middleware/session.middleware.js'; // <-- You'll need to create this middleware
 import express from 'express';
 

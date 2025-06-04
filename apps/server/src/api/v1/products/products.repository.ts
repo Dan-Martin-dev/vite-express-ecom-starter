@@ -1,13 +1,13 @@
 // apps/server/src/api/v1/products/products.repository.ts
 import {
-  InferSelectModel,
+/*   between,
+  InferSelectModel, */
   eq,
   sql,
   asc,
   desc,
   ilike,
   and,
-  between,
   inArray,
 } from "drizzle-orm"; // Add inArray
 import { PostgresJsDatabase } from "drizzle-orm/postgres-js"; // Adjust DB client type if needed
@@ -19,7 +19,7 @@ import {
   attributeValues as attributeValuesSchema, // Needed to process variant attributes
 } from "@/db/schema/products.schema.js";
 import { db, schema } from "@/db/index.js"; // Assuming your Drizzle client and schema are exported from here
-import { AppError } from "@/lib/errors/AppError.js"; // Assuming you have an index exporting these
+/* import { AppError } from "@/lib/errors/AppError.js";  */
 import { NotFoundError } from "@/lib/errors/NotFoundError.js"; // Assuming you have an index exporting these
 // Import types from this module
 import {
@@ -28,8 +28,8 @@ import {
   ProductWithDetails, // Use the type intended for API output
   GetProductsInput, // Use the input type for filtering/pagination
   ProductVariantWithDetails, // Use the type for detailed variants
-  DBAttribute, // Imported from schema, but useful for types
-  DBAttributeValue, // Imported from schema, but useful for types
+/*   DBAttribute, 
+  DBAttributeValue, */
   ProductDimensions, // <--- Add this import
 } from "./products.types.js";
 // Infer the schema type for the database client
@@ -95,7 +95,7 @@ export class ProductRepository {
     return variants.map((variant) => {
       const processedAttributes: Record<string, string> = {}; // { attributeName: valueLabel }
       if (variant.attributes) {
-        for (const [attributeId, valueId] of Object.entries(
+        for (const [_attributeId, valueId] of Object.entries(
           variant.attributes
         )) {
           const detail = attributeDetailsMap.get(valueId);

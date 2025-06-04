@@ -109,21 +109,21 @@ export function updateCartItemQuantity(currentItems: CartItem[], productId: stri
  * the necessary product/variant data and coupon data available.
  *
  * @param cart The cart object.
- * @param productsData Map of productId to Product data (including basePrice, salePrice).
- * @param variantsData Map of variantId to ProductVariant data (including price, salePrice).
+ * @param _productsData Map of productId to Product data (including basePrice, salePrice).  <-- FIX: Prefixed with _
+ * @param _variantsData Map of variantId to ProductVariant data (including price, salePrice). <-- FIX: Prefixed with _
  * @param coupon The applied Coupon object (optional).
  * @returns Calculated CartTotals.
  */
 export function calculateCartTotals(
     cart: Cart,
-    productsData: Map<string, ProductForCartCalculation>,
-    variantsData: Map<string, ProductVariantForCartCalculation>,
-    coupon?: CouponForCartCalculation // You'll need to fetch this based on cart.couponCode
+    _productsData: Map<string, ProductForCartCalculation>, // FIX: Prefixed with _
+    _variantsData: Map<string, ProductVariantForCartCalculation>, // FIX: Prefixed with _
+    coupon?: CouponForCartCalculation
 ): CartTotals {
     let itemsPrice = 0;
     let discountAmount = 0;
-    let shippingPrice = parseFloat(cart.shippingPrice || '0'); // Use current shipping price from cart
-    let taxPrice = parseFloat(cart.taxPrice || '0'); // Use current tax price from cart
+    let shippingPrice = parseFloat(cart.shippingPrice || '0');
+    let taxPrice = parseFloat(cart.taxPrice || '0');
 
     if (!Array.isArray(cart.items)) {
         return {
@@ -137,7 +137,7 @@ export function calculateCartTotals(
 
     // 1. Calculate itemsPrice based on current product/variant prices (snapshot or live)
     // It's best practice to use snapshot prices stored in CartItem, but if not,
-    // you'd look up prices from productsData/variantsData here.
+    // you'd look up prices from _productsData/_variantsData here.
     // Assuming CartItem price/salePrice is the snapshot price:
     itemsPrice = cart.items.reduce((sum, item) => {
         const itemPrice = item.salePrice !== null && item.salePrice !== undefined
@@ -148,8 +148,6 @@ export function calculateCartTotals(
 
     // 2. Apply Coupon Discount
     if (coupon && coupon.isActive && (!coupon.startDate || new Date(coupon.startDate) <= new Date()) && (!coupon.endDate || new Date(coupon.endDate) >= new Date())) {
-        // Check usage limits (this might be complex, potentially involving another table or service call)
-        // For simplicity here, we just check validity and apply discount
         const minimumSpend = parseFloat(coupon.minimumSpend || '0');
         const maximumSpend = parseFloat(coupon.maximumSpend || 'Infinity');
 
@@ -160,22 +158,13 @@ export function calculateCartTotals(
              } else if (coupon.discountType === 'percentage') {
                  discountAmount = (itemsPrice * discountValue) / 100;
              } else if (coupon.discountType === 'free_shipping') {
-                 // Free shipping logic - this might mean setting shippingPrice to 0
-                 // and potentially storing the original shipping cost somewhere else.
-                 // For now, we'll just note it. The actual shipping calculation
-                 // might be separate.
                  // discountAmount = 0; // Or handle this effect outside discountAmount
              }
-            // Ensure discountAmount doesn't exceed itemsPrice
             discountAmount = Math.min(discountAmount, itemsPrice);
         }
     }
 
     // 3. Calculate Total Price
-    // Note: Tax and Shipping calculation can be very complex depending on rules,
-    // destination, product types, etc. These fields might be updated separately
-    // based on user input or configuration. For this utility, we'll just use
-    // the values already present in the cart object.
     const subtotalAfterDiscount = itemsPrice - discountAmount;
     const totalPrice = subtotalAfterDiscount + shippingPrice + taxPrice;
 
@@ -190,15 +179,13 @@ export function calculateCartTotals(
 
 
 // Helper to fetch product/variant data for items in the cart (needed for recalculation)
-// This function belongs more in the Service layer or a dedicated Product Service,
-// but illustrating the need here.
 /*
 async function fetchCartItemDetails(items: CartItem[], productRepository: any): Promise<{ products: Map<string, ProductForCartCalculation>, variants: Map<string, ProductVariantForCartCalculation> }> {
     const productIds = [...new Set(items.map(item => item.productId))];
     const variantIds = [...new Set(items.map(item => item.variantId).filter(id => id !== undefined))] as string[];
 
-    const productsData = await productRepository.findByIds(productIds); // Need a repo method for this
-    const variantsData = variantIds.length > 0 ? await productRepository.findVariantsByIds(variantIds) : []; // Need a repo method
+    const productsData = await productRepository.findByIds(productIds);
+    const variantsData = variantIds.length > 0 ? await productRepository.findVariantsByIds(variantIds) : [];
 
     const productsMap = new Map(productsData.map(p => [p.id, p]));
     const variantsMap = new Map(variantsData.map(v => [v.id, v]));

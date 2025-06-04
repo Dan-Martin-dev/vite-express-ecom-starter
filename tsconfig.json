@@ -1,44 +1,45 @@
 {
-  "$schema": "https://json.schemastore.org/tsconfig",
   "compilerOptions": {
-    // Base Options
-    "target": "es2020",
-    "lib": ["es2020", "dom", "dom.iterable"],
-    "module": "esnext",
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "lib": ["ESNext"],
     "allowJs": true,
-    "skipLibCheck": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "strict": true,
-    "forceConsistentCasingInFileName": true,
-    "moduleResolution": "node",
+    "checkJs": false,
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "noEmit": true, // Root tsconfig often doesn't emit files itself
-    "jsx": "react-jsx",
-    "sourceMap": true,
-    "baseUrl": "./", // Important for resolving paths
-    "paths": {
-       // Define monorepo paths if you use them (e.g., import from @/...)
-       # Example if you have shared packages:
-       # "@shared/*": ["packages/shared/*"]
-    },
-
-    // Monorepo specific settings
-    "composite": true, // Enables project references
-    "declaration": true,
-    "declarationMap": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "skipLibCheck": true,
+    "noEmit": true,
+    "baseUrl": ".",
+    "paths": {}
   },
+  "include": [
+    "apps/*/vite.config.ts",
+    "apps/*/playwright.config.ts",
+    "apps/*/*.config.js",
+    "apps/*/*.config.cjs",
+    "apps/*/*.config.ts",
+    "apps/*/**/*.d.ts"
+  ],
   "exclude": [
     "node_modules",
-    "**/node_modules",
-    "dist",
-    "**/*.js" // Exclude compiled JS files
+    "**/node_modules/**",
+    "**/dist/**",
+    "**/build/**",
+    ".turbo/**",
+    "coverage/**"
   ],
   "references": [
-    // List your projects here. These paths are relative to the root tsconfig.json
-    { "path": "apps/client" },
-    { "path": "apps/server" }
-    // Add any paths to 'packages/*' here if they exist
-  ]
+    { "path": "./apps/client" },
+    { "path": "./apps/server" }
+  ],
+  "files": []
 }

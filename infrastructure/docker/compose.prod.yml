@@ -68,6 +68,7 @@ services:
   pocketbase:
     image: ghcr.io/pocketbase/pocketbase:0.22.18 # Pin to a specific version
     container_name: ecommerce_pocketbase_prod
+    condition: service_healthy
     command: serve --http="0.0.0.0:8090" --automigrate=false # Disable automigrate if you manage it elsewhere
     ports:
       - "8090:8090"

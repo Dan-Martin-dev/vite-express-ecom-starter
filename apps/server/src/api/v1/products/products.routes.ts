@@ -1,15 +1,15 @@
 // apps/server/src/api/v1/products/products.routes.ts
 
 import { Router } from 'express';
-import express, { Request, Response, NextFunction } from 'express';
+import express/* , { Request, Response, NextFunction } */ from 'express';
 import { productController } from "./products.controller.js";
-import { validateRequestBody, validateQueryParams } from '@/middleware/validation.middleware.js'; // Assuming validation middleware handles query/body separately
+import { /* validateRequestBody,  */validateQueryParams } from '@/middleware/validation.middleware.js'; // Assuming validation middleware handles query/body separately
 // import { authenticate } from '@/middleware/auth.middleware.js'; // Add if product routes require authentication
 
 import {
-    GetProductsInputSchema, // Schema for list query params
-    GetProductBySlugInputSchema, // Schema for slug param (optional validation)
-    GetProductByIdInputSchema, // Schema for ID param (optional validation)
+    GetProductsInputSchema,
+/*     GetProductBySlugInputSchema, 
+    GetProductByIdInputSchema,  */
     // Add schemas for Create/Update Product Input if needed later
     // CreateProductInputSchema,
     // UpdateProductInputSchema,

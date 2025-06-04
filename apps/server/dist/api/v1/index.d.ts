@@ -1,2 +1,3 @@
-declare const v1Router: import("express-serve-static-core").Router;
+import { Router } from 'express';
+declare const v1Router: Router;
 export default v1Router;

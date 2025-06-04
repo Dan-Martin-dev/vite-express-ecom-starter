@@ -1,39 +1,28 @@
 // apps/server/src/api/v1/products/products.service.ts
-
+/* import { AppError } from "@/lib/errors/AppError.js"; */
 import { ProductRepository } from "./products.repository.js";
 import {
-    ProductWithDetails,
-    GetProductsInput,
+/*     GetProductsInput,
     GetProductBySlugInput,
-    GetProductByIdInput,
-    DBProduct, // Import DB types if needed internally
+    GetProductByIdInput, */
+    ProductWithDetails,
+
+    DBProduct, 
     DBProductVariant,
 } from "./products.types.js";
 import { NotFoundError } from "@/lib/errors/NotFoundError.js";
-import { AppError } from "@/lib/errors/AppError.js";
 
-// Import Zod infer utility and schemas for input typing
+
 import { z } from 'zod';
 import { GetProductsInputSchema, GetProductBySlugInputSchema, GetProductByIdInputSchema } from "./products.validators.js";
 
-// --- Services this module might depend on ---
-// import { StockService } from '@/features/stock/stock.service'; // For centralized stock management
-// import { ReviewService } from '@/features/reviews/review.service'; // If product service fetches reviews
 
 export class ProductService {
     constructor(
         private productRepository: ProductRepository,
-        // private stockService: StockService, // Inject if stock is separate
-        // private reviewService: ReviewService, // Inject if fetching reviews here
     ) {}
 
-    /**
-     * Retrieves a list of products based on query parameters.
-     * @param input Filter, pagination, and sorting parameters (validated by Zod).
-     * @returns A promise resolving to an object containing the product list and total count.
-     */
     async getProducts(input: z.infer<typeof GetProductsInputSchema>): Promise<{ products: ProductWithDetails[]; total: number }> {
-        // The repository handles the heavy lifting of querying, filtering, sorting, and fetching basic relations.
         const { products, total } = await this.productRepository.findMany(input);
 
         // If findMany in repo doesn't fetch all details needed for ProductWithDetails

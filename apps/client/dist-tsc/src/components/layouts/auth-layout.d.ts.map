@@ -1,0 +1,1 @@
+{"version":3,"file":"auth-layout.d.ts","sourceRoot":"","sources":["../../../../src/components/layouts/auth-layout.tsx"],"names":[],"mappings":"AAAA,OAAO,KAAK,KAAK,MAAM,OAAO,CAAC;AAU/B,KAAK,WAAW,GAAG;IACjB,QAAQ,EAAE,KAAK,CAAC,SAAS,CAAC;IAC1B,KAAK,EAAE,MAAM,CAAC;CACf,CAAC;AAEF,eAAO,MAAM,UAAU,GAAI,qBAAqB,WAAW,4CA0C1D,CAAC"}

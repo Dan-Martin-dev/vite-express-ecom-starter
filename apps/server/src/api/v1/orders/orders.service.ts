@@ -2,20 +2,21 @@
 
 import { OrderRepository, orderRepository } from "./orders.repository.js";
 import {
-    DBOrder,
+
     NewOrder,
     NewOrderItem,
     OrderWithItems,
+/*  DBOrder,
     CreateOrderInput,
     GetUserOrdersInput,
-    GetOrderByIdInput
+    GetOrderByIdInput */
 } from "./orders.types.js";
 import { AppError, NotFoundError } from "@/lib/errors/index.js"; // Import errors
 import { db } from '@/db/index.js'; // Import db for transaction
 import { cartService, CartService } from '@/api/v1/cart/cart.service.js';
 import { ProductService } from '@/api/v1/products/products.service.js';
 import { z } from 'zod';
-import { CreateOrderInputSchema, GetUserOrdersInputSchema, GetOrderByIdInputSchema } from "./orders.validators.js";
+import { CreateOrderInputSchema, GetUserOrdersInputSchema/* , GetOrderByIdInputSchema  */} from "./orders.validators.js";
 
 // Import Drizzle types if needed for transaction
 import { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
@@ -93,8 +94,8 @@ export class OrderService {
             if (slugValue === null || slugValue === undefined) {
                  throw new AppError(`Could not determine slug for product ${product.name}. Slug is required for order items.`);
             }
-            const finalSlug: string = slugValue as string;
-
+/*             const finalSlug: string = slugValue as string;
+ */
             const lineTotalValue = (priceAsNumber * cartItem.quantity).toFixed(2);
 
             orderItemsData.push({

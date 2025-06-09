@@ -3387,6 +3387,7 @@ packages:
       gel: '>=2'
       knex: '*'
       kysely: '*'
+      mysql2: '>=2'
       pg: '>=8'
       postgres: '>=3'
       prisma: '*'
@@ -3436,6 +3437,8 @@ packages:
       knex:
         optional: true
       kysely:
+        optional: true
+      mysql2:
         optional: true
       pg:
         optional: true

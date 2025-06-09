@@ -1,12 +1,12 @@
 //apps/server/src/app.ts
-  import express from 'express';
   import cors from 'cors';
   import helmet from 'helmet';
   import routes from './api/v1/index.js';
   import { errorHandler } from './middleware/error-handler.js';
   import cookieParser from 'cookie-parser';
-    
-  export const createApp = () => {
+  import express, { Express } from 'express'; // Import the Express type
+
+  export const createApp = (): Express => {
     const app = express(); 
 
     app.use(cors());

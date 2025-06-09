@@ -16,9 +16,9 @@
     "build": "tsc && tsc-alias",
     "start": "node dist/index.js",
     "dev": "node --loader ts-node/esm --no-warnings --inspect=0.0.0.0:9229 node_modules/ts-node-dev/lib/bin.js --respawn --transpile-only src/index.ts",
-    "premigrate": "node --loader ts-node/esm src/db/scripts/pre-migrate.ts",
-    "migrate": "drizzle-kit migrate",
-    "generate": "node -r module-alias/register -r tsconfig-paths/register ./node_modules/.bin/drizzle-kit generate",
+    "premigrate": "node dist/src/db/scripts/pre-migrate.js",
+    "migrate": "drizzle-kit migrate --config=drizzle.config.ts",
+    "generate": "drizzle-kit generate --config=drizzle.config.ts",
     "studio": "drizzle-kit studio",
     "test": "NODE_ENV=test jest --config tests/jest.config.ts --runInBand",
     "test:docker": "docker-compose -f tests/docker-compose.yml up -d && npm test"

@@ -107,4 +107,4 @@ apps/server/pocketbase_instance/pb_data/
 apps/server/pocketbase_instance/pocketbase
 apps/server/pocketbase_instance/*.zip
 
-    
+node_modules

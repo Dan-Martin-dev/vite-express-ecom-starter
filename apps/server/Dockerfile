@@ -1,5 +1,5 @@
 FROM node:20.11-alpine3.19 AS builder
-ARG PNPM_VERSION=9.1.4
+ARG PNPM_VERSION=9.14.2
 RUN npm install -g pnpm@${PNPM_VERSION}
 
 WORKDIR /app

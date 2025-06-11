@@ -41,22 +41,24 @@ services:
       test: ["CMD", "wget", "--no-verbose", "--spider", "http://localhost:4000/api/v1/health"]
       interval: 10s
       timeout: 5s
+
       retries: 3
 
   postgres:
     image: postgres:16-alpine
     container_name: ecommerce_postgres
     environment:
-      POSTGRES_USER: ${DB_USER}
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
       POSTGRES_DB: ${DB_NAME}
       PGDATA: /var/lib/postgresql/data
     volumes:
       - pgdata:/var/lib/postgresql/data
+      - ./infrastructure/postgres/postgres-init.sql:/docker-entrypoint-initdb.d/postgres-init.sql
     ports:
       - "5433:5432" # Expose on a different port to avoid conflicts with local postgres
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
+      test: ["CMD-SHELL", "pg_isready -U postgres -d ${DB_NAME}"]
 
       interval: 10s
       timeout: 5s

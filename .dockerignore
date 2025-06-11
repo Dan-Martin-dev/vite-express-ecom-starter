@@ -28,6 +28,8 @@ Thumbs.db
 # Env files (should be managed via Docker Compose environments or secrets)
 *.env
 .env.*
+apps/server/.env
+apps/client/.env
 !/.env.example # Allow example env files
 
 # Test reports and coverage
@@ -43,6 +45,8 @@ apps/client/node_modules
 apps/server/dist
 apps/client/dist
 
+
+    
 # Logs
 *.log
 logs/

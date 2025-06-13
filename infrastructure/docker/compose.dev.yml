@@ -80,9 +80,9 @@ services:
       - pocketbase_data_dev:/pb_data
     ports:
       - "8090:8090"
+    command: ["serve", "--http=0.0.0.0:8090"]
     healthcheck:
-      #test: ["CMD", "wget", "--no-verbose", "--spider", "http://localhost:8090/api/health"]
-      test: ["CMD", "nc", "-z", "localhost", "8090"]
+      test: ["CMD-SHELL", "timeout 5 sh -c 'until nc -z localhost 8090; do sleep 1; done'"]
       interval: 10s
       timeout: 5s
       retries: 3

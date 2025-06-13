@@ -1,13 +1,9 @@
--- Create the custom user if it doesn't exist
-CREATE USER vite_ecom_user WITH PASSWORD 'bcdOYrB2vimRakexBwTOSsTGIe72wdSm';
+-- Using postgres variables, which are automatically populated from environment
+-- No need to create a user as POSTGRES_USER will be automatically created by the postgres image
 
--- Grant privileges to the user on the database
-GRANT ALL PRIVILEGES ON DATABASE "vite-ecom" TO vite_ecom_user;
-
--- Connect to the database to set schema permissions
-\c "vite-ecom";
-
--- Grant privileges on all tables (current and future)
-ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL PRIVILEGES ON TABLES TO vite_ecom_user;
-ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL PRIVILEGES ON SEQUENCES TO vite_ecom_user;
-GRANT ALL PRIVILEGES ON SCHEMA public TO vite_ecom_user;
+-- Grant privileges on the database (database name comes from POSTGRES_DB env var)
+-- The \c command connects to the database specified by POSTGRES_DB
+-- Grant privileges on all tables (current and future) to the user specified by POSTGRES_USER
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL PRIVILEGES ON TABLES TO :"POSTGRES_USER";
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL PRIVILEGES ON SEQUENCES TO :"POSTGRES_USER";
+GRANT ALL PRIVILEGES ON SCHEMA public TO :"POSTGRES_USER";

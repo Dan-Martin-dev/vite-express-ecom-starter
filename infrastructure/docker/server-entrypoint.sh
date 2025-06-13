@@ -1,77 +1,73 @@
-# /home/vare/project/ecom_101/ecommerce_1/vite-express-ecom-starter/infrastructure/docker/server-entrypoint.sh
 #!/bin/sh
 set -e
 
-echo "--- SERVER ENTRYPOINT SCRIPT START ---"
-echo "DB_USER from env: [${DB_USER}]"
-echo "DB_PASSWORD from env: [********]" # Hide password in logs
-echo "DB_NAME from env: [${DB_NAME}]"
-echo "POCKETBASE_URL from env: [${POCKETBASE_URL}]"
-echo "DATABASE_URL from env: [${DATABASE_URL}]"
-echo "--- END ENV VARS ---"
+# Initialize variables for environment-specific behavior
+APP_ENV="${NODE_ENV:-development}"
+RETRY_INTERVAL=2
 
-# Add network debugging
-echo "Network diagnostic information:"
-ip addr show
-echo "DNS resolution test:"
-nslookup postgres || true
-echo "Ping test:"
-ping -c 2 postgres || true
+# Check for required environment variables
+if [ -z "$DB_USER" ] || [ -z "$DB_PASSWORD" ] || [ -z "$DB_NAME" ]; then
+  echo "ERROR: Missing required environment variables. Please set DB_USER, DB_PASSWORD, and DB_NAME."
+  exit 1
+fi
+
+echo "Starting server application in ${APP_ENV} environment..."
+
+# Set database connection timeout based on environment
+if [ "$APP_ENV" = "production" ]; then
+  MAX_RETRIES=30  # Less retries in production - fail faster
+  echo "Production mode: Will attempt database connection for ~${MAX_RETRIES} seconds"
+else
+  MAX_RETRIES=60  # More retries in development
+  
+  # Show detailed debug info only in dev
+  echo "--- ENV DEBUG INFO (DEV ONLY) ---"
+  echo "DB_USER: [${DB_USER}]"
+  echo "DB_PASSWORD: [********]"
+  echo "DB_NAME: [${DB_NAME}]"
+  echo "POCKETBASE_URL: [${POCKETBASE_URL}]"
+  echo "DATABASE_URL: [PostgreSQL connection string hidden]"
+  
+  # Debug network in dev only
+  echo "Network diagnostic information:"
+  ip addr show
+  echo "DNS resolution test:"
+  getent hosts postgres || echo "DNS resolution failed"
+  echo "Connection test:"
+  nc -zv postgres 5432 || echo "Connection test failed"
+  echo "--- END DEBUG INFO ---"
+fi
 
 # Wait for database to be ready
 echo "Waiting for database to be ready..."
-# Simple retry loop to wait for Postgres
-MAX_RETRIES=60
-RETRY_INTERVAL=2
 count=0
 
-# Try connecting via direct TCP connection first
-echo "Testing TCP connection to postgres:5432..."
-nc -zv postgres 5432 || echo "Cannot establish TCP connection to postgres:5432"
-
-# Try connecting via psql directly with verbose output
 until PGPASSWORD="${DB_PASSWORD}" psql -v ON_ERROR_STOP=1 -h postgres -U "${DB_USER}" -d "${DB_NAME}" -c "SELECT 1" > /dev/null 2>&1; do
-  echo "PSQL connection attempt failed. Retrying..."
   count=$((count+1))
+  echo "Database connection attempt ${count}/${MAX_RETRIES} failed. Retrying in ${RETRY_INTERVAL}s..."
+  
   if [ $count -ge $MAX_RETRIES ]; then
-    echo "Failed to connect to database after $MAX_RETRIES attempts, exiting..."
-    echo "Current PostgreSQL connection details:"
-    echo "Host: postgres"
-    echo "User: ${DB_USER}"
-    echo "Database: ${DB_NAME}"
-    echo "Command: PGPASSWORD=***** psql -h postgres -U ${DB_USER} -d ${DB_NAME} -c \"SELECT 1\""
-    
-    # Try with different options as a last resort
-    echo "Attempting connection with different options:"
-    PGPASSWORD="${DB_PASSWORD}" psql "postgresql://${DB_USER}:${DB_PASSWORD}@postgres:5432/${DB_NAME}" -c "SELECT 1" || echo "Failed with connection string"
-    
+    echo "ERROR: Could not connect to database after ${MAX_RETRIES} attempts. Exiting."
     exit 1
   fi
-  echo "Waiting for database connection... ($count/$MAX_RETRIES)"
+  
   sleep $RETRY_INTERVAL
 done
 
-echo "Database is ready!"
+echo "Database connection established successfully."
 
-# Run database migrations
+# Run migrations
 echo "Running database migrations..."
-cd /app/apps/server && pnpm run migrate
-
-# Start the server
-echo "Starting server..."
 cd /app/apps/server
-
-# Check what files are available
-echo "Checking for entry point files..."
-ls -la dist/
-
-if [ -f "dist/server.js" ]; then
-  echo "Found server.js, starting..."
-  node dist/server.js
-elif [ -f "dist/index.js" ]; then
-  echo "Found index.js, starting..."
-  node dist/index.js
+NODE_ENV=$APP_ENV node dist/db/scripts/run-migrations.js
+#NODE_ENV=$APP_ENV node dist/db/scripts/pre-migrate.js
+#NODE_ENV=$APP_ENV npx drizzle-kit migrate
+# Start the server based on environment
+echo "Starting server..."
+if [ "$APP_ENV" = "development" ]; then
+  # Development - for better debugging
+  exec node --inspect=0.0.0.0:9229 dist/main.js
 else
-  echo "No entry point found in dist directory."
-  exit 1
+  # Production - standard start 
+  exec node dist/main.js
 fi

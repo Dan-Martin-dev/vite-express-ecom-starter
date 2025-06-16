@@ -49,6 +49,8 @@ RUN pnpm install --filter=./apps/server --prod --frozen --ignore-scripts
 # Copy built files from builder stage
 COPY --from=builder /app/apps/server/dist ./apps/server/dist
 COPY apps/server/drizzle ./apps/server/drizzle
+# Copy migration files to the correct location in dist (including meta directory)
+COPY apps/server/src/db/migrations/ ./apps/server/dist/src/db/migrations/
 
 # Add entrypoint script to run migrations before starting the server
 COPY infrastructure/docker/server-entrypoint.sh .

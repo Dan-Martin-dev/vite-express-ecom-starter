@@ -1,4 +1,5 @@
 #!/bin/sh
+#vite-express-ecom-starter/infrastructure/docker/server-entrypoint.sh
 set -e
 
 # Initialize variables for environment-specific behavior
@@ -59,15 +60,21 @@ echo "Database connection established successfully."
 # Run migrations
 echo "Running database migrations..."
 cd /app/apps/server
+
+# First, ensure enum types exist
+echo "Creating enum types if they don't exist..."
+NODE_ENV=$APP_ENV node dist/db/scripts/pre-migrate.js
+
+# Then run the main migrations
+echo "Running main migrations..."
 NODE_ENV=$APP_ENV node dist/db/scripts/run-migrations.js
-#NODE_ENV=$APP_ENV node dist/db/scripts/pre-migrate.js
-#NODE_ENV=$APP_ENV npx drizzle-kit migrate
+
 # Start the server based on environment
 echo "Starting server..."
 if [ "$APP_ENV" = "development" ]; then
   # Development - for better debugging
-  exec node --inspect=0.0.0.0:9229 dist/main.js
+  exec node --inspect=0.0.0.0:9229 dist/index.js
 else
   # Production - standard start 
-  exec node dist/main.js
+  exec node dist/index.js
 fi

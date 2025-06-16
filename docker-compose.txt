@@ -1,0 +1,94 @@
+services:
+  client:
+    build:
+      context: .
+      dockerfile: apps/client/Dockerfile
+      args:
+        VITE_BASE_URL: /api # API will be proxied by Nginx
+    container_name: ecommerce_client
+    ports:
+      - "80:80" # Standard HTTP port for client
+    depends_on:
+      - server
+    restart: unless-stopped
+    networks:
+      - ecommerce_network
+
+  server:
+    build:
+      context: .
+      dockerfile: apps/server/Dockerfile
+    container_name: ecommerce_server
+    environment:
+      NODE_ENV: production
+      PORT: ${APP_SERVER_PORT:-4000}
+      DATABASE_URL: postgresql://${DB_USER}:${DB_PASSWORD}@postgres:5432/${DB_NAME}
+      POCKETBASE_URL: http://pocketbase:8090
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_NAME: ${DB_NAME}
+    ports:
+      - "4000:4000" 
+    depends_on:
+      postgres:
+        condition: service_healthy
+      pocketbase:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - ecommerce_network
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--spider", "http://localhost:4000/api/v1/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: ecommerce_postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: ${DB_NAME}
+      PGDATA: /var/lib/postgresql/data
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./infrastructure/postgres/postgres-init.sql:/docker-entrypoint-initdb.d/postgres-init.sql
+    ports:
+      - "5433:5432" # Expose on a different port to avoid conflicts with local postgres
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d ${DB_NAME}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    networks:
+      - ecommerce_network
+
+  pocketbase:
+    image: spectado/pocketbase:latest
+    container_name: ecommerce_pocketbase
+    command: ["--http=0.0.0.0:8090", "--dir=/pb_data"] 
+    ports:
+      - "8090:8090"
+    environment:
+      - TZ=UTC
+    volumes:
+      - pb_data:/pb_data
+    restart: unless-stopped
+    networks:
+      - ecommerce_network
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--spider", "http://localhost:8090/_/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 45s
+
+volumes:
+  pgdata:
+  pb_data:
+
+networks:
+  ecommerce_network:
+    driver: bridge

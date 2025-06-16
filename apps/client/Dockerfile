@@ -31,30 +31,17 @@ RUN echo "VITE_API_URL=${VITE_API_URL}" > ./apps/client/.env
 WORKDIR /app/apps/client
 RUN pnpm build
 
-# Production stage - use specific versioned tag
-FROM nginx:1.25.3-alpine
-
-# Security: run NGINX as non-root
-RUN touch /var/run/nginx.pid && \
-    chown -R nginx:nginx /var/run/nginx.pid && \
-    chown -R nginx:nginx /var/cache/nginx && \
-    sed -i 's/user  nginx;/user  nginx;/' /etc/nginx/nginx.conf
+# Production stage - use stable nginx alpine
+FROM nginx:alpine
 
 # Copy built assets to nginx
 COPY --from=builder /app/apps/client/dist /usr/share/nginx/html
-RUN chown -R nginx:nginx /usr/share/nginx/html
 
 # Copy nginx configuration
 COPY infrastructure/nginx/nginx.config /etc/nginx/conf.d/default.conf
 
 # Expose port
 EXPOSE 80
-
-# Switch to non-root user
-USER nginx
-
-# Switch to non-root user
-USER nginx
 
 # Default command
 CMD ["nginx", "-g", "daemon off;"]

@@ -1,0 +1,729 @@
+.
+├── backend@1.0.0
+├── dist
+│   ├── api
+│   │   └── v1
+│   │       ├── auth
+│   │       │   ├── auth.controller.d.ts
+│   │       │   ├── auth.controller.js
+│   │       │   ├── auth.controller.js.map
+│   │       │   ├── auth.repository.d.ts
+│   │       │   ├── auth.repository.js
+│   │       │   ├── auth.repository.js.map
+│   │       │   ├── auth.routes.d.ts
+│   │       │   ├── auth.routes.js
+│   │       │   ├── auth.routes.js.map
+│   │       │   ├── auth.service.d.ts
+│   │       │   ├── auth.service.js
+│   │       │   ├── auth.service.js.map
+│   │       │   ├── auth.test.d.ts
+│   │       │   ├── auth.test.js
+│   │       │   ├── auth.test.js.map
+│   │       │   ├── auth.types.d.ts
+│   │       │   ├── auth.types.js
+│   │       │   ├── auth.types.js.map
+│   │       │   ├── auth.utils.d.ts
+│   │       │   ├── auth.utils.js
+│   │       │   ├── auth.utils.js.map
+│   │       │   ├── auth.validator.d.ts
+│   │       │   ├── auth.validator.js
+│   │       │   └── auth.validator.js.map
+│   │       ├── cart
+│   │       │   ├── cart.controller.d.ts
+│   │       │   ├── cart.controller.js
+│   │       │   ├── cart.controller.js.map
+│   │       │   ├── cart.repository.d.ts
+│   │       │   ├── cart.repository.js
+│   │       │   ├── cart.repository.js.map
+│   │       │   ├── cart.routes.d.ts
+│   │       │   ├── cart.routes.js
+│   │       │   ├── cart.routes.js.map
+│   │       │   ├── cart.service.d.ts
+│   │       │   ├── cart.service.js
+│   │       │   ├── cart.service.js.map
+│   │       │   ├── cart.types.d.ts
+│   │       │   ├── cart.types.js
+│   │       │   ├── cart.types.js.map
+│   │       │   ├── cart.utils.d.ts
+│   │       │   ├── cart.utils.js
+│   │       │   ├── cart.utils.js.map
+│   │       │   ├── cart.validators.d.ts
+│   │       │   ├── cart.validators.js
+│   │       │   └── cart.validators.js.map
+│   │       ├── index.d.ts
+│   │       ├── index.js
+│   │       ├── index.js.map
+│   │       ├── orders
+│   │       │   ├── orders.controller.d.ts
+│   │       │   ├── orders.controller.js
+│   │       │   ├── orders.controller.js.map
+│   │       │   ├── orders.repository.d.ts
+│   │       │   ├── orders.repository.js
+│   │       │   ├── orders.repository.js.map
+│   │       │   ├── orders.routes.d.ts
+│   │       │   ├── orders.routes.js
+│   │       │   ├── orders.routes.js.map
+│   │       │   ├── orders.service.d.ts
+│   │       │   ├── orders.service.js
+│   │       │   ├── orders.service.js.map
+│   │       │   ├── orders.test.d.ts
+│   │       │   ├── orders.test.js
+│   │       │   ├── orders.test.js.map
+│   │       │   ├── orders.types.d.ts
+│   │       │   ├── orders.types.js
+│   │       │   ├── orders.types.js.map
+│   │       │   ├── orders.validator.d.ts
+│   │       │   ├── orders.validator.js
+│   │       │   ├── orders.validator.js.map
+│   │       │   ├── orders.validators.d.ts
+│   │       │   ├── orders.validators.js
+│   │       │   └── orders.validators.js.map
+│   │       ├── products
+│   │       │   ├── product.routes.d.ts
+│   │       │   ├── product.routes.js
+│   │       │   ├── product.routes.js.map
+│   │       │   ├── products.controller.d.ts
+│   │       │   ├── products.controller.js
+│   │       │   ├── products.controller.js.map
+│   │       │   ├── products.repository.d.ts
+│   │       │   ├── products.repository.js
+│   │       │   ├── products.repository.js.map
+│   │       │   ├── products.routes.d.ts
+│   │       │   ├── products.routes.js
+│   │       │   ├── products.routes.js.map
+│   │       │   ├── products.service.d.ts
+│   │       │   ├── products.service.js
+│   │       │   ├── products.service.js.map
+│   │       │   ├── products.test.d.ts
+│   │       │   ├── products.test.js
+│   │       │   ├── products.test.js.map
+│   │       │   ├── products.types.d.ts
+│   │       │   ├── products.types.js
+│   │       │   ├── products.types.js.map
+│   │       │   ├── products.utils.d.ts
+│   │       │   ├── products.utils.js
+│   │       │   ├── products.utils.js.map
+│   │       │   ├── products.validator.d.ts
+│   │       │   ├── products.validator.js
+│   │       │   ├── products.validator.js.map
+│   │       │   ├── products.validators.d.ts
+│   │       │   ├── products.validators.js
+│   │       │   └── products.validators.js.map
+│   │       ├── routes
+│   │       │   ├── auth.routes.d.ts
+│   │       │   ├── auth.routes.js
+│   │       │   ├── auth.routes.js.map
+│   │       │   ├── orders.routes.d.ts
+│   │       │   ├── orders.routes.js
+│   │       │   ├── orders.routes.js.map
+│   │       │   ├── product.routes.d.ts
+│   │       │   ├── product.routes.js
+│   │       │   └── product.routes.js.map
+│   │       ├── users
+│   │       │   ├── users.controller.d.ts
+│   │       │   ├── users.controller.js
+│   │       │   ├── users.controller.js.map
+│   │       │   ├── users.repository.d.ts
+│   │       │   ├── users.repository.js
+│   │       │   ├── users.repository.js.map
+│   │       │   ├── users.service.d.ts
+│   │       │   ├── users.service.js
+│   │       │   ├── users.service.js.map
+│   │       │   ├── users.test.d.ts
+│   │       │   ├── users.test.js
+│   │       │   ├── users.test.js.map
+│   │       │   ├── users.types.d.ts
+│   │       │   ├── users.types.js
+│   │       │   ├── users.types.js.map
+│   │       │   ├── users.validators.d.ts
+│   │       │   ├── users.validators.js
+│   │       │   └── users.validators.js.map
+│   │       └── wishlists
+│   │           ├── wishlists.controller.d.ts
+│   │           ├── wishlists.controller.js
+│   │           ├── wishlists.controller.js.map
+│   │           ├── wishlists.repository.d.ts
+│   │           ├── wishlists.repository.js
+│   │           ├── wishlists.repository.js.map
+│   │           ├── wishlists.routes.d.ts
+│   │           ├── wishlists.routes.js
+│   │           ├── wishlists.routes.js.map
+│   │           ├── wishlists.service.d.ts
+│   │           ├── wishlists.service.js
+│   │           ├── wishlists.service.js.map
+│   │           ├── wishlists.test.d.ts
+│   │           ├── wishlists.test.js
+│   │           ├── wishlists.test.js.map
+│   │           ├── wishlists.types.d.ts
+│   │           ├── wishlists.types.js
+│   │           ├── wishlists.types.js.map
+│   │           ├── wishlists.validator.d.ts
+│   │           ├── wishlists.validator.js
+│   │           ├── wishlists.validator.js.map
+│   │           ├── wishlists.validators.d.ts
+│   │           ├── wishlists.validators.js
+│   │           └── wishlists.validators.js.map
+│   ├── app.d.ts
+│   ├── app.js
+│   ├── app.js.map
+│   ├── config
+│   │   ├── env.d.ts
+│   │   ├── env.js
+│   │   ├── env.js.map
+│   │   ├── index.d.ts
+│   │   ├── index.js
+│   │   └── index.js.map
+│   ├── config.d.ts
+│   ├── config.js
+│   ├── config.js.map
+│   ├── db
+│   │   ├── client.d.ts
+│   │   ├── client.js
+│   │   ├── client.js.map
+│   │   ├── index.d.ts
+│   │   ├── index.js
+│   │   ├── index.js.map
+│   │   ├── schema
+│   │   │   ├── auth.schema.d.ts
+│   │   │   ├── auth.schema.js
+│   │   │   ├── auth.schema.js.map
+│   │   │   ├── carts.schema.d.ts
+│   │   │   ├── carts.schema.js
+│   │   │   ├── carts.schema.js.map
+│   │   │   ├── coupons.schema.d.ts
+│   │   │   ├── coupons.schema.js
+│   │   │   ├── coupons.schema.js.map
+│   │   │   ├── inventory.schema.d.ts
+│   │   │   ├── inventory.schema.js
+│   │   │   ├── inventory.schema.js.map
+│   │   │   ├── orders.schema.d.ts
+│   │   │   ├── orders.schema.js
+│   │   │   ├── orders.schema.js.map
+│   │   │   ├── products.schema.d.ts
+│   │   │   ├── products.schema.js
+│   │   │   ├── products.schema.js.map
+│   │   │   ├── reviews.schema.d.ts
+│   │   │   ├── reviews.schema.js
+│   │   │   ├── reviews.schema.js.map
+│   │   │   ├── wishlists.schema.d.ts
+│   │   │   ├── wishlists.schema.js
+│   │   │   └── wishlists.schema.js.map
+│   │   ├── scripts
+│   │   │   ├── pre-migrate.d.ts
+│   │   │   ├── pre-migrate.js
+│   │   │   └── pre-migrate.js.map
+│   │   ├── seed.d.ts
+│   │   ├── seed.js
+│   │   └── seed.js.map
+│   ├── drizzle.config.d.ts
+│   ├── drizzle.config.d.ts.map
+│   ├── drizzle.config.js
+│   ├── drizzle.config.js.map
+│   ├── drizzle-kit.config.d.ts
+│   ├── drizzle-kit.config.d.ts.map
+│   ├── drizzle-kit.config.js
+│   ├── drizzle-kit.config.js.map
+│   ├── features
+│   │   ├── auth
+│   │   │   ├── auth.controller.d.ts
+│   │   │   ├── auth.controller.js
+│   │   │   ├── auth.controller.js.map
+│   │   │   ├── auth.repository.d.ts
+│   │   │   ├── auth.repository.js
+│   │   │   ├── auth.repository.js.map
+│   │   │   ├── auth.service.d.ts
+│   │   │   ├── auth.service.js
+│   │   │   ├── auth.service.js.map
+│   │   │   ├── auth.test.d.ts
+│   │   │   ├── auth.test.js
+│   │   │   ├── auth.test.js.map
+│   │   │   ├── auth.types.d.ts
+│   │   │   ├── auth.types.js
+│   │   │   ├── auth.types.js.map
+│   │   │   ├── auth.utils.d.ts
+│   │   │   ├── auth.utils.js
+│   │   │   ├── auth.utils.js.map
+│   │   │   ├── auth.validator.d.ts
+│   │   │   ├── auth.validator.js
+│   │   │   └── auth.validator.js.map
+│   │   ├── orders
+│   │   │   ├── orders.controller.d.ts
+│   │   │   ├── orders.controller.js
+│   │   │   ├── orders.controller.js.map
+│   │   │   ├── orders.repository.d.ts
+│   │   │   ├── orders.repository.js
+│   │   │   ├── orders.repository.js.map
+│   │   │   ├── orders.service.d.ts
+│   │   │   ├── orders.service.js
+│   │   │   ├── orders.service.js.map
+│   │   │   ├── orders.test.d.ts
+│   │   │   ├── orders.test.js
+│   │   │   ├── orders.test.js.map
+│   │   │   ├── orders.types.d.ts
+│   │   │   ├── orders.types.js
+│   │   │   ├── orders.types.js.map
+│   │   │   ├── orders.validator.d.ts
+│   │   │   ├── orders.validator.js
+│   │   │   └── orders.validator.js.map
+│   │   ├── products
+│   │   │   ├── products.controller.d.ts
+│   │   │   ├── products.controller.js
+│   │   │   ├── products.controller.js.map
+│   │   │   ├── products.repository.d.ts
+│   │   │   ├── products.repository.js
+│   │   │   ├── products.repository.js.map
+│   │   │   ├── products.service.d.ts
+│   │   │   ├── products.service.js
+│   │   │   ├── products.service.js.map
+│   │   │   ├── products.test.d.ts
+│   │   │   ├── products.test.js
+│   │   │   ├── products.test.js.map
+│   │   │   ├── products.types.d.ts
+│   │   │   ├── products.types.js
+│   │   │   ├── products.types.js.map
+│   │   │   ├── products.validator.d.ts
+│   │   │   ├── products.validator.js
+│   │   │   └── products.validator.js.map
+│   │   └── users
+│   │       ├── users.controller.d.ts
+│   │       ├── users.controller.js
+│   │       ├── users.controller.js.map
+│   │       ├── users.repository.d.ts
+│   │       ├── users.repository.js
+│   │       ├── users.repository.js.map
+│   │       ├── users.service.d.ts
+│   │       ├── users.service.js
+│   │       ├── users.service.js.map
+│   │       ├── users.test.d.ts
+│   │       ├── users.test.js
+│   │       ├── users.test.js.map
+│   │       ├── users.types.d.ts
+│   │       ├── users.types.js
+│   │       ├── users.types.js.map
+│   │       ├── users.validators.d.ts
+│   │       ├── users.validators.js
+│   │       └── users.validators.js.map
+│   ├── index.d.ts
+│   ├── index.js
+│   ├── index.js.map
+│   ├── lib
+│   │   ├── analytics
+│   │   │   ├── events.d.ts
+│   │   │   ├── events.js
+│   │   │   └── events.js.map
+│   │   ├── errors
+│   │   │   ├── AppError.d.ts
+│   │   │   ├── AppError.js
+│   │   │   ├── AppError.js.map
+│   │   │   ├── ConflictError.d.ts
+│   │   │   ├── ConflictError.js
+│   │   │   ├── ConflictError.js.map
+│   │   │   ├── HttpError.d.ts
+│   │   │   ├── HttpError.js
+│   │   │   ├── HttpError.js.map
+│   │   │   ├── index.d.ts
+│   │   │   ├── index.js
+│   │   │   ├── index.js.map
+│   │   │   ├── NotFoundError.d.ts
+│   │   │   ├── NotFoundError.js
+│   │   │   └── NotFoundError.js.map
+│   │   ├── payment
+│   │   │   ├── crypto.d.ts
+│   │   │   ├── crypto.js
+│   │   │   ├── crypto.js.map
+│   │   │   ├── providers.d.ts
+│   │   │   ├── providers.js
+│   │   │   └── providers.js.map
+│   │   ├── pocketbase.d.ts
+│   │   ├── pocketbase.js
+│   │   └── pocketbase.js.map
+│   ├── middleware
+│   │   ├── auth.middleware.d.ts
+│   │   ├── auth.middleware.js
+│   │   ├── auth.middleware.js.map
+│   │   ├── cart.middleware.d.ts
+│   │   ├── cart.middleware.js
+│   │   ├── cart.middleware.js.map
+│   │   ├── error-handler.d.ts
+│   │   ├── error-handler.js
+│   │   ├── error-handler.js.map
+│   │   ├── error.middleware.d.ts
+│   │   ├── error.middleware.js
+│   │   ├── error.middleware.js.map
+│   │   ├── logger.middleware.d.ts
+│   │   ├── logger.middleware.js
+│   │   ├── logger.middleware.js.map
+│   │   ├── orders.middleware.d.ts
+│   │   ├── orders.middleware.js
+│   │   ├── orders.middleware.js.map
+│   │   ├── ratelimit.middleware.d.ts
+│   │   ├── ratelimit.middleware.js
+│   │   ├── ratelimit.middleware.js.map
+│   │   ├── session.middleware.d.ts
+│   │   ├── session.middleware.js
+│   │   ├── session.middleware.js.map
+│   │   ├── validation.middleware.d.ts
+│   │   ├── validation.middleware.js
+│   │   └── validation.middleware.js.map
+│   ├── server.d.ts
+│   ├── server.js
+│   ├── server.js.map
+│   ├── src
+│   │   ├── api
+│   │   │   └── v1
+│   │   │       ├── auth
+│   │   │       ├── cart
+│   │   │       ├── index.d.ts
+│   │   │       ├── index.d.ts.map
+│   │   │       ├── index.js
+│   │   │       ├── index.js.map
+│   │   │       ├── orders
+│   │   │       ├── products
+│   │   │       ├── users
+│   │   │       └── wishlists
+│   │   ├── app.d.ts
+│   │   ├── app.d.ts.map
+│   │   ├── app.js
+│   │   ├── app.js.map
+│   │   ├── config
+│   │   │   ├── env.d.ts
+│   │   │   ├── env.d.ts.map
+│   │   │   ├── env.js
+│   │   │   ├── env.js.map
+│   │   │   ├── index.d.ts
+│   │   │   ├── index.d.ts.map
+│   │   │   ├── index.js
+│   │   │   └── index.js.map
+│   │   ├── db
+│   │   │   ├── client.d.ts
+│   │   │   ├── client.d.ts.map
+│   │   │   ├── client.js
+│   │   │   ├── client.js.map
+│   │   │   ├── index.d.ts
+│   │   │   ├── index.d.ts.map
+│   │   │   ├── index.js
+│   │   │   ├── index.js.map
+│   │   │   ├── schema
+│   │   │   │   ├── auth.schema.d.ts
+│   │   │   │   ├── auth.schema.d.ts.map
+│   │   │   │   ├── auth.schema.js
+│   │   │   │   ├── auth.schema.js.map
+│   │   │   │   ├── carts.schema.d.ts
+│   │   │   │   ├── carts.schema.d.ts.map
+│   │   │   │   ├── carts.schema.js
+│   │   │   │   ├── carts.schema.js.map
+│   │   │   │   ├── coupons.schema.d.ts
+│   │   │   │   ├── coupons.schema.d.ts.map
+│   │   │   │   ├── coupons.schema.js
+│   │   │   │   ├── coupons.schema.js.map
+│   │   │   │   ├── orders.schema.d.ts
+│   │   │   │   ├── orders.schema.d.ts.map
+│   │   │   │   ├── orders.schema.js
+│   │   │   │   ├── orders.schema.js.map
+│   │   │   │   ├── products.schema.d.ts
+│   │   │   │   ├── products.schema.d.ts.map
+│   │   │   │   ├── products.schema.js
+│   │   │   │   ├── products.schema.js.map
+│   │   │   │   ├── reviews.schema.d.ts
+│   │   │   │   ├── reviews.schema.d.ts.map
+│   │   │   │   ├── reviews.schema.js
+│   │   │   │   ├── reviews.schema.js.map
+│   │   │   │   ├── wishlists.schema.d.ts
+│   │   │   │   ├── wishlists.schema.d.ts.map
+│   │   │   │   ├── wishlists.schema.js
+│   │   │   │   └── wishlists.schema.js.map
+│   │   │   ├── scripts
+│   │   │   │   ├── pre-migrate.d.ts
+│   │   │   │   ├── pre-migrate.d.ts.map
+│   │   │   │   ├── pre-migrate.js
+│   │   │   │   └── pre-migrate.js.map
+│   │   │   ├── seed.d.ts
+│   │   │   ├── seed.d.ts.map
+│   │   │   ├── seed.js
+│   │   │   └── seed.js.map
+│   │   ├── index.d.ts
+│   │   ├── index.d.ts.map
+│   │   ├── index.js
+│   │   ├── index.js.map
+│   │   ├── lib
+│   │   │   ├── analytics
+│   │   │   │   ├── events.d.ts
+│   │   │   │   ├── events.d.ts.map
+│   │   │   │   ├── events.js
+│   │   │   │   └── events.js.map
+│   │   │   ├── errors
+│   │   │   │   ├── AppError.d.ts
+│   │   │   │   ├── AppError.d.ts.map
+│   │   │   │   ├── AppError.js
+│   │   │   │   ├── AppError.js.map
+│   │   │   │   ├── ConflictError.d.ts
+│   │   │   │   ├── ConflictError.d.ts.map
+│   │   │   │   ├── ConflictError.js
+│   │   │   │   ├── ConflictError.js.map
+│   │   │   │   ├── HttpError.d.ts
+│   │   │   │   ├── HttpError.d.ts.map
+│   │   │   │   ├── HttpError.js
+│   │   │   │   ├── HttpError.js.map
+│   │   │   │   ├── index.d.ts
+│   │   │   │   ├── index.d.ts.map
+│   │   │   │   ├── index.js
+│   │   │   │   ├── index.js.map
+│   │   │   │   ├── NotFoundError.d.ts
+│   │   │   │   ├── NotFoundError.d.ts.map
+│   │   │   │   ├── NotFoundError.js
+│   │   │   │   └── NotFoundError.js.map
+│   │   │   ├── payment
+│   │   │   │   ├── crypto.d.ts
+│   │   │   │   ├── crypto.d.ts.map
+│   │   │   │   ├── crypto.js
+│   │   │   │   ├── crypto.js.map
+│   │   │   │   ├── providers.d.ts
+│   │   │   │   ├── providers.d.ts.map
+│   │   │   │   ├── providers.js
+│   │   │   │   └── providers.js.map
+│   │   │   ├── pocketbase.d.ts
+│   │   │   ├── pocketbase.d.ts.map
+│   │   │   ├── pocketbase.js
+│   │   │   └── pocketbase.js.map
+│   │   ├── middleware
+│   │   │   ├── auth.middleware.d.ts
+│   │   │   ├── auth.middleware.d.ts.map
+│   │   │   ├── auth.middleware.js
+│   │   │   ├── auth.middleware.js.map
+│   │   │   ├── cart.middleware.d.ts
+│   │   │   ├── cart.middleware.d.ts.map
+│   │   │   ├── cart.middleware.js
+│   │   │   ├── cart.middleware.js.map
+│   │   │   ├── error-handler.d.ts
+│   │   │   ├── error-handler.d.ts.map
+│   │   │   ├── error-handler.js
+│   │   │   ├── error-handler.js.map
+│   │   │   ├── error.middleware.d.ts
+│   │   │   ├── error.middleware.d.ts.map
+│   │   │   ├── error.middleware.js
+│   │   │   ├── error.middleware.js.map
+│   │   │   ├── logger.middleware.d.ts
+│   │   │   ├── logger.middleware.d.ts.map
+│   │   │   ├── logger.middleware.js
+│   │   │   ├── logger.middleware.js.map
+│   │   │   ├── orders.middleware.d.ts
+│   │   │   ├── orders.middleware.d.ts.map
+│   │   │   ├── orders.middleware.js
+│   │   │   ├── orders.middleware.js.map
+│   │   │   ├── ratelimit.middleware.d.ts
+│   │   │   ├── ratelimit.middleware.d.ts.map
+│   │   │   ├── ratelimit.middleware.js
+│   │   │   ├── ratelimit.middleware.js.map
+│   │   │   ├── session.middleware.d.ts
+│   │   │   ├── session.middleware.d.ts.map
+│   │   │   ├── session.middleware.js
+│   │   │   ├── session.middleware.js.map
+│   │   │   ├── validation.middleware.d.ts
+│   │   │   ├── validation.middleware.d.ts.map
+│   │   │   ├── validation.middleware.js
+│   │   │   └── validation.middleware.js.map
+│   │   ├── server.d.ts
+│   │   ├── server.d.ts.map
+│   │   ├── server.js
+│   │   ├── server.js.map
+│   │   ├── types
+│   │   │   ├── index.d.ts
+│   │   │   ├── index.d.ts.map
+│   │   │   ├── index.js
+│   │   │   └── index.js.map
+│   │   └── validations
+│   │       ├── validations.d.ts
+│   │       ├── validations.d.ts.map
+│   │       ├── validations.js
+│   │       └── validations.js.map
+│   ├── tests
+│   │   ├── db
+│   │   │   ├── schema.test.d.ts
+│   │   │   ├── schema.test.d.ts.map
+│   │   │   ├── schema.test.js
+│   │   │   └── schema.test.js.map
+│   │   ├── jest.config.d.ts
+│   │   ├── jest.config.d.ts.map
+│   │   ├── jest.config.js
+│   │   └── jest.config.js.map
+│   ├── tsconfig.tsbuildinfo
+│   ├── types
+│   │   ├── index.d.ts
+│   │   ├── index.js
+│   │   └── index.js.map
+│   └── validations
+│       ├── validations.d.ts
+│       ├── validations.js
+│       └── validations.js.map
+├── Dockerfile
+├── docs
+│   ├── api
+│   │   └── v1
+│   │       ├── auth
+│   │       │   ├── auth.md
+│   │       │   └── auth.routes.md
+│   │       ├── cart
+│   │       ├── files.md
+│   │       ├── request-lifecycle.md
+│   │       └── users
+│   │           └── users.routes.md
+│   ├── architecture
+│   ├── deployment
+│   └── middleware
+│       └── session.middleware.md
+├── drizzle
+├── drizzle.config.ts
+├── drizzle-kit.config.ts
+├── entrypoint.sh
+├── folder-structure.txt
+├── node
+├── package.json
+├── package-lock.json
+├── pnpm-lock.yaml
+├── pocketbase_instance
+│   ├── CHANGELOG.md
+│   ├── LICENSE.md
+│   ├── pb_data
+│   │   ├── auxiliary.db
+│   │   ├── backups
+│   │   ├── data.db
+│   │   └── types.d.ts
+│   ├── pb_migrations
+│   │   ├── 1748340040_created_auth.js
+│   │   ├── 1748340060_updated_auth.js
+│   │   ├── 1748340071_deleted_Auth.js
+│   │   └── 1748340078_created_Auth.js
+│   ├── pocketbase
+│   └── pocketbase_0.28.2_linux_amd64.zip
+├── project_structure.txt
+├── scripts
+│   └── server-entrypoint.sh
+├── src
+│   ├── api
+│   │   ├── v1
+│   │   │   ├── auth
+│   │   │   │   ├── auth.controller.ts
+│   │   │   │   ├── auth.repository.ts
+│   │   │   │   ├── auth.routes.ts
+│   │   │   │   ├── auth.service.ts
+│   │   │   │   ├── auth.test.ts
+│   │   │   │   ├── auth.types.ts
+│   │   │   │   ├── auth.utils.ts
+│   │   │   │   └── auth.validator.ts
+│   │   │   ├── cart
+│   │   │   │   ├── cart.controller.ts
+│   │   │   │   ├── cart.repository.ts
+│   │   │   │   ├── cart.routes.ts
+│   │   │   │   ├── cart.service.ts
+│   │   │   │   ├── cart.types.ts
+│   │   │   │   ├── cart.utils.ts
+│   │   │   │   └── cart.validators.ts
+│   │   │   ├── index.ts
+│   │   │   ├── orders
+│   │   │   │   ├── orders.controller.ts
+│   │   │   │   ├── orders.repository.ts
+│   │   │   │   ├── orders.routes.ts
+│   │   │   │   ├── orders.service.ts
+│   │   │   │   ├── orders.test.ts
+│   │   │   │   ├── orders.types.ts
+│   │   │   │   └── orders.validators.ts
+│   │   │   ├── products
+│   │   │   │   ├── products.controller.ts
+│   │   │   │   ├── products.repository.ts
+│   │   │   │   ├── products.routes.ts
+│   │   │   │   ├── products.service.ts
+│   │   │   │   ├── products.test.ts
+│   │   │   │   ├── products.types.ts
+│   │   │   │   ├── products.utils.ts
+│   │   │   │   └── products.validators.ts
+│   │   │   ├── users
+│   │   │   │   ├── users.controller.ts
+│   │   │   │   ├── users.repository.ts
+│   │   │   │   ├── users.service.ts
+│   │   │   │   ├── users.test.ts
+│   │   │   │   ├── users.types.ts
+│   │   │   │   └── users.validators.ts
+│   │   │   └── wishlists
+│   │   │       ├── wishlists.controller.ts
+│   │   │       ├── wishlists.repository.ts
+│   │   │       ├── wishlists.routes.ts
+│   │   │       ├── wishlists.service.ts
+│   │   │       ├── wishlists.test.ts
+│   │   │       ├── wishlists.types.ts
+│   │   │       └── wishlists.validators.ts
+│   │   └── v2
+│   ├── app.ts
+│   ├── config
+│   │   ├── env.ts
+│   │   └── index.ts
+│   ├── db
+│   │   ├── client.ts
+│   │   ├── index.ts
+│   │   ├── migrations
+│   │   │   ├── 0000_milky_malice.sql
+│   │   │   ├── 0001_brave_lorna_dane.sql
+│   │   │   └── meta
+│   │   │       ├── 0000_snapshot.json
+│   │   │       ├── 0001_snapshot.json
+│   │   │       └── _journal.json
+│   │   ├── schema
+│   │   │   ├── auth.schema.ts
+│   │   │   ├── carts.schema.ts
+│   │   │   ├── coupons.schema.ts
+│   │   │   ├── orders.schema.ts
+│   │   │   ├── products.schema.ts
+│   │   │   ├── reviews.schema.ts
+│   │   │   └── wishlists.schema.ts
+│   │   ├── scripts
+│   │   │   ├── pre-migrate.ts
+│   │   │   └── run-migrations.ts
+│   │   └── seed.ts
+│   ├── index.ts
+│   ├── lib
+│   │   ├── analytics
+│   │   │   └── events.ts
+│   │   ├── cache
+│   │   ├── errors
+│   │   │   ├── AppError.ts
+│   │   │   ├── ConflictError.ts
+│   │   │   ├── HttpError.ts
+│   │   │   ├── index.ts
+│   │   │   └── NotFoundError.ts
+│   │   ├── payment
+│   │   │   ├── crypto.ts
+│   │   │   └── providers.ts
+│   │   ├── pocketbase.ts
+│   │   └── utils
+│   ├── middleware
+│   │   ├── auth.middleware.ts
+│   │   ├── cart.middleware.ts
+│   │   ├── error-handler.ts
+│   │   ├── error.middleware.ts
+│   │   ├── logger.middleware.ts
+│   │   ├── orders.middleware.ts
+│   │   ├── ratelimit.middleware.ts
+│   │   ├── session.middleware.ts
+│   │   └── validation.middleware.ts
+│   ├── server.ts
+│   ├── types
+│   │   ├── express.d.ts
+│   │   └── index.ts
+│   └── validations
+│       └── validations.ts
+├── structure.txt
+├── tests
+│   ├── controllers
+│   ├── db
+│   ├── docker.compose.yml
+│   ├── e2e
+│   ├── fixtures
+│   ├── integration
+│   ├── jest.config.ts
+│   ├── load
+│   ├── routes
+│   ├── services
+│   ├── unit
+│   └── utils
+└── tsconfig.json
+
+99 directories, 627 files

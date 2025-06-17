@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "description": "Express TypeScript API with Drizzle ORM and PostgreSQL",
   "module": "NodeNext",
-  "main": "dist/index.js",
+  "main": "dist/src/index.js",
   "type": "module",
   "exports": {
     "./*": "./dist/*.js"
@@ -14,9 +14,9 @@
   },
   "scripts": {
     "build": "tsc && tsc-alias",
-    "start": "node dist/index.js",
+    "start": "node dist/src/index.js",
     "dev": "node --loader ts-node/esm --no-warnings --inspect=0.0.0.0:9229 node_modules/ts-node-dev/lib/bin.js --respawn --transpile-only src/index.ts",
-    "premigrate": "node dist/src/db/scripts/pre-migrate.js",
+    "premigrate": "node dist/src/db/scripts/pre-migrate.js", 
     "migrate": "drizzle-kit migrate --config=drizzle.config.ts",
     "generate": "drizzle-kit generate --config=drizzle.config.ts",
     "studio": "drizzle-kit studio",

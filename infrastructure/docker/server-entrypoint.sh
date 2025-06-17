@@ -63,18 +63,18 @@ cd /app/apps/server
 
 # First, ensure enum types exist
 echo "Creating enum types if they don't exist..."
-NODE_ENV=$APP_ENV node dist/db/scripts/pre-migrate.js
+NODE_ENV=$APP_ENV node dist/src/db/scripts/pre-migrate.js # <--- MODIFIED
 
 # Then run the main migrations
 echo "Running main migrations..."
-NODE_ENV=$APP_ENV node dist/db/scripts/run-migrations.js
+NODE_ENV=$APP_ENV node dist/src/db/scripts/run-migrations.js # <--- MODIFIED
 
 # Start the server based on environment
 echo "Starting server..."
 if [ "$APP_ENV" = "development" ]; then
   # Development - for better debugging
-  exec node --inspect=0.0.0.0:9229 dist/index.js
+  exec node --inspect=0.0.0.0:9229 dist/src/index.js # <--- MODIFIED (assuming src/index.ts)
 else
   # Production - standard start 
-  exec node dist/index.js
+  exec node dist/src/index.js # <--- MODIFIED (assuming src/index.ts)
 fi

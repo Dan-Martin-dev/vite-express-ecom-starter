@@ -52,4 +52,4 @@ node dist/src/db/scripts/pre-migrate.js
 
 echo "Starting server..."
 cd /app/apps/server
-exec node --inspect=0.0.0.0:9229 dist/src/index.js
+exec node --inspect=0.0.0.0:9229 dist7/src/index.js

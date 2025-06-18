@@ -1,36 +1,69 @@
-// src/lib/pocketbase.ts (Initialize PocketBase Admin SDK)
 import PocketBase from 'pocketbase';
-import { config } from '@/config/index.js';
-// Use CommonJS import if ES modules cause issues with PocketBase v0.2x
-// const PocketBase = require('pocketbase/cjs')
-    
+import { config } from '../config/index.js';
+
+// Initialize PocketBase client
 export const pb = new PocketBase(config.pocketbaseUrl);
 
-// Authenticate as Admin globally (or handle per request if needed)
-// Ensure this runs once on server startup
-let isPbAdminAuthenticated = false;
+// Auth state
+let isAuthenticated = false;
+let authRetryCount = 0;
+const MAX_RETRIES = 5;
+const RETRY_DELAY_MS = 5000;
 
-export async function ensurePbAdminAuth() {
-    if (!isPbAdminAuthenticated && config.pocketbaseAdminEmail && config.pocketbaseAdminPassword) {
-        try {
-            console.log('Authenticating PocketBase Admin...');
-            await pb.admins.authWithPassword(config.pocketbaseAdminEmail, config.pocketbaseAdminPassword);
-            isPbAdminAuthenticated = true;
-            console.log('PocketBase Admin authenticated successfully.');
-            // Optional: Set up auto-refresh for the admin token if needed
-            // pb.autoRefreshThreshold = 30 * 60; // Example: Refresh if token expires in next 30 mins
-        } catch (err) {
-            console.error('PocketBase Admin authentication failed:', err);
-            // Decide how to handle this - maybe retry or exit?
-            // For now, we'll allow the app to continue but SDK calls might fail
-            isPbAdminAuthenticated = false; // Ensure it stays false
-        }
-    } else if (!config.pocketbaseAdminEmail || !config.pocketbaseAdminPassword) {
-         console.warn('PocketBase Admin credentials not provided. SDK calls requiring admin rights will fail.');
+/**
+ * Authenticate with PocketBase as admin
+ */
+export async function authenticatePocketBase(): Promise<boolean> {
+  try {
+    if (!config.pocketbaseAdminEmail || !config.pocketbaseAdminPassword) {
+      console.error('PocketBase admin credentials not provided in config');
+      return false;
     }
+
+    if (isAuthenticated) {
+      return true;
+    }
+
+    console.log(`Authenticating with PocketBase (attempt ${authRetryCount + 1}/${MAX_RETRIES})...`);
+    
+    // Use the admins authWithPassword method instead of collections
+    await pb.admins.authWithPassword(
+      config.pocketbaseAdminEmail,
+      config.pocketbaseAdminPassword
+    );
+    
+    console.log('Successfully authenticated with PocketBase as admin');
+    isAuthenticated = true;
+    authRetryCount = 0;
+    return true;
+  } catch (error) {
+    console.error('PocketBase authentication error:', error);
+    
+    // If authentication failed, try again with a delay
+    if (authRetryCount < MAX_RETRIES - 1) {
+      authRetryCount++;
+      console.log(`Retrying in ${RETRY_DELAY_MS/1000} seconds...`);
+      await new Promise(resolve => setTimeout(resolve, RETRY_DELAY_MS));
+      return authenticatePocketBase();
+    }
+    
+    console.error(`Failed to authenticate with PocketBase after ${MAX_RETRIES} attempts`);
+    return false;
+  }
 }
 
-// Add a health check or getter if needed elsewhere
-export const isPocketBaseReady = () => isPbAdminAuthenticated;
+/**
+ * Returns whether PocketBase is authenticated
+ */
+export function isPocketBaseAuthenticated(): boolean {
+  return isAuthenticated;
+}
 
-// Call ensurePbAdminAuth() during your server initialization phase.
+/**
+ * Ensures PocketBase Admin is authenticated (for backward compatibility)
+ * @param retryCount Current retry attempt
+ * @returns Boolean indicating if authentication was successful
+ */
+export async function ensurePbAdminAuth(): Promise<boolean> {
+  return authenticatePocketBase();
+}

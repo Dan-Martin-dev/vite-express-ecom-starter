@@ -83,14 +83,30 @@ services:
     ports:
       - "8090:8090"
     command: ["serve", "--http=0.0.0.0:8090"]
+    environment:
+      - POCKETBASE_ADMIN_EMAIL=${POCKETBASE_ADMIN_EMAIL}
+      - POCKETBASE_ADMIN_PASSWORD=${POCKETBASE_ADMIN_PASSWORD}
+    entrypoint: >
+      sh -c '
+        if [ ! -f /pb_data/data.db ]; then
+          echo "Initializing PocketBase with first admin user..."
+          /usr/local/bin/pocketbase superuser upsert "$POCKETBASE_ADMIN_EMAIL" "$POCKETBASE_ADMIN_PASSWORD" 
+        else
+          echo "PocketBase database already exists."
+        fi
+        
+        echo "Starting PocketBase server..."
+        exec /usr/local/bin/pocketbase serve --http="0.0.0.0:8090"
+        '
     healthcheck:
-      test: ["CMD-SHELL", "timeout 5 sh -c 'until nc -z localhost 8090; do sleep 1; done'"]
+      test: ["CMD-SHELL", "wget -q --spider http://localhost:8090/api/health || exit 1"]
       interval: 10s
       timeout: 5s
       retries: 3
+      start_period: 10s
     networks:
       - ecom-network-dev
-
+    
 networks:
   ecom-network-dev:
     driver: bridge

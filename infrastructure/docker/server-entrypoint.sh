@@ -1,5 +1,5 @@
 #!/bin/sh
-#vite-express-ecom-starter/infrastructure/docker/server-entrypoint.sh
+
 set -e
 
 # Initialize variables for environment-specific behavior
@@ -33,9 +33,9 @@ else
   echo "Network diagnostic information:"
   ip addr show
   echo "DNS resolution test:"
-  getent hosts postgres || echo "DNS resolution failed"
+  getent hosts postgres pocketbase || echo "DNS resolution failed"
   echo "Connection test:"
-  nc -zv postgres 5432 || echo "Connection test failed"
+  nc -zv postgres 5432 || echo "PostgreSQL connection test failed"
   echo "--- END DEBUG INFO ---"
 fi
 
@@ -57,24 +57,52 @@ done
 
 echo "Database connection established successfully."
 
+# Wait for PocketBase to be ready
+echo "Waiting for PocketBase to be ready..."
+count=0
+PB_MAX_RETRIES=30
+PB_RETRY_INTERVAL=2
+
+# Use simple check for PocketBase API endpoint instead of health
+until curl -s -o /dev/null -w "%{http_code}" "${POCKETBASE_URL}/api/" | grep -q "200"; do
+  count=$((count+1))
+  echo "PocketBase connection attempt ${count}/${PB_MAX_RETRIES} failed. Retrying in ${PB_RETRY_INTERVAL}s..."
+  
+  if [ $count -ge $PB_MAX_RETRIES ]; then
+    echo "WARNING: Could not connect to PocketBase after ${PB_MAX_RETRIES} attempts. Continuing anyway..."
+    break
+  fi
+  
+  sleep $PB_RETRY_INTERVAL
+done
+
+# Additional check to see if the PocketBase admin API is available
+if curl -s -o /dev/null -w "%{http_code}" "${POCKETBASE_URL}/api/admins/auth-with-password" | grep -q "400"; then
+  echo "PocketBase admin authentication endpoint is available."
+else
+  echo "WARNING: PocketBase admin authentication endpoint might not be ready."
+fi
+
+echo "PocketBase connection check completed."
+
 # Run migrations
 echo "Running database migrations..."
 cd /app/apps/server
 
 # First, ensure enum types exist
 echo "Creating enum types if they don't exist..."
-NODE_ENV=$APP_ENV node dist/src/db/scripts/pre-migrate.js # <--- MODIFIED
+NODE_ENV=$APP_ENV node dist/src/db/scripts/pre-migrate.js 
 
 # Then run the main migrations
 echo "Running main migrations..."
-NODE_ENV=$APP_ENV node dist/src/db/scripts/run-migrations.js # <--- MODIFIED
+NODE_ENV=$APP_ENV node dist/src/db/scripts/run-migrations.js 
 
 # Start the server based on environment
 echo "Starting server..."
 if [ "$APP_ENV" = "development" ]; then
   # Development - for better debugging
-  exec node --inspect=0.0.0.0:9229 dist/src/index.js # <--- MODIFIED (assuming src/index.ts)
+  exec node --inspect=0.0.0.0:9229 dist/src/index.js
 else
   # Production - standard start 
-  exec node dist/src/index.js # <--- MODIFIED (assuming src/index.ts)
+  exec node dist/src/index.js
 fi
